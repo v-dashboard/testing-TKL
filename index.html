@@ -355,8 +355,11 @@
         renderApp();
     }
 
-    // ==================== RENDER APP ====================
+    // ==================== RENDER APP (DENGAN SCROLL FIX) ====================
     function renderApp() {
+        // Simpan posisi scroll sebelum render
+        const scrollPosition = window.scrollY;
+        
         const app = document.getElementById('app');
         
         if (state.currentPage === 'dashboard') {
@@ -367,7 +370,13 @@
             app.innerHTML = renderManagementPage();
         }
         
-        window.scrollTo(0, 0);
+        // Kembalikan ke posisi scroll semula setelah render selesai
+        setTimeout(() => {
+            window.scrollTo({
+                top: scrollPosition,
+                behavior: 'auto' // pakai 'auto' biar langsung, bukan smooth
+            });
+        }, 10);
     }
 
     function renderHeader(title, icon) {
