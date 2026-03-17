@@ -44,6 +44,14 @@
         .kode-8 { background: #fed7aa; color: #7b341e; }
         .kode-9 { background: #f1f5f9; color: #334155; }
         
+        /* Tally Marks */
+        .tally-mark {
+            font-family: 'Courier New', monospace;
+            font-size: 1.5rem;
+            letter-spacing: 2px;
+            line-height: 1;
+        }
+        
         /* Gradient Background */
         .gradient-bg {
             background: linear-gradient(-45deg, #667eea, #764ba2, #6b46c1, #4299e1);
@@ -208,10 +216,25 @@
             box-shadow: 0 2px 4px rgba(0,0,0,0.02);
         }
         
+        /* Resume Card */
+        .resume-card {
+            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+            border-radius: 16px;
+            padding: 1rem;
+            border: 1px solid #e2e8f0;
+        }
+        
+        .resume-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            line-height: 1.2;
+        }
+        
         /* Responsive */
         @media (max-width: 640px) {
             .nav-modern { border-radius: 20px; flex-wrap: wrap; }
             .nav-item { flex: 1 1 auto; text-align: center; justify-content: center; }
+            .resume-value { font-size: 1.25rem; }
         }
     </style>
 </head>
@@ -249,6 +272,8 @@
         // Input TKL state
         kegiatanList: [],
         batches: [],
+        minorStopCounts: {}, // { "ETIKET PUTUS": 3, "CODING KERING": 1 }
+        
         selectedDate: new Date().toISOString().split('T')[0],
         selectedShift: '',
         selectedMachineId: '',
@@ -323,7 +348,7 @@
         return (h2*60+m2) - (h1*60+m1);
     }
 
-    // ==================== OEE CALC ====================
+    // ==================== OEE & RESUME CALC ====================
     function hitungOEE() {
         let running = 0, planned = 0, unplanned = 0;
         
@@ -347,6 +372,54 @@
         const oee = (avail * perf * quality) / 10000;
         
         return { running, planned, unplanned, avail, perf, quality, oee };
+    }
+
+    function hitungResume() {
+        let totalStandar13578 = 0; // Σ durasi standar kode 1,5,7,8
+        let totalKode2 = 0; // Σ durasi aktual kode 2
+        let totalKode6 = 0; // Σ durasi aktual kode 6
+        let totalKode3 = 0; // Σ durasi aktual kode 3
+        let totalKode9 = 0; // Σ durasi aktual kode 9
+        let totalLebihan = 0; // Σ (aktual - standar) untuk kode 1,5,7,8 (jika positif)
+        
+        const mesin = state.machines.find(m => m.id === state.selectedMachineId);
+        
+        state.kegiatanList.forEach(k => {
+            const dur = hitungDurasi(k.dari, k.jam);
+            
+            if (k.kode === 2) {
+                totalKode2 += dur;
+            } else if (k.kode === 6) {
+                totalKode6 += dur;
+            } else if (k.kode === 3) {
+                totalKode3 += dur;
+            } else if (k.kode === 9) {
+                totalKode9 += dur;
+            } else if ([1,5,7,8].includes(k.kode)) {
+                // Cari durasi standar dari mesin
+                let standar = 0;
+                if (mesin?.activities && mesin.activities[k.kode]) {
+                    const kegiatan = mesin.activities[k.kode].find(a => a.nama === k.kegiatan);
+                    standar = kegiatan?.durasi || 0;
+                }
+                totalStandar13578 += standar;
+                
+                // Hitung lebihan (jika aktual > standar)
+                if (dur > standar) {
+                    totalLebihan += (dur - standar);
+                }
+            }
+        });
+        
+        const totalODT = totalStandar13578 + totalKode2 + totalKode6;
+        const totalLineStopMesin = totalKode3;
+        const totalLineStopNonMesin = totalKode9 + totalLebihan;
+        
+        return {
+            totalODT,
+            totalLineStopMesin,
+            totalLineStopNonMesin
+        };
     }
 
     // ==================== NAVIGATION ====================
@@ -374,7 +447,7 @@
         setTimeout(() => {
             window.scrollTo({
                 top: scrollPosition,
-                behavior: 'auto' // pakai 'auto' biar langsung, bukan smooth
+                behavior: 'auto'
             });
         }, 10);
     }
@@ -571,6 +644,7 @@
     // ==================== INPUT PAGE ====================
     function renderInputPage() {
         const oee = hitungOEE();
+        const resume = hitungResume();
         const mesinTerpilih = state.machines.find(m => m.id === state.selectedMachineId);
         
         return `
@@ -650,6 +724,50 @@
                     `}
                 </div>
 
+                <!-- MINOR STOP -->
+                ${mesinTerpilih?.minorStop?.length > 0 ? `
+                <div class="card-modern">
+                    <h3 class="font-bold mb-4">⏸️ MINOR STOP (<10 MENIT)</h3>
+                    
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        ${mesinTerpilih.minorStop.map(item => `
+                            <div class="flex items-center justify-between p-3 bg-slate-50 rounded-lg">
+                                <span class="font-medium text-sm">${item}</span>
+                                <div class="flex items-center gap-2">
+                                    <span class="tally-mark text-xl">${'I'.repeat(state.minorStopCounts[item] || 0)}</span>
+                                    <span class="bg-slate-200 px-2 py-1 rounded-full text-xs font-bold">${state.minorStopCounts[item] || 0}</span>
+                                    <button class="w-7 h-7 rounded-full bg-blue-100 text-blue-600 hover:bg-blue-200" onclick="tambahMinorStop('${item}')">
+                                        <i class="fas fa-plus text-xs"></i>
+                                    </button>
+                                    <button class="w-7 h-7 rounded-full bg-red-100 text-red-600 hover:bg-red-200" onclick="kurangMinorStop('${item}')">
+                                        <i class="fas fa-minus text-xs"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+                ` : ''}
+
+                <!-- RESUME CARDS (DIPINDAH KE SINI) -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div class="resume-card">
+                        <div class="text-xs text-slate-500 mb-1">TOTAL ODT</div>
+                        <div class="resume-value text-blue-600">${resume.totalODT} MENIT</div>
+                        <div class="text-2xs text-slate-400">(STANDAR 1,5,7,8 + KODE 2 + KODE 6)</div>
+                    </div>
+                    <div class="resume-card">
+                        <div class="text-xs text-slate-500 mb-1">LINE STOP MESIN</div>
+                        <div class="resume-value text-red-600">${resume.totalLineStopMesin} MENIT</div>
+                        <div class="text-2xs text-slate-400">(KODE 3)</div>
+                    </div>
+                    <div class="resume-card">
+                        <div class="text-xs text-slate-500 mb-1">LINE STOP NON MESIN</div>
+                        <div class="resume-value text-orange-600">${resume.totalLineStopNonMesin} MENIT</div>
+                        <div class="text-2xs text-slate-400">(KODE 9 + LEBIHAN 1,5,7,8)</div>
+                    </div>
+                </div>
+
                 <!-- BATCH -->
                 <div class="card-modern">
                     <h3 class="font-bold mb-4">📦 BATCH & OUTPUT</h3>
@@ -724,6 +842,18 @@
     function updateShift(val) { state.selectedShift = val; renderApp(); }
     function updateMachine(val) { state.selectedMachineId = val; renderApp(); }
     function updateOperator(val) { state.selectedOperator = toUpper(val); }
+
+    function tambahMinorStop(item) {
+        state.minorStopCounts[item] = (state.minorStopCounts[item] || 0) + 1;
+        renderApp();
+    }
+
+    function kurangMinorStop(item) {
+        if (state.minorStopCounts[item] > 0) {
+            state.minorStopCounts[item]--;
+        }
+        renderApp();
+    }
 
     function showTambahKegiatanModal() {
         if (!state.selectedMachineId) {
@@ -914,6 +1044,7 @@
         }
 
         const oee = hitungOEE();
+        const resume = hitungResume();
         const mesin = state.machines.find(m => m.id === state.selectedMachineId);
 
         const record = {
@@ -933,6 +1064,10 @@
                 ...b,
                 batch: toUpper(b.batch)
             })),
+            minor_stop: { ...state.minorStopCounts },
+            total_odt: resume.totalODT,
+            total_line_stop_mesin: resume.totalLineStopMesin,
+            total_line_stop_non_mesin: resume.totalLineStopNonMesin,
             total_good: state.batches.reduce((s,b)=>s+(b.good||0),0),
             total_defect: state.batches.reduce((s,b)=>s+(b.reject||0),0),
             running_time: oee.running,
@@ -954,6 +1089,7 @@
         // RESET FORM
         state.kegiatanList = [];
         state.batches = [];
+        state.minorStopCounts = {};
         state.selectedShift = '';
         state.selectedMachineId = '';
         state.selectedOperator = '';
@@ -1041,6 +1177,15 @@
                                                 </div>
                                             `).join('')}
                                         </div>
+                                        
+                                        ${m.minorStop?.length > 0 ? `
+                                        <div class="mt-2 flex flex-wrap gap-1">
+                                            <span class="text-xs text-slate-500">MINOR STOP:</span>
+                                            ${m.minorStop.map(ms => `
+                                                <span class="text-xs bg-slate-200 px-2 py-0.5 rounded-full">${ms}</span>
+                                            `).join('')}
+                                        </div>
+                                        ` : ''}
                                     </div>
                                     
                                     <div class="flex gap-2 ml-4">
@@ -1141,6 +1286,12 @@
                     </div>
                 </div>
                 
+                <div>
+                    <label class="text-xs font-semibold text-slate-500 mb-1 block">MINOR STOP ITEMS</label>
+                    <input type="text" id="modal-minor-stop" class="input-modern" placeholder="ETIKET PUTUS, CODING KERING, DLL">
+                    <p class="text-xs text-slate-400 mt-1">PISAHKAN DENGAN KOMA</p>
+                </div>
+                
                 <div class="border-t pt-4">
                     <h4 class="font-semibold mb-4">PILIH KEGIATAN PER KODE</h4>
                     
@@ -1207,11 +1358,17 @@
     function simpanMesinBaru() {
         const nama = document.getElementById('modal-nama-mesin')?.value;
         const target = parseFloat(document.getElementById('modal-target')?.value) || 0;
+        const minorStopStr = document.getElementById('modal-minor-stop')?.value || '';
         
         if (!nama) {
             showToast('NAMA MESIN HARUS DIISI', 'error');
             return;
         }
+        
+        // Parse minor stop items
+        const minorStop = minorStopStr.split(',')
+            .map(s => s.trim().toUpperCase())
+            .filter(s => s.length > 0);
         
         const activities = {};
         let hasError = false;
@@ -1265,6 +1422,7 @@
             id: crypto.randomUUID(),
             name: toUpper(nama),
             target: target,
+            minorStop: minorStop,
             activities: activities
         };
         
@@ -1333,6 +1491,8 @@
     window.updateShift = updateShift;
     window.updateMachine = updateMachine;
     window.updateOperator = updateOperator;
+    window.tambahMinorStop = tambahMinorStop;
+    window.kurangMinorStop = kurangMinorStop;
     window.showTambahKegiatanModal = showTambahKegiatanModal;
     window.updateKegiatanFromSelect = updateKegiatanFromSelect;
     window.tambahKegiatanFromModal = tambahKegiatanFromModal;
