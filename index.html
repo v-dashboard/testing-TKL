@@ -216,6 +216,15 @@
             box-shadow: 0 2px 4px rgba(0,0,0,0.02);
         }
         
+        .oee-metric-large {
+            background: white;
+            border-radius: 16px;
+            padding: 1.25rem;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(102,126,234,0.1);
+            border: 1px solid #667eea30;
+        }
+        
         /* Resume Card */
         .resume-card {
             background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
@@ -228,6 +237,14 @@
             font-size: 1.5rem;
             font-weight: 700;
             line-height: 1.2;
+        }
+        
+        /* Sisa Jam Card */
+        .sisa-jam-card {
+            background: linear-gradient(135deg, #e0f2fe 0%, #bae6fd 100%);
+            border-radius: 16px;
+            padding: 1rem;
+            border: 1px solid #7dd3fc;
         }
         
         /* Responsive */
@@ -261,6 +278,27 @@
         'SHIFT 2 (15:20-22:50)': { start: '15:20', end: '22:50' },
         'SHIFT 3 (22:40-07:10)': { start: '22:40', end: '07:10' }
     };
+
+    // ==================== FUNCTION TO GET SHIFT MINUTES ====================
+    function getShiftMinutes(shiftKey) {
+        if (!shiftKey) return 480; // default 8 jam
+        
+        const shift = SHIFTS[shiftKey];
+        if (!shift) return 480;
+        
+        const [startHour, startMin] = shift.start.split(':').map(Number);
+        const [endHour, endMin] = shift.end.split(':').map(Number);
+        
+        let totalMinutes;
+        if (endHour < startHour || (endHour === startHour && endMin < startMin)) {
+            // Shift melewati tengah malam
+            totalMinutes = (24*60 - (startHour*60 + startMin)) + (endHour*60 + endMin);
+        } else {
+            totalMinutes = (endHour*60 + endMin) - (startHour*60 + startMin);
+        }
+        
+        return totalMinutes;
+    }
 
     // ==================== STATE ====================
     const state = {
@@ -362,16 +400,16 @@
         const totalGood = state.batches.reduce((s, b) => s + (b.good || 0), 0);
         const totalReject = state.batches.reduce((s, b) => s + (b.reject || 0), 0);
         
-        const avail = (running + unplanned) ? (running / (running + unplanned)) * 100 : 0;
-        
         const mesin = state.machines.find(m => m.id === state.selectedMachineId);
         const target = mesin?.target || 1;
         
+        // Performance = Total Good / (Running Time × Target)
         const perf = (running * target) ? (totalGood / (running * target)) * 100 : 0;
-        const quality = totalGood ? ((totalGood - totalReject) / totalGood) * 100 : 100;
-        const oee = (avail * perf * quality) / 10000;
         
-        return { running, planned, unplanned, avail, perf, quality, oee };
+        // Quality = (Total Good - Total Reject) / Total Good
+        const quality = totalGood ? ((totalGood - totalReject) / totalGood) * 100 : 100;
+        
+        return { running, planned, unplanned, perf, quality };
     }
 
     function hitungResume() {
@@ -419,6 +457,44 @@
             totalODT,
             totalLineStopMesin,
             totalLineStopNonMesin
+        };
+    }
+
+    function hitungAvailAndOEE() {
+        const resume = hitungResume();
+        const oee = hitungOEE();
+        
+        // Jam kerja dalam menit
+        const jamKerja = getShiftMinutes(state.selectedShift);
+        
+        // Availability = (Jam Kerja - Total ODT - Line Stop Mesin - Line Stop Non Mesin) / (Jam Kerja - Total ODT)
+        const penyebutAvail = jamKerja - resume.totalODT;
+        const avail = penyebutAvail > 0 
+            ? ((jamKerja - resume.totalODT - resume.totalLineStopMesin - resume.totalLineStopNonMesin) / penyebutAvail) * 100 
+            : 0;
+        
+        // Availability 365 = (Jam Kerja - Total ODT - Line Stop Mesin - Line Stop Non Mesin) / Jam Kerja
+        const avail365 = jamKerja > 0 
+            ? ((jamKerja - resume.totalODT - resume.totalLineStopMesin - resume.totalLineStopNonMesin) / jamKerja) * 100 
+            : 0;
+        
+        // OEE = (Avail% × Perf% × Qual%) / 10000
+        const oeeValue = (avail * oee.perf * oee.quality) / 10000;
+        
+        // OEE 365 = (Avail365% × Perf% × Qual%) / 10000
+        const oee365 = (avail365 * oee.perf * oee.quality) / 10000;
+        
+        // Sisa Jam Kerja
+        const sisaJamKerja = jamKerja - resume.totalODT - resume.totalLineStopMesin - resume.totalLineStopNonMesin;
+        
+        return {
+            avail,
+            avail365,
+            perf: oee.perf,
+            quality: oee.quality,
+            oee: oeeValue,
+            oee365,
+            sisaJamKerja
         };
     }
 
@@ -575,7 +651,7 @@
                                             <td class="font-medium">${r.mesin_name}</td>
                                             <td>${r.operator}</td>
                                             <td>${r.total_good || 0}</td>
-                                            <td class="${(r.oee_actual || 0) >= 85 ? 'text-green-600' : 'text-red-600'} font-bold">${(r.oee_actual || 0).toFixed(1)}%</td>
+                                            <td class="${(r.oee_actual || 0) >= 88 ? 'text-green-600' : 'text-red-600'} font-bold">${(r.oee_actual || 0).toFixed(1)}%</td>
                                         </tr>
                                     `).join('')}
                                 </tbody>
@@ -631,7 +707,7 @@
                 
                 <div class="p-4 bg-gradient-to-r from-blue-50 to-purple-50 rounded-xl text-center">
                     <div class="text-sm text-slate-600">OEE</div>
-                    <div class="text-3xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+                    <div class="text-3xl font-bold ${(record.oee_actual || 0) >= 88 ? 'text-green-600' : 'text-red-600'}">
                         ${(record.oee_actual || 0).toFixed(1)}%
                     </div>
                 </div>
@@ -643,9 +719,10 @@
 
     // ==================== INPUT PAGE ====================
     function renderInputPage() {
-        const oee = hitungOEE();
+        const oeeData = hitungAvailAndOEE();
         const resume = hitungResume();
         const mesinTerpilih = state.machines.find(m => m.id === state.selectedMachineId);
+        const jamKerja = getShiftMinutes(state.selectedShift);
         
         return `
             ${renderHeader('INPUT TKL REAL TIME', '✏️')}
@@ -749,7 +826,7 @@
                 </div>
                 ` : ''}
 
-                <!-- RESUME CARDS (DIPINDAH KE SINI) -->
+                <!-- RESUME CARDS -->
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <div class="resume-card">
                         <div class="text-xs text-slate-500 mb-1">TOTAL ODT</div>
@@ -766,6 +843,21 @@
                         <div class="resume-value text-orange-600">${resume.totalLineStopNonMesin} MENIT</div>
                         <div class="text-2xs text-slate-400">(KODE 9 + LEBIHAN 1,5,7,8)</div>
                     </div>
+                </div>
+
+                <!-- SISA JAM KERJA -->
+                <div class="sisa-jam-card">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <div class="text-xs text-sky-700 mb-1">SISA JAM KERJA</div>
+                            <div class="text-2xl font-bold text-sky-800">${Math.max(0, oeeData.sisaJamKerja)} MENIT</div>
+                        </div>
+                        <div class="text-right">
+                            <div class="text-xs text-sky-600">TOTAL SHIFT</div>
+                            <div class="text-lg font-semibold text-sky-700">${jamKerja} MENIT</div>
+                        </div>
+                    </div>
+                    <div class="text-xs text-sky-600 mt-1">JAM KERJA - TOTAL ODT - LINE STOP MESIN - LINE STOP NON MESIN</div>
                 </div>
 
                 <!-- BATCH -->
@@ -805,24 +897,40 @@
                 <div class="card-modern bg-gradient-to-r from-blue-50 to-purple-50">
                     <h3 class="font-bold mb-4">📊 OEE LIVE</h3>
                     
-                    <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+                    <div class="grid grid-cols-2 md:grid-cols-5 gap-3 mb-4">
                         <div class="oee-metric">
                             <div class="text-xs text-slate-400">AVAIL</div>
-                            <div class="text-lg font-bold ${oee.avail >= 90 ? 'text-green-600' : 'text-yellow-600'}">${oee.avail.toFixed(1)}%</div>
+                            <div class="text-lg font-bold ${oeeData.avail >= 90 ? 'text-green-600' : 'text-yellow-600'}">${oeeData.avail.toFixed(1)}%</div>
                         </div>
                         <div class="oee-metric">
                             <div class="text-xs text-slate-400">PERF</div>
-                            <div class="text-lg font-bold ${oee.perf >= 95 ? 'text-green-600' : 'text-yellow-600'}">${oee.perf.toFixed(1)}%</div>
+                            <div class="text-lg font-bold ${oeeData.perf >= 95 ? 'text-green-600' : 'text-yellow-600'}">${oeeData.perf.toFixed(1)}%</div>
                         </div>
                         <div class="oee-metric">
                             <div class="text-xs text-slate-400">QUAL</div>
-                            <div class="text-lg font-bold ${oee.quality >= 99 ? 'text-green-600' : 'text-yellow-600'}">${oee.quality.toFixed(1)}%</div>
+                            <div class="text-lg font-bold ${oeeData.quality >= 99 ? 'text-green-600' : 'text-yellow-600'}">${oeeData.quality.toFixed(1)}%</div>
                         </div>
-                        <div class="oee-metric bg-gradient-to-br from-blue-100 to-purple-100">
+                        <div class="oee-metric col-span-2 bg-gradient-to-br from-blue-100 to-purple-100">
                             <div class="text-xs text-slate-500">OEE</div>
-                            <div class="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-                                ${oee.oee.toFixed(1)}%
+                            <div class="text-2xl font-bold ${oeeData.oee >= 88 ? 'text-green-600' : 'text-red-600'}">
+                                ${oeeData.oee.toFixed(1)}%
                             </div>
+                        </div>
+                    </div>
+                    
+                    <!-- OEE 365 & AVAIL 365 -->
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="oee-metric-large">
+                            <div class="text-xs text-slate-400 mb-1">AVAIL 365</div>
+                            <div class="text-2xl font-bold text-blue-600">${oeeData.avail365.toFixed(1)}%</div>
+                            <div class="text-xs text-slate-500 mt-1">(JAM KERJA - ODT - STOP) / JAM KERJA</div>
+                        </div>
+                        <div class="oee-metric-large">
+                            <div class="text-xs text-slate-400 mb-1">OEE 365</div>
+                            <div class="text-2xl font-bold ${oeeData.oee365 >= 60 ? 'text-green-600' : 'text-red-600'}">
+                                ${oeeData.oee365.toFixed(1)}%
+                            </div>
+                            <div class="text-xs text-slate-500 mt-1">AVAIL 365 × PERF × QUAL</div>
                         </div>
                     </div>
                 </div>
@@ -1043,14 +1151,16 @@
             return;
         }
 
-        const oee = hitungOEE();
+        const oeeData = hitungAvailAndOEE();
         const resume = hitungResume();
         const mesin = state.machines.find(m => m.id === state.selectedMachineId);
+        const jamKerja = getShiftMinutes(state.selectedShift);
 
         const record = {
             id: crypto.randomUUID(),
             tanggal: state.selectedDate,
             shift: state.selectedShift,
+            jam_kerja: jamKerja,
             mesin_id: state.selectedMachineId,
             mesin_name: mesin?.name,
             operator: toUpper(state.selectedOperator),
@@ -1070,13 +1180,16 @@
             total_line_stop_non_mesin: resume.totalLineStopNonMesin,
             total_good: state.batches.reduce((s,b)=>s+(b.good||0),0),
             total_defect: state.batches.reduce((s,b)=>s+(b.reject||0),0),
-            running_time: oee.running,
-            planned_dt: oee.planned,
-            unplanned_dt: oee.unplanned,
-            availability: oee.avail,
-            performance: oee.perf,
-            quality: oee.quality,
-            oee_actual: oee.oee,
+            running_time: oeeData.running,
+            planned_dt: oeeData.planned,
+            unplanned_dt: oeeData.unplanned,
+            availability: oeeData.avail,
+            availability_365: oeeData.avail365,
+            performance: oeeData.perf,
+            quality: oeeData.quality,
+            oee_actual: oeeData.oee,
+            oee_365: oeeData.oee365,
+            sisa_jam_kerja: oeeData.sisaJamKerja,
             created_at: new Date().toISOString()
         };
 
