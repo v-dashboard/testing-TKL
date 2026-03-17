@@ -389,6 +389,13 @@
             border-bottom: 1px dashed rgba(245,158,11,0.3);
         }
         
+        .no-data-message {
+            text-align: center;
+            padding: 3rem;
+            color: #94a3b8;
+            font-style: italic;
+        }
+        
         @media (max-width: 768px) {
             .card { padding: 1rem; }
             .nav-tabs { border-radius: 20px; flex-wrap: wrap; }
@@ -475,94 +482,6 @@
         // Theme
         theme: localStorage.getItem('oee-theme') || 'light'
     };
-    
-    // ==================== DUMMY DATA (UNTUK TESTING) ====================
-    const dummyMachines = [
-        { 
-            id: '1', 
-            name: 'INJEKSI 1', 
-            target: 2,
-            minor_stop: ['ETIKET PUTUS', 'CODING KERING'],
-            activities: { 
-                "1": [{ nama: 'SETUP INJEKSI', durasi: 30 }],
-                "2": [{ nama: 'RUNNING INJEKSI' }],
-                "3": [{ nama: 'LINE STOP MESIN' }],
-                "5": [{ nama: 'AM INJEKSI', durasi: 15 }],
-                "6": [{ nama: 'PM INJEKSI' }],
-                "7": [{ nama: 'CLEANUP INJEKSI', durasi: 25 }],
-                "8": [{ nama: 'ISTIRAHAT', durasi: 60 }],
-                "9": [{ nama: 'STOP NON MESIN' }]
-            }
-        },
-        { 
-            id: '2', 
-            name: 'FILLING 1', 
-            target: 5,
-            minor_stop: ['MATERIAL HABIS', 'SETTING'],
-            activities: { 
-                "1": [{ nama: 'SETUP FILLING', durasi: 20 }],
-                "2": [{ nama: 'RUNNING FILLING' }],
-                "3": [{ nama: 'LINE STOP FILLING' }],
-                "5": [{ nama: 'AM FILLING', durasi: 10 }],
-                "6": [{ nama: 'PM FILLING' }],
-                "7": [{ nama: 'CLEANUP FILLING', durasi: 30 }],
-                "8": [{ nama: 'ISTIRAHAT', durasi: 60 }],
-                "9": [{ nama: 'STOP NON MESIN' }]
-            }
-        }
-    ];
-    
-    const dummyLibrary = {
-        '1': ['SETUP INJEKSI', 'SETUP BLOW', 'SETUP FILLING'],
-        '2': ['RUNNING NORMAL', 'RUNNING CEPAT'],
-        '3': ['LINE STOP MATERIAL', 'LINE STOP SETTING'],
-        '5': ['AM SHIFT 1', 'AM SHIFT 2'],
-        '6': ['PM MINGGUAN', 'PM BULANAN'],
-        '7': ['CLEANUP SHIFT', 'CLEANUP TOTAL'],
-        '8': ['ISTIRAHAT', 'BRIEFING'],
-        '9': ['STOP LISTRIK', 'STOP AIR']
-    };
-    
-    // Generate dummy records
-    const dummyRecords = [];
-    const today = new Date();
-    const pics = ['BUDI', 'SITI', 'AGUS', 'JOKO'];
-    
-    for (let i = 0; i < 50; i++) {
-        const date = new Date(today);
-        date.setDate(date.getDate() - Math.floor(Math.random() * 30));
-        
-        const machine = dummyMachines[Math.floor(Math.random() * dummyMachines.length)];
-        const avail = 85 + Math.random() * 15;
-        const perf = 85 + Math.random() * 15;
-        const qual = 95 + Math.random() * 5;
-        const oeeActual = (avail * perf * qual) / 10000;
-        
-        dummyRecords.push({
-            id: `rec_${i}`,
-            date: date.toISOString().split('T')[0],
-            shift: Object.keys(SHIFTS)[Math.floor(Math.random() * 3)],
-            mesin_id: machine.id,
-            machine_name: machine.name,
-            operator: pics[Math.floor(Math.random() * pics.length)],
-            kegiatan: [],
-            batches: [{ batch: `BATCH${i}`, good: Math.floor(Math.random() * 5000), reject: Math.floor(Math.random() * 100) }],
-            total_good: Math.floor(Math.random() * 5000),
-            total_defect: Math.floor(Math.random() * 100),
-            availability: avail,
-            availability_365: avail * 0.9,
-            performance: perf,
-            quality: qual,
-            oee_actual: oeeActual,
-            oee_365: oeeActual * 0.7,
-            created_at: new Date().toISOString()
-        });
-    }
-    
-    // Initialize state with dummy data
-    state.machines = dummyMachines;
-    state.tklRecords = dummyRecords;
-    state.libraryKegiatan = dummyLibrary;
     
     // ==================== HELPER FUNCTIONS ====================
     function getDefaultStartDate() {
@@ -1085,6 +1004,11 @@
         const ctx = document.getElementById('chart-trend');
         if (!ctx) return;
         
+        if (records.length === 0) {
+            ctx.getContext('2d').clearRect(0, 0, ctx.width, ctx.height);
+            return;
+        }
+        
         const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'];
         const monthlyData = Array(12).fill().map(() => []);
         
@@ -1132,6 +1056,11 @@
         const ctx = document.getElementById('chart-per-machine');
         if (!ctx) return;
         
+        if (records.length === 0) {
+            ctx.getContext('2d').clearRect(0, 0, ctx.width, ctx.height);
+            return;
+        }
+        
         const machineStats = {};
         records.forEach(r => {
             if (!r.machine_name || !r.oee_actual) return;
@@ -1170,6 +1099,11 @@
         const ctx = document.getElementById('chart-apq');
         if (!ctx) return;
         
+        if (records.length === 0) {
+            ctx.getContext('2d').clearRect(0, 0, ctx.width, ctx.height);
+            return;
+        }
+        
         const avgA = records.length ? records.reduce((s, r) => s + (r.availability || 0), 0) / records.length : 0;
         const avgP = records.length ? records.reduce((s, r) => s + (r.performance || 0), 0) / records.length : 0;
         const avgQ = records.length ? records.reduce((s, r) => s + (r.quality || 0), 0) / records.length : 0;
@@ -1202,116 +1136,33 @@
         const ctx = document.getElementById('chart-odt');
         if (!ctx) return;
         
-        const dummyODT = [
-            { name: 'SETUP MESIN', value: 245 },
-            { name: 'GANTI MOLD', value: 180 },
-            { name: 'SETTING PARAMETER', value: 120 }
-        ];
-        
-        state.chartInstances.odt = new Chart(ctx, {
-            type: 'bar',
-            data: {
-                labels: dummyODT.map(d => d.name),
-                datasets: [{
-                    label: 'Menit',
-                    data: dummyODT.map(d => d.value),
-                    backgroundColor: '#f59e0b'
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                indexAxis: 'y',
-                plugins: { legend: { display: false } }
-            }
-        });
+        // TODO: Implement actual ODT chart from records
+        // For now, just clear the canvas
+        ctx.getContext('2d').clearRect(0, 0, ctx.width, ctx.height);
     }
     
     function renderLineStopMesinChart() {
         const ctx = document.getElementById('chart-ls-mesin');
         if (!ctx) return;
         
-        const dummyLSM = [
-            { name: 'MATERIAL HABIS', value: 156 },
-            { name: 'MESIN ERROR', value: 132 },
-            { name: 'SETTING ULANG', value: 98 }
-        ];
-        
-        state.chartInstances.lsMesin = new Chart(ctx, {
-            type: 'bar',
-            data: {
-                labels: dummyLSM.map(d => d.name),
-                datasets: [{
-                    label: 'Menit',
-                    data: dummyLSM.map(d => d.value),
-                    backgroundColor: '#ef4444'
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                indexAxis: 'y',
-                plugins: { legend: { display: false } }
-            }
-        });
+        // TODO: Implement actual LSM chart from records
+        ctx.getContext('2d').clearRect(0, 0, ctx.width, ctx.height);
     }
     
     function renderLineStopNonMesinChart() {
         const ctx = document.getElementById('chart-ls-non-mesin');
         if (!ctx) return;
         
-        const dummyLSNM = [
-            { name: 'LISTRIK PADAM', value: 89 },
-            { name: 'AIR PUTUS', value: 67 },
-            { name: 'OPERATOR ISTIRAHAT', value: 60 }
-        ];
-        
-        state.chartInstances.lsNonMesin = new Chart(ctx, {
-            type: 'bar',
-            data: {
-                labels: dummyLSNM.map(d => d.name),
-                datasets: [{
-                    label: 'Menit',
-                    data: dummyLSNM.map(d => d.value),
-                    backgroundColor: '#f59e0b'
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                indexAxis: 'y',
-                plugins: { legend: { display: false } }
-            }
-        });
+        // TODO: Implement actual LSNM chart from records
+        ctx.getContext('2d').clearRect(0, 0, ctx.width, ctx.height);
     }
     
     function renderMinorStopChart() {
         const ctx = document.getElementById('chart-minor-stop');
         if (!ctx) return;
         
-        const dummyMS = [
-            { name: 'ETIKET PUTUS', value: 12 },
-            { name: 'CODING KERING', value: 8 },
-            { name: 'MATERIAL SELIP', value: 7 }
-        ];
-        
-        state.chartInstances.minorStop = new Chart(ctx, {
-            type: 'bar',
-            data: {
-                labels: dummyMS.map(d => d.name),
-                datasets: [{
-                    label: 'Frekuensi',
-                    data: dummyMS.map(d => d.value),
-                    backgroundColor: '#764ba2'
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                indexAxis: 'y',
-                plugins: { legend: { display: false } }
-            }
-        });
+        // TODO: Implement actual Minor Stop chart from records
+        ctx.getContext('2d').clearRect(0, 0, ctx.width, ctx.height);
     }
     
     function renderCharts() {
@@ -1520,7 +1371,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                ${operatorStats.map(s => `
+                                ${operatorStats.length ? operatorStats.map(s => `
                                     <tr>
                                         <td class="font-medium">${s.pic}</td>
                                         <td class="${s.avgOEE >= CONFIG.OEE_TARGET ? 'status-good' : 'status-bad'}">${s.avgOEE.toFixed(1)}%</td>
@@ -1528,7 +1379,11 @@
                                         <td>${Math.round(s.totalTargetOutput).toLocaleString()}</td>
                                         <td>${s.count}</td>
                                     </tr>
-                                `).join('')}
+                                `).join('') : `
+                                    <tr>
+                                        <td colspan="5" class="text-center py-8 text-gray-400">BELUM ADA DATA OPERATOR</td>
+                                    </tr>
+                                `}
                             </tbody>
                         </table>
                     </div>
@@ -1554,7 +1409,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                ${records.slice(0, 10).map(r => `
+                                ${records.length ? records.slice(0, 10).map(r => `
                                     <tr class="clickable-row" onclick='window.showRecordDetail(${JSON.stringify(r).replace(/'/g, "\\'")})'>
                                         <td>${formatDate(r.date)}</td>
                                         <td>${r.shift || '-'}</td>
@@ -1568,7 +1423,11 @@
                                         <td class="${(r.quality || 0) >= CONFIG.Q_TARGET ? 'status-good' : 'status-bad'}">${(r.quality || 0).toFixed(1)}%</td>
                                         <td class="${(r.oee_actual || 0) >= CONFIG.OEE_TARGET ? 'status-good' : 'status-bad'}">${(r.oee_actual || 0).toFixed(1)}%</td>
                                     </tr>
-                                `).join('')}
+                                `).join('') : `
+                                    <tr>
+                                        <td colspan="11" class="text-center py-8 text-gray-400">BELUM ADA DATA OEE</td>
+                                    </tr>
+                                `}
                             </tbody>
                         </table>
                     </div>
@@ -1654,6 +1513,7 @@
                     ${state.kegiatanList.length === 0 ? `
                         <div class="text-center py-8 bg-gray-50 rounded-lg border-2 border-dashed">
                             <p class="text-gray-400">BELUM ADA KEGIATAN</p>
+                            ${!mesinTerpilih ? '<p class="text-xs text-gray-500 mt-2">PILIH MESIN TERLEBIH DAHULU</p>' : ''}
                         </div>
                     ` : state.kegiatanList.map((k, i) => `
                         <div class="timeline-card">
@@ -1863,6 +1723,7 @@
                     ${state.machines.length === 0 ? `
                         <div class="text-center py-12 bg-gray-50 rounded-xl">
                             <p class="text-gray-400">BELUM ADA MESIN</p>
+                            <p class="text-sm text-gray-500 mt-2">Klik "TAMBAH MESIN" untuk memulai</p>
                         </div>
                     ` : `
                         <div class="grid grid-cols-1 gap-4">
@@ -1997,7 +1858,10 @@
         }
         
         const mesin = state.machines.find(m => m.id === state.selectedMachineId);
-        if (!mesin) return;
+        if (!mesin) {
+            showToast('MESIN TIDAK DITEMUKAN', 'error');
+            return;
+        }
         
         const start = getNextStart();
         const end = addHour(start);
@@ -2152,9 +2016,11 @@
         };
         
         try {
+            showLoading('Menyimpan data...');
             const saved = await saveOEERecord(recordData);
             state.tklRecords.unshift(saved);
             
+            // Reset form
             state.kegiatanList = [];
             state.batches = [];
             state.minorStopCounts = {};
@@ -2162,9 +2028,11 @@
             state.selectedMachineId = '';
             state.selectedOperator = '';
             
+            hideLoading();
             state.currentPage = 'dashboard';
             renderApp();
         } catch (error) {
+            hideLoading();
             console.error('Error saving:', error);
         }
     };
@@ -2349,11 +2217,14 @@
         };
         
         try {
+            showLoading('Menyimpan mesin...');
             await saveMachine(machineData, activities);
             await loadMachines();
+            hideLoading();
             closeModal();
             renderApp();
         } catch (error) {
+            hideLoading();
             console.error('Error saving machine:', error);
         }
     };
@@ -2365,10 +2236,13 @@
     window.deleteMachine = async function(id) {
         if (confirm('YAKIN HAPUS MESIN INI?')) {
             try {
+                showLoading('Menghapus mesin...');
                 await deleteMachine(id);
                 await loadMachines();
+                hideLoading();
                 renderApp();
             } catch (error) {
+                hideLoading();
                 console.error('Error deleting machine:', error);
             }
         }
@@ -2429,7 +2303,7 @@
         document.documentElement.setAttribute('data-theme', state.theme);
         
         try {
-            showLoading('Loading data...');
+            showLoading('Loading data from Supabase...');
             await Promise.all([
                 loadMachines(),
                 loadLibraryKegiatan(),
@@ -2437,6 +2311,7 @@
             ]);
             hideLoading();
             renderApp();
+            showToast('Connected to Supabase', 'success');
         } catch (error) {
             hideLoading();
             console.error('Init error:', error);
