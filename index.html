@@ -1,0 +1,1349 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>OEE TKL SYSTEM • PT GOF</title>
+    
+    <!-- Font & Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Tailwind -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <style>
+        * {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+        
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #f1f5f9; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+        
+        /* Kode Badge */
+        .kode-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 48px;
+            padding: 4px 8px;
+            border-radius: 30px;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+        .kode-1 { background: #fef3c7; color: #92400e; }
+        .kode-2 { background: #d1fae5; color: #065f46; }
+        .kode-3 { background: #fee2e2; color: #991b1b; }
+        .kode-5 { background: #f3e8ff; color: #6b21a8; }
+        .kode-6 { background: #ffe4e6; color: #9f1239; }
+        .kode-7 { background: #cffafe; color: #155e75; }
+        .kode-8 { background: #fed7aa; color: #7b341e; }
+        .kode-9 { background: #f1f5f9; color: #334155; }
+        
+        /* Gradient Background */
+        .gradient-bg {
+            background: linear-gradient(-45deg, #667eea, #764ba2, #6b46c1, #4299e1);
+            background-size: 400% 400%;
+            animation: gradient 10s ease infinite;
+        }
+        @keyframes gradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        /* Card */
+        .card-modern {
+            background: white;
+            border-radius: 20px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+            border: 1px solid #f1f5f9;
+        }
+        
+        /* Input */
+        .input-modern {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 14px;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+            text-transform: uppercase;
+        }
+        .input-modern:focus {
+            outline: none;
+            border-color: #667eea;
+            background: white;
+            box-shadow: 0 0 0 4px rgba(102,126,234,0.1);
+        }
+        .input-modern[readonly] {
+            background: #e2e8f0;
+            cursor: not-allowed;
+        }
+        
+        /* Button */
+        .btn-modern {
+            padding: 0.75rem 1.5rem;
+            border-radius: 14px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            cursor: pointer;
+            border: none;
+            text-transform: uppercase;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 10px 15px -3px rgba(102,126,234,0.4); }
+        .btn-secondary {
+            background: white;
+            color: #1e293b;
+            border: 1px solid #e2e8f0;
+        }
+        .btn-secondary:hover { background: #f8fafc; }
+        
+        /* Navigation Tabs */
+        .nav-modern {
+            display: flex;
+            gap: 0.5rem;
+            padding: 0.5rem;
+            background: white;
+            border-radius: 100px;
+            border: 1px solid #f1f5f9;
+        }
+        .nav-item {
+            padding: 0.6rem 1.2rem;
+            border-radius: 100px;
+            font-weight: 600;
+            color: #64748b;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-transform: uppercase;
+        }
+        .nav-item:hover { background: #f1f5f9; }
+        .nav-item.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        
+        /* Timeline Cards */
+        .timeline-card {
+            background: #f8fafc;
+            border-radius: 16px;
+            padding: 1rem;
+            border: 1px solid #e2e8f0;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            transition: all 0.2s;
+        }
+        .timeline-card:hover {
+            background: white;
+            border-color: #667eea;
+            transform: translateX(4px);
+        }
+        
+        /* Modal */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.5);
+            backdrop-filter: blur(4px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            padding: 1rem;
+        }
+        .modal-content {
+            background: white;
+            border-radius: 24px;
+            padding: 2rem;
+            max-width: 800px;
+            width: 100%;
+            max-height: 85vh;
+            overflow-y: auto;
+        }
+        
+        /* Toast */
+        .toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 1rem 1.5rem;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 10px 25px -5px rgba(0,0,0,0.1);
+            border-left: 4px solid #10b981;
+            font-weight: 600;
+            z-index: 10000;
+            animation: slideIn 0.3s ease;
+            text-transform: uppercase;
+        }
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        
+        /* OEE Metric */
+        .oee-metric {
+            background: white;
+            border-radius: 16px;
+            padding: 1rem;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+        }
+        
+        /* Responsive */
+        @media (max-width: 640px) {
+            .nav-modern { border-radius: 20px; flex-wrap: wrap; }
+            .nav-item { flex: 1 1 auto; text-align: center; justify-content: center; }
+        }
+    </style>
+</head>
+<body class="bg-slate-50">
+
+<div id="app" class="min-h-screen"></div>
+
+<script>
+    // ==================== KODE TKL REFERENCE ====================
+    const KODE_TKL = {
+        '1': { name: 'PERSIAPAN AWAL (SETUP)', icon: '🔧', hasDuration: true },
+        '2': { name: 'JALAN PROSES (MACHINE RUNNING)', icon: '⚙️', hasDuration: false },
+        '3': { name: 'LINESTOP MESIN', icon: '⚠️', hasDuration: false },
+        '5': { name: 'AM ACTIVITY (5R, CLIT, CLOSE WHITE TAG)', icon: '🧹', hasDuration: true },
+        '6': { name: 'PM, CLOSE YELLOW & RED TAG', icon: '🔩', hasDuration: false },
+        '7': { name: 'CLEANING AKHIR (CLEANUP)', icon: '🧼', hasDuration: true },
+        '8': { name: 'ISTIRAHAT, BRIEFING, CM, QCC, START UP', icon: '☕', hasDuration: true },
+        '9': { name: 'LINE STOP NON MESIN', icon: '⏸️', hasDuration: false }
+    };
+
+    // ==================== SHIFT CONFIG ====================
+    const SHIFTS = {
+        'SHIFT 1 (07:00-15:30)': { start: '07:00', end: '15:30' },
+        'SHIFT 2 (15:20-22:50)': { start: '15:20', end: '22:50' },
+        'SHIFT 3 (22:40-07:10)': { start: '22:40', end: '07:10' }
+    };
+
+    // ==================== STATE ====================
+    const state = {
+        currentPage: 'management',
+        machines: [],
+        tklRecords: [],
+        libraryKegiatan: {},
+        
+        // Input TKL state
+        kegiatanList: [],
+        batches: [],
+        selectedDate: new Date().toISOString().split('T')[0],
+        selectedShift: '',
+        selectedMachineId: '',
+        selectedOperator: '',
+        
+        // Filters
+        filters: {
+            startDate: new Date(new Date().getFullYear(), new Date().getMonth(), 1).toISOString().split('T')[0],
+            endDate: new Date().toISOString().split('T')[0]
+        }
+    };
+
+    // ==================== UPPERCASE UTILITY ====================
+    function toUpper(str) {
+        return str ? str.toString().toUpperCase() : '';
+    }
+
+    // ==================== UTILS ====================
+    function showToast(msg, type = 'success') {
+        const icons = { success: '✅', error: '❌', warning: '⚠️' };
+        const toast = document.createElement('div');
+        toast.className = 'toast';
+        toast.innerHTML = `<span>${icons[type]}</span><span>${toUpper(msg)}</span>`;
+        document.body.appendChild(toast);
+        setTimeout(() => toast.remove(), 3000);
+    }
+
+    function showModal(content) {
+        const modal = document.createElement('div');
+        modal.className = 'modal-overlay';
+        modal.innerHTML = `<div class="modal-content">${content}</div>`;
+        modal.onclick = (e) => { if (e.target === modal) modal.remove(); };
+        document.body.appendChild(modal);
+    }
+
+    function closeModal() {
+        document.querySelector('.modal-overlay')?.remove();
+    }
+
+    // ==================== TIME FUNCTIONS ====================
+    function getShiftStart() {
+        return state.selectedShift ? SHIFTS[state.selectedShift]?.start || '07:00' : '07:00';
+    }
+
+    function getShiftEnd() {
+        return state.selectedShift ? SHIFTS[state.selectedShift]?.end || '15:30' : '15:30';
+    }
+
+    function getNextStart() {
+        if (state.kegiatanList.length === 0) return getShiftStart();
+        return state.kegiatanList[state.kegiatanList.length - 1].jam;
+    }
+
+    function addHour(time) {
+        if (!time) return '08:00';
+        const [h, m] = time.split(':').map(Number);
+        const nh = (h + 1) % 24;
+        return `${nh.toString().padStart(2,'0')}:${m.toString().padStart(2,'0')}`;
+    }
+
+    function isTimeGreater(t1, t2) {
+        if (!t1 || !t2) return false;
+        const [h1, m1] = t1.split(':').map(Number);
+        const [h2, m2] = t2.split(':').map(Number);
+        return h1 > h2 || (h1 === h2 && m1 > m2);
+    }
+
+    function hitungDurasi(dari, sampai) {
+        if (!dari || !sampai) return 0;
+        const [h1,m1] = dari.split(':').map(Number);
+        const [h2,m2] = sampai.split(':').map(Number);
+        return (h2*60+m2) - (h1*60+m1);
+    }
+
+    // ==================== OEE CALC ====================
+    function hitungOEE() {
+        let running = 0, planned = 0, unplanned = 0;
+        
+        state.kegiatanList.forEach(k => {
+            const dur = hitungDurasi(k.dari, k.jam);
+            if (k.kode === 2) running += dur;
+            else if ([1,5,7,8].includes(k.kode)) planned += dur;
+            else if ([3,9].includes(k.kode)) unplanned += dur;
+        });
+        
+        const totalGood = state.batches.reduce((s, b) => s + (b.good || 0), 0);
+        const totalReject = state.batches.reduce((s, b) => s + (b.reject || 0), 0);
+        
+        const avail = (running + unplanned) ? (running / (running + unplanned)) * 100 : 0;
+        
+        const mesin = state.machines.find(m => m.id === state.selectedMachineId);
+        const target = mesin?.target || 1;
+        
+        const perf = (running * target) ? (totalGood / (running * target)) * 100 : 0;
+        const quality = totalGood ? ((totalGood - totalReject) / totalGood) * 100 : 100;
+        const oee = (avail * perf * quality) / 10000;
+        
+        return { running, planned, unplanned, avail, perf, quality, oee };
+    }
+
+    // ==================== NAVIGATION ====================
+    function navigateTo(page) {
+        state.currentPage = page;
+        renderApp();
+    }
+
+    // ==================== RENDER APP ====================
+    function renderApp() {
+        const app = document.getElementById('app');
+        
+        if (state.currentPage === 'dashboard') {
+            app.innerHTML = renderDashboard();
+        } else if (state.currentPage === 'input') {
+            app.innerHTML = renderInputPage();
+        } else if (state.currentPage === 'management') {
+            app.innerHTML = renderManagementPage();
+        }
+        
+        window.scrollTo(0, 0);
+    }
+
+    function renderHeader(title, icon) {
+        return `
+            <div class="gradient-bg text-white px-6 py-8">
+                <div class="max-w-7xl mx-auto">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <h1 class="text-2xl font-bold flex items-center gap-3">
+                                <span class="text-3xl">${icon}</span>
+                                ${toUpper(title)}
+                            </h1>
+                            <p class="text-white/80 text-sm mt-1">PT GOF • OVERALL EQUIPMENT EFFECTIVENESS</p>
+                        </div>
+                        <div class="text-right">
+                            <div class="text-xl font-semibold">${toUpper(new Date().toLocaleDateString('id-ID', { day:'numeric', month:'long', year:'numeric' }))}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+    }
+
+    function renderNav() {
+        return `
+            <div class="max-w-7xl mx-auto px-6 -mt-5">
+                <div class="nav-modern">
+                    <div class="nav-item ${state.currentPage === 'dashboard' ? 'active' : ''}" onclick="navigateTo('dashboard')">
+                        <i class="fas fa-chart-pie"></i> DASHBOARD
+                    </div>
+                    <div class="nav-item ${state.currentPage === 'input' ? 'active' : ''}" onclick="navigateTo('input')">
+                        <i class="fas fa-pen"></i> INPUT TKL
+                    </div>
+                    <div class="nav-item ${state.currentPage === 'management' ? 'active' : ''}" onclick="navigateTo('management')">
+                        <i class="fas fa-cog"></i> MANAGEMENT
+                    </div>
+                </div>
+            </div>
+        `;
+    }
+
+    // ==================== DASHBOARD PAGE ====================
+    function renderDashboard() {
+        const records = JSON.parse(localStorage.getItem('tkl_records') || '[]');
+        const totalRecords = records.length;
+        const totalGood = records.reduce((sum, r) => sum + (r.total_good || 0), 0);
+        const avgOEE = records.length ? (records.reduce((sum, r) => sum + (r.oee_actual || 0), 0) / records.length).toFixed(1) : 0;
+        
+        return `
+            ${renderHeader('DASHBOARD OEE', '📊')}
+            ${renderNav()}
+            
+            <div class="max-w-7xl mx-auto px-6 py-8 space-y-6">
+                <!-- STATS CARDS -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="card-modern">
+                        <div class="flex items-center gap-4">
+                            <div class="w-12 h-12 rounded-2xl bg-blue-100 text-blue-600 flex items-center justify-center text-xl">
+                                <i class="fas fa-database"></i>
+                            </div>
+                            <div>
+                                <div class="text-sm text-slate-500">TOTAL RECORDS</div>
+                                <div class="text-2xl font-bold text-slate-800">${totalRecords}</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="card-modern">
+                        <div class="flex items-center gap-4">
+                            <div class="w-12 h-12 rounded-2xl bg-green-100 text-green-600 flex items-center justify-center text-xl">
+                                <i class="fas fa-box"></i>
+                            </div>
+                            <div>
+                                <div class="text-sm text-slate-500">TOTAL OUTPUT</div>
+                                <div class="text-2xl font-bold text-slate-800">${totalGood.toLocaleString()}</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="card-modern">
+                        <div class="flex items-center gap-4">
+                            <div class="w-12 h-12 rounded-2xl bg-purple-100 text-purple-600 flex items-center justify-center text-xl">
+                                <i class="fas fa-chart-line"></i>
+                            </div>
+                            <div>
+                                <div class="text-sm text-slate-500">RATA-RATA OEE</div>
+                                <div class="text-2xl font-bold text-slate-800">${avgOEE}%</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- RECENT RECORDS -->
+                <div class="card-modern">
+                    <h3 class="font-bold text-slate-700 mb-4 flex items-center gap-2">
+                        <i class="fas fa-history text-blue-500"></i>
+                        RECENT RECORDS
+                    </h3>
+                    
+                    ${records.length === 0 ? `
+                        <div class="text-center py-12 bg-slate-50 rounded-xl">
+                            <i class="fas fa-inbox text-4xl text-slate-300 mb-3"></i>
+                            <p class="text-slate-400">BELUM ADA DATA</p>
+                        </div>
+                    ` : `
+                        <div class="overflow-x-auto">
+                            <table class="w-full">
+                                <thead>
+                                    <tr class="text-left text-xs text-slate-500">
+                                        <th class="pb-2">TANGGAL</th>
+                                        <th class="pb-2">SHIFT</th>
+                                        <th class="pb-2">MESIN</th>
+                                        <th class="pb-2">OPERATOR</th>
+                                        <th class="pb-2">GOOD</th>
+                                        <th class="pb-2">OEE</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    ${records.slice(-5).reverse().map(r => `
+                                        <tr class="border-t hover:bg-slate-50 cursor-pointer" onclick='showRecordDetail(${JSON.stringify(r)})'>
+                                            <td class="py-3">${new Date(r.tanggal).toLocaleDateString('id-ID')}</td>
+                                            <td>${r.shift?.substring(0,8)}</td>
+                                            <td class="font-medium">${r.mesin_name}</td>
+                                            <td>${r.operator}</td>
+                                            <td>${r.total_good || 0}</td>
+                                            <td class="${(r.oee_actual || 0) >= 85 ? 'text-green-600' : 'text-red-600'} font-bold">${(r.oee_actual || 0).toFixed(1)}%</td>
+                                        </tr>
+                                    `).join('')}
+                                </tbody>
+                            </table>
+                        </div>
+                    `}
+                </div>
+            </div>
+        `;
+    }
+
+    function showRecordDetail(record) {
+        showModal(`
+            <h3 class="text-xl font-bold mb-4 flex items-center gap-2">
+                <i class="fas fa-file-alt text-blue-500"></i>
+                DETAIL RECORD
+            </h3>
+            
+            <div class="space-y-4">
+                <div class="grid grid-cols-2 gap-3 p-4 bg-slate-50 rounded-xl">
+                    <div><span class="text-xs text-slate-500">TANGGAL</span><div class="font-semibold">${new Date(record.tanggal).toLocaleDateString('id-ID')}</div></div>
+                    <div><span class="text-xs text-slate-500">SHIFT</span><div class="font-semibold">${record.shift}</div></div>
+                    <div><span class="text-xs text-slate-500">MESIN</span><div class="font-semibold">${record.mesin_name}</div></div>
+                    <div><span class="text-xs text-slate-500">OPERATOR</span><div class="font-semibold">${record.operator}</div></div>
+                </div>
+                
+                <div>
+                    <h4 class="font-semibold text-sm mb-2">📦 BATCH</h4>
+                    <div class="space-y-2">
+                        ${record.batches?.map(b => `
+                            <div class="p-3 bg-slate-50 rounded-lg flex justify-between">
+                                <span class="font-medium">${b.batch}</span>
+                                <span>GOOD: ${b.good || 0} | REJECT: ${b.reject || 0}</span>
+                            </div>
+                        `).join('') || '-'}
+                    </div>
+                </div>
+                
+                <div class="grid grid-cols-3 gap-3">
+                    <div class="p-3 bg-blue-50 rounded-lg text-center">
+                        <div class="text-xs text-blue-600">AVAIL</div>
+                        <div class="font-bold">${(record.availability || 0).toFixed(1)}%</div>
+                    </div>
+                    <div class="p-3 bg-purple-50 rounded-lg text-center">
+                        <div class="text-xs text-purple-600">PERF</div>
+                        <div class="font-bold">${(record.performance || 0).toFixed(1)}%</div>
+                    </div>
+                    <div class="p-3 bg-green-50 rounded-lg text-center">
+                        <div class="text-xs text-green-600">QUAL</div>
+                        <div class="font-bold">${(record.quality || 0).toFixed(1)}%</div>
+                    </div>
+                </div>
+                
+                <div class="p-4 bg-gradient-to-r from-blue-50 to-purple-50 rounded-xl text-center">
+                    <div class="text-sm text-slate-600">OEE</div>
+                    <div class="text-3xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+                        ${(record.oee_actual || 0).toFixed(1)}%
+                    </div>
+                </div>
+                
+                <button class="btn-modern btn-secondary w-full" onclick="closeModal()">TUTUP</button>
+            </div>
+        `);
+    }
+
+    // ==================== INPUT PAGE ====================
+    function renderInputPage() {
+        const oee = hitungOEE();
+        const mesinTerpilih = state.machines.find(m => m.id === state.selectedMachineId);
+        
+        return `
+            ${renderHeader('INPUT TKL REAL TIME', '✏️')}
+            ${renderNav()}
+            
+            <div class="max-w-7xl mx-auto px-6 py-8 space-y-6">
+                <!-- HEADER FORM -->
+                <div class="card-modern">
+                    <h3 class="font-bold mb-4">📋 INFORMASI SHIFT</h3>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                        <div>
+                            <label class="text-xs font-semibold text-slate-500 mb-1 block">TANGGAL</label>
+                            <input type="date" class="input-modern" value="${state.selectedDate}" onchange="updateDate(this.value)">
+                        </div>
+                        <div>
+                            <label class="text-xs font-semibold text-slate-500 mb-1 block">SHIFT</label>
+                            <select class="input-modern" onchange="updateShift(this.value)">
+                                <option value="">PILIH SHIFT</option>
+                                ${Object.keys(SHIFTS).map(s => `
+                                    <option value="${s}" ${state.selectedShift === s ? 'selected' : ''}>${toUpper(s)}</option>
+                                `).join('')}
+                            </select>
+                        </div>
+                        <div>
+                            <label class="text-xs font-semibold text-slate-500 mb-1 block">MESIN</label>
+                            <select class="input-modern" onchange="updateMachine(this.value)">
+                                <option value="">PILIH MESIN</option>
+                                ${state.machines.map(m => `
+                                    <option value="${m.id}" ${state.selectedMachineId === m.id ? 'selected' : ''}>${m.name}</option>
+                                `).join('')}
+                            </select>
+                        </div>
+                        <div>
+                            <label class="text-xs font-semibold text-slate-500 mb-1 block">OPERATOR</label>
+                            <input type="text" class="input-modern" placeholder="NAMA OPERATOR" value="${state.selectedOperator}" onchange="updateOperator(this.value)">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TIMELINE -->
+                <div class="card-modern">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="font-bold">⏱️ TIMELINE KEGIATAN</h3>
+                        <button class="btn-modern btn-primary text-sm" onclick="showTambahKegiatanModal()" ${!mesinTerpilih ? 'disabled style="opacity:0.5"' : ''}>
+                            <i class="fas fa-plus"></i> TAMBAH
+                        </button>
+                    </div>
+
+                    ${state.kegiatanList.length === 0 ? `
+                        <div class="text-center py-12 bg-slate-50 rounded-2xl border-2 border-dashed">
+                            <i class="fas fa-clock text-4xl text-slate-300 mb-3"></i>
+                            <p class="text-slate-400 font-medium">BELUM ADA KEGIATAN</p>
+                            <p class="text-xs text-slate-300 mt-1">${!mesinTerpilih ? 'PILIH MESIN TERLEBIH DAHULU' : 'KLIK TOMBOL TAMBAH UNTUK MEMULAI'}</p>
+                        </div>
+                    ` : `
+                        <div class="space-y-2">
+                            ${state.kegiatanList.map((k, i) => `
+                                <div class="timeline-card">
+                                    <div class="kode-badge kode-${k.kode}">${k.kode}</div>
+                                    <div class="flex-1">
+                                        <div class="flex items-center gap-3">
+                                            <span class="text-sm font-semibold">${k.dari} - ${k.jam}</span>
+                                            <span class="text-xs bg-slate-200 px-2 py-1 rounded-full">${KODE_TKL[k.kode]?.icon} ${KODE_TKL[k.kode]?.name}</span>
+                                        </div>
+                                        <div class="text-sm font-medium mt-1">${k.kegiatan}</div>
+                                        ${k.notes ? `<div class="text-xs text-slate-500 mt-1">📝 ${k.notes}</div>` : ''}
+                                        ${k.wr ? `<div class="text-xs text-slate-500 mt-1">📋 WR: ${k.wr}</div>` : ''}
+                                    </div>
+                                    <button class="w-8 h-8 rounded-full bg-red-50 text-red-500 hover:bg-red-100" onclick="hapusKegiatan(${i})">
+                                        <i class="fas fa-trash text-sm"></i>
+                                    </button>
+                                </div>
+                            `).join('')}
+                        </div>
+                    `}
+                </div>
+
+                <!-- BATCH -->
+                <div class="card-modern">
+                    <h3 class="font-bold mb-4">📦 BATCH & OUTPUT</h3>
+
+                    <div id="batch-container" class="space-y-3 mb-4">
+                        ${state.batches.map((b, i) => `
+                            <div class="flex flex-col sm:flex-row gap-3 p-4 bg-slate-50 rounded-xl">
+                                <input type="text" class="input-modern flex-1" placeholder="NO. BATCH" value="${b.batch || ''}" onchange="updateBatch(${i}, 'batch', this.value)">
+                                <input type="number" class="input-modern w-full sm:w-32" placeholder="GOOD" value="${b.good || ''}" onchange="updateBatch(${i}, 'good', this.value)">
+                                <input type="number" class="input-modern w-full sm:w-32" placeholder="REJECT" value="${b.reject || ''}" onchange="updateBatch(${i}, 'reject', this.value)">
+                                <button class="btn-modern btn-secondary w-full sm:w-auto" onclick="hapusBatch(${i})">
+                                    <i class="fas fa-trash"></i> HAPUS
+                                </button>
+                            </div>
+                        `).join('')}
+                    </div>
+
+                    <button class="btn-modern btn-secondary w-full" onclick="tambahBatch()">
+                        <i class="fas fa-plus"></i> TAMBAH BATCH
+                    </button>
+
+                    <div class="grid grid-cols-2 gap-4 mt-4">
+                        <div class="bg-blue-50 rounded-xl p-4 text-center">
+                            <div class="text-xs text-blue-600 font-semibold">TOTAL GOOD</div>
+                            <div class="text-2xl font-bold text-blue-700">${state.batches.reduce((s,b)=>s+(b.good||0),0)}</div>
+                        </div>
+                        <div class="bg-red-50 rounded-xl p-4 text-center">
+                            <div class="text-xs text-red-600 font-semibold">TOTAL REJECT</div>
+                            <div class="text-2xl font-bold text-red-700">${state.batches.reduce((s,b)=>s+(b.reject||0),0)}</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- OEE LIVE -->
+                <div class="card-modern bg-gradient-to-r from-blue-50 to-purple-50">
+                    <h3 class="font-bold mb-4">📊 OEE LIVE</h3>
+                    
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+                        <div class="oee-metric">
+                            <div class="text-xs text-slate-400">AVAIL</div>
+                            <div class="text-lg font-bold ${oee.avail >= 90 ? 'text-green-600' : 'text-yellow-600'}">${oee.avail.toFixed(1)}%</div>
+                        </div>
+                        <div class="oee-metric">
+                            <div class="text-xs text-slate-400">PERF</div>
+                            <div class="text-lg font-bold ${oee.perf >= 95 ? 'text-green-600' : 'text-yellow-600'}">${oee.perf.toFixed(1)}%</div>
+                        </div>
+                        <div class="oee-metric">
+                            <div class="text-xs text-slate-400">QUAL</div>
+                            <div class="text-lg font-bold ${oee.quality >= 99 ? 'text-green-600' : 'text-yellow-600'}">${oee.quality.toFixed(1)}%</div>
+                        </div>
+                        <div class="oee-metric bg-gradient-to-br from-blue-100 to-purple-100">
+                            <div class="text-xs text-slate-500">OEE</div>
+                            <div class="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+                                ${oee.oee.toFixed(1)}%
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SAVE BUTTON -->
+                <div class="flex justify-end">
+                    <button class="btn-modern btn-primary px-8 py-4 text-base" onclick="simpanData()">
+                        <i class="fas fa-save"></i> SIMPAN DATA SHIFT
+                    </button>
+                </div>
+            </div>
+        `;
+    }
+
+    // ==================== INPUT ACTIONS ====================
+    function updateDate(val) { state.selectedDate = val; }
+    function updateShift(val) { state.selectedShift = val; renderApp(); }
+    function updateMachine(val) { state.selectedMachineId = val; renderApp(); }
+    function updateOperator(val) { state.selectedOperator = toUpper(val); }
+
+    function showTambahKegiatanModal() {
+        if (!state.selectedMachineId) {
+            showToast('PILIH MESIN TERLEBIH DAHULU', 'warning');
+            return;
+        }
+
+        const mesin = state.machines.find(m => m.id === state.selectedMachineId);
+        if (!mesin) {
+            showToast('MESIN TIDAK DITEMUKAN', 'error');
+            return;
+        }
+
+        const start = getNextStart();
+        const end = addHour(start);
+
+        // BUILD OPTIONS DARI ACTIVITIES MESIN
+        let options = '<option value="">PILIH KEGIATAN</option>';
+        
+        // URUTAN KODE: 1,2,3,5,6,7,8,9
+        const kodeUrutan = ['1','2','3','5','6','7','8','9'];
+        
+        kodeUrutan.forEach(kodeStr => {
+            const acts = mesin.activities?.[kodeStr];
+            
+            if (acts && acts.length > 0) {
+                options += `<optgroup label="KODE ${kodeStr} ${KODE_TKL[kodeStr]?.icon}">`;
+                acts.forEach((a, idx) => {
+                    const durasiText = a.durasi ? ` (${a.durasi} MIN)` : '';
+                    options += `<option value="${kodeStr}_${idx}">${a.nama}${durasiText}</option>`;
+                });
+                options += '</optgroup>';
+            }
+        });
+
+        showModal(`
+            <h3 class="text-xl font-bold mb-6">➕ TAMBAH KEGIATAN</h3>
+            
+            <div class="space-y-4">
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="text-xs font-semibold text-slate-500 mb-1 block">DARI</label>
+                        <input type="time" id="modal-dari" class="input-modern" value="${start}" ${!state.kegiatanList.length ? 'readonly' : ''}>
+                    </div>
+                    <div>
+                        <label class="text-xs font-semibold text-slate-500 mb-1 block">SAMPAI</label>
+                        <input type="time" id="modal-sampai" class="input-modern" value="${end}">
+                    </div>
+                </div>
+                
+                <div>
+                    <label class="text-xs font-semibold text-slate-500 mb-1 block">PILIH KEGIATAN</label>
+                    <select id="modal-kegiatan-select" class="input-modern" onchange="updateKegiatanFromSelect()">
+                        ${options}
+                    </select>
+                </div>
+                
+                <div>
+                    <label class="text-xs font-semibold text-slate-500 mb-1 block">NAMA KEGIATAN</label>
+                    <input type="text" id="modal-kegiatan" class="input-modern" readonly>
+                </div>
+                
+                <div>
+                    <label class="text-xs font-semibold text-slate-500 mb-1 block">CATATAN</label>
+                    <input type="text" id="modal-notes" class="input-modern" placeholder="OPSIONAL">
+                </div>
+                
+                <div id="modal-wr-field" class="hidden">
+                    <label class="text-xs font-semibold text-slate-500 mb-1 block">NO. WORK REQUEST</label>
+                    <input type="text" id="modal-wr" class="input-modern" placeholder="WAJIB UNTUK LINE STOP ≥ 180 MENIT">
+                </div>
+                
+                <div class="flex gap-3 pt-4">
+                    <button class="btn-modern btn-primary flex-1" onclick="tambahKegiatanFromModal()">TAMBAH</button>
+                    <button class="btn-modern btn-secondary flex-1" onclick="closeModal()">BATAL</button>
+                </div>
+            </div>
+        `);
+    }
+
+    function updateKegiatanFromSelect() {
+        const sel = document.getElementById('modal-kegiatan-select');
+        if (!sel?.value) return;
+        
+        const [kode, idx] = sel.value.split('_');
+        const mesin = state.machines.find(m => m.id === state.selectedMachineId);
+        const kegiatan = mesin?.activities?.[kode]?.[parseInt(idx)];
+        
+        if (kegiatan) {
+            document.getElementById('modal-kegiatan').value = kegiatan.nama;
+            const wrField = document.getElementById('modal-wr-field');
+            if (wrField) {
+                wrField.classList.toggle('hidden', kode !== '3');
+            }
+        }
+    }
+
+    function tambahKegiatanFromModal() {
+        const dari = document.getElementById('modal-dari')?.value;
+        const sampai = document.getElementById('modal-sampai')?.value;
+        const kegiatan = document.getElementById('modal-kegiatan')?.value;
+        const notes = document.getElementById('modal-notes')?.value || '';
+        const wr = document.getElementById('modal-wr')?.value || '';
+        const sel = document.getElementById('modal-kegiatan-select');
+        
+        if (!sel?.value || !kegiatan) {
+            showToast('PILIH KEGIATAN', 'error');
+            return;
+        }
+
+        const [kode] = sel.value.split('_');
+        const durasi = hitungDurasi(dari, sampai);
+        
+        if (isTimeGreater(sampai, getShiftEnd())) {
+            showToast('MELEBIHI JAM AKHIR SHIFT', 'error');
+            return;
+        }
+
+        if (kode === '3' && durasi >= 180 && !wr) {
+            showToast('LINE STOP ≥ 180 MENIT WAJIB ISI NO. WR', 'error');
+            return;
+        }
+
+        if (state.kegiatanList.length === 0) {
+            const shiftStart = getShiftStart();
+            if (dari !== shiftStart) {
+                showToast(`KEGIATAN PERTAMA HARUS MULAI JAM ${shiftStart}`, 'error');
+                return;
+            }
+        } else {
+            const last = state.kegiatanList[state.kegiatanList.length - 1];
+            if (dari !== last.jam) {
+                showToast(`HARUS LANJUT DARI JAM ${last.jam}`, 'error');
+                return;
+            }
+        }
+
+        state.kegiatanList.push({
+            dari, 
+            jam: sampai, 
+            kode: parseInt(kode), 
+            kegiatan: toUpper(kegiatan),
+            notes: toUpper(notes),
+            wr: toUpper(wr)
+        });
+
+        closeModal();
+        renderApp();
+        showToast('KEGIATAN DITAMBAHKAN');
+    }
+
+    function hapusKegiatan(i) {
+        state.kegiatanList.splice(i, 1);
+        renderApp();
+    }
+
+    function tambahBatch() {
+        state.batches.push({ batch: '', good: 0, reject: 0 });
+        renderApp();
+    }
+
+    function hapusBatch(i) {
+        state.batches.splice(i, 1);
+        renderApp();
+    }
+
+    function updateBatch(i, field, val) {
+        if (field === 'batch') {
+            state.batches[i][field] = toUpper(val);
+        } else {
+            state.batches[i][field] = val === '' ? 0 : parseInt(val);
+        }
+        renderApp();
+    }
+
+    function simpanData() {
+        if (!state.selectedShift || !state.selectedMachineId || !state.selectedOperator) {
+            showToast('LENGKAPI SEMUA FIELD HEADER', 'error');
+            return;
+        }
+        if (!state.kegiatanList.length) {
+            showToast('MINIMAL 1 KEGIATAN', 'error');
+            return;
+        }
+        if (!state.batches.length) {
+            showToast('MINIMAL 1 BATCH', 'error');
+            return;
+        }
+
+        const oee = hitungOEE();
+        const mesin = state.machines.find(m => m.id === state.selectedMachineId);
+
+        const record = {
+            id: crypto.randomUUID(),
+            tanggal: state.selectedDate,
+            shift: state.selectedShift,
+            mesin_id: state.selectedMachineId,
+            mesin_name: mesin?.name,
+            operator: toUpper(state.selectedOperator),
+            kegiatan: state.kegiatanList.map(k => ({
+                ...k,
+                kegiatan: toUpper(k.kegiatan),
+                notes: toUpper(k.notes),
+                wr: toUpper(k.wr)
+            })),
+            batches: state.batches.map(b => ({
+                ...b,
+                batch: toUpper(b.batch)
+            })),
+            total_good: state.batches.reduce((s,b)=>s+(b.good||0),0),
+            total_defect: state.batches.reduce((s,b)=>s+(b.reject||0),0),
+            running_time: oee.running,
+            planned_dt: oee.planned,
+            unplanned_dt: oee.unplanned,
+            availability: oee.avail,
+            performance: oee.perf,
+            quality: oee.quality,
+            oee_actual: oee.oee,
+            created_at: new Date().toISOString()
+        };
+
+        const saved = JSON.parse(localStorage.getItem('tkl_records') || '[]');
+        saved.push(record);
+        localStorage.setItem('tkl_records', JSON.stringify(saved));
+
+        showToast('DATA BERHASIL DISIMPAN! ✨');
+        
+        // RESET FORM
+        state.kegiatanList = [];
+        state.batches = [];
+        state.selectedShift = '';
+        state.selectedMachineId = '';
+        state.selectedOperator = '';
+        
+        state.currentPage = 'dashboard';
+        renderApp();
+    }
+
+    // ==================== MANAGEMENT PAGE ====================
+    function renderManagementPage() {
+        return `
+            ${renderHeader('MANAGEMENT SYSTEM', '⚙️')}
+            ${renderNav()}
+            
+            <div class="max-w-7xl mx-auto px-6 py-8 space-y-8">
+                <!-- LIBRARY KODE SECTION -->
+                <div class="card-modern">
+                    <div class="flex items-center justify-between mb-6">
+                        <h2 class="text-xl font-bold">📚 LIBRARY KEGIATAN</h2>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                        ${Object.entries(KODE_TKL).map(([kode, value]) => `
+                            <div class="bg-slate-50 rounded-xl p-4">
+                                <div class="flex items-center justify-between mb-3">
+                                    <div class="flex items-center gap-2">
+                                        <span class="kode-badge kode-${kode}">KODE ${kode}</span>
+                                        <span class="font-semibold">${value.icon} ${value.name}</span>
+                                    </div>
+                                    <button class="w-8 h-8 rounded-full bg-blue-100 text-blue-600 hover:bg-blue-200" 
+                                            onclick="showTambahKegiatanLibraryModal('${kode}')">
+                                        <i class="fas fa-plus text-sm"></i>
+                                    </button>
+                                </div>
+                                
+                                <div class="space-y-2 max-h-[200px] overflow-y-auto">
+                                    ${renderLibraryItems(kode)}
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+                
+                <!-- MACHINE LIST SECTION -->
+                <div class="card-modern">
+                    <div class="flex items-center justify-between mb-6">
+                        <h2 class="text-xl font-bold">🏭 DAFTAR MESIN</h2>
+                        <button class="btn-modern btn-primary" onclick="showTambahMesinModal()">
+                            <i class="fas fa-plus"></i> TAMBAH MESIN
+                        </button>
+                    </div>
+                    
+                    ${state.machines.length === 0 ? `
+                        <div class="text-center py-12 bg-slate-50 rounded-xl">
+                            <i class="fas fa-tools text-4xl text-slate-300 mb-3"></i>
+                            <p class="text-slate-400">BELUM ADA MESIN</p>
+                        </div>
+                    ` : `
+                        <div class="grid grid-cols-1 gap-4">
+                            ${state.machines.map(m => `
+                                <div class="bg-slate-50 rounded-xl p-4 flex items-center justify-between hover:bg-slate-100">
+                                    <div class="flex-1">
+                                        <div class="flex items-center gap-3">
+                                            <h4 class="font-bold text-slate-800">${m.name}</h4>
+                                            <span class="text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded-full">
+                                                TARGET: ${m.target}/MENIT
+                                            </span>
+                                        </div>
+                                        
+                                        <div class="flex flex-wrap gap-2 mt-3">
+                                            ${Object.entries(m.activities || {}).map(([kode, acts]) => `
+                                                <div class="relative group">
+                                                    <span class="kode-badge kode-${kode} cursor-help">
+                                                        ${kode} (${acts.length})
+                                                    </span>
+                                                    <div class="absolute bottom-full left-0 mb-2 w-48 p-2 bg-white rounded-lg shadow-lg hidden group-hover:block z-10">
+                                                        <p class="text-xs font-semibold mb-1">KODE ${kode}</p>
+                                                        ${acts.map(a => `
+                                                            <div class="text-xs py-1 border-b last:border-0">
+                                                                ${a.nama}
+                                                                ${a.durasi ? `<span class="text-blue-600">(${a.durasi} MIN)</span>` : ''}
+                                                            </div>
+                                                        `).join('')}
+                                                    </div>
+                                                </div>
+                                            `).join('')}
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="flex gap-2 ml-4">
+                                        <button class="w-8 h-8 rounded-full bg-blue-100 text-blue-600 hover:bg-blue-200" 
+                                                onclick="editMachine('${m.id}')">
+                                            <i class="fas fa-edit text-sm"></i>
+                                        </button>
+                                        <button class="w-8 h-8 rounded-full bg-red-100 text-red-600 hover:bg-red-200" 
+                                                onclick="deleteMachine('${m.id}')">
+                                            <i class="fas fa-trash text-sm"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    `}
+                </div>
+            </div>
+        `;
+    }
+
+    function renderLibraryItems(kode) {
+        const items = state.libraryKegiatan[kode] || [];
+        if (items.length === 0) {
+            return '<p class="text-xs text-slate-400 italic">BELUM ADA KEGIATAN</p>';
+        }
+        return items.map(item => `
+            <div class="flex items-center justify-between bg-white p-2 rounded-lg">
+                <span class="text-sm">${item}</span>
+                <button class="text-red-500 hover:text-red-700" onclick="hapusDariLibrary('${kode}', '${item}')">
+                    <i class="fas fa-times text-xs"></i>
+                </button>
+            </div>
+        `).join('');
+    }
+
+    // ==================== LIBRARY ACTIONS ====================
+    function showTambahKegiatanLibraryModal(kode) {
+        showModal(`
+            <h3 class="text-xl font-bold mb-6">➕ TAMBAH KE LIBRARY KODE ${kode}</h3>
+            
+            <div class="space-y-4">
+                <div>
+                    <label class="text-xs font-semibold text-slate-500 mb-1 block">NAMA KEGIATAN</label>
+                    <input type="text" id="modal-nama-kegiatan" class="input-modern" placeholder="CONTOH: SETUP INJEKSI">
+                </div>
+                
+                <div class="flex gap-3 pt-4">
+                    <button class="btn-modern btn-primary flex-1" onclick="simpanKegiatanKeLibrary('${kode}')">SIMPAN</button>
+                    <button class="btn-modern btn-secondary flex-1" onclick="closeModal()">BATAL</button>
+                </div>
+            </div>
+        `);
+    }
+
+    function simpanKegiatanKeLibrary(kode) {
+        const nama = document.getElementById('modal-nama-kegiatan')?.value;
+        if (!nama) {
+            showToast('NAMA KEGIATAN HARUS DIISI', 'error');
+            return;
+        }
+
+        if (!state.libraryKegiatan[kode]) {
+            state.libraryKegiatan[kode] = [];
+        }
+        
+        state.libraryKegiatan[kode].push(toUpper(nama));
+        localStorage.setItem('library_kegiatan', JSON.stringify(state.libraryKegiatan));
+        
+        closeModal();
+        renderApp();
+        showToast('KEGIATAN DITAMBAHKAN KE LIBRARY');
+    }
+
+    function hapusDariLibrary(kode, item) {
+        if (confirm(`HAPUS "${item}" DARI LIBRARY?`)) {
+            state.libraryKegiatan[kode] = state.libraryKegiatan[kode].filter(i => i !== item);
+            localStorage.setItem('library_kegiatan', JSON.stringify(state.libraryKegiatan));
+            renderApp();
+            showToast('KEGIATAN DIHAPUS DARI LIBRARY', 'warning');
+        }
+    }
+
+    // ==================== MACHINE MODAL ====================
+    function showTambahMesinModal() {
+        let html = `
+            <h3 class="text-xl font-bold mb-6">➕ TAMBAH MESIN BARU</h3>
+            
+            <div class="space-y-6">
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="text-xs font-semibold text-slate-500 mb-1 block">NAMA MESIN</label>
+                        <input type="text" id="modal-nama-mesin" class="input-modern" placeholder="CONTOH: INJEKSI 1">
+                    </div>
+                    <div>
+                        <label class="text-xs font-semibold text-slate-500 mb-1 block">TARGET (PCS/MENIT)</label>
+                        <input type="number" id="modal-target" class="input-modern" placeholder="0" step="0.1">
+                    </div>
+                </div>
+                
+                <div class="border-t pt-4">
+                    <h4 class="font-semibold mb-4">PILIH KEGIATAN PER KODE</h4>
+                    
+                    <div class="space-y-6 max-h-[400px] overflow-y-auto pr-2" id="machine-activities-container">
+        `;
+        
+        // URUTAN KODE: 1,2,3,5,6,7,8,9
+        const kodeUrutan = ['1','2','3','5','6','7','8','9'];
+        
+        kodeUrutan.forEach(kodeStr => {
+            const libraryItems = state.libraryKegiatan[kodeStr] || [];
+            
+            html += `
+                <div class="bg-slate-50 p-4 rounded-xl">
+                    <div class="flex items-center gap-2 mb-3">
+                        <span class="kode-badge kode-${kodeStr}">KODE ${kodeStr}</span>
+                        <span class="font-medium">${KODE_TKL[kodeStr].icon} ${KODE_TKL[kodeStr].name}</span>
+                        ${KODE_TKL[kodeStr].hasDuration ? '<span class="text-xs text-blue-600">(WAJIB ISI DURASI)</span>' : ''}
+                    </div>
+                    
+                    <div class="space-y-3" id="kode-${kodeStr}-container">
+                        ${libraryItems.map((item, idx) => `
+                            <div class="flex items-center gap-3 bg-white p-3 rounded-lg">
+                                <input type="checkbox" id="cb_${kodeStr}_${idx}" class="w-4 h-4 text-blue-600 rounded" onchange="toggleDurationField('${kodeStr}', ${idx})">
+                                <label for="cb_${kodeStr}_${idx}" class="flex-1 text-sm">${item}</label>
+                                ${KODE_TKL[kodeStr].hasDuration ? `
+                                    <div id="durasi_${kodeStr}_${idx}" class="hidden">
+                                        <input type="number" class="input-modern w-24 text-sm" placeholder="DURASI" min="0" step="1">
+                                    </div>
+                                ` : ''}
+                            </div>
+                        `).join('')}
+                        
+                        ${libraryItems.length === 0 ? `
+                            <p class="text-sm text-slate-400 italic">BELUM ADA KEGIATAN. TAMBAH DULU DI LIBRARY KODE.</p>
+                        ` : ''}
+                    </div>
+                </div>
+            `;
+        });
+        
+        html += `
+                    </div>
+                </div>
+                
+                <div class="flex gap-3 pt-4">
+                    <button class="btn-modern btn-primary flex-1" onclick="simpanMesinBaru()">SIMPAN MESIN</button>
+                    <button class="btn-modern btn-secondary flex-1" onclick="closeModal()">BATAL</button>
+                </div>
+            </div>
+        `;
+        
+        showModal(html);
+    }
+
+    window.toggleDurationField = function(kode, idx) {
+        const checkbox = document.getElementById(`cb_${kode}_${idx}`);
+        const durasiDiv = document.getElementById(`durasi_${kode}_${idx}`);
+        if (durasiDiv) {
+            durasiDiv.classList.toggle('hidden', !checkbox.checked);
+        }
+    };
+
+    function simpanMesinBaru() {
+        const nama = document.getElementById('modal-nama-mesin')?.value;
+        const target = parseFloat(document.getElementById('modal-target')?.value) || 0;
+        
+        if (!nama) {
+            showToast('NAMA MESIN HARUS DIISI', 'error');
+            return;
+        }
+        
+        const activities = {};
+        let hasError = false;
+        
+        // URUTAN KODE: 1,2,3,5,6,7,8,9
+        const kodeUrutan = ['1','2','3','5','6','7','8','9'];
+        
+        for (let kodeIdx = 0; kodeIdx < kodeUrutan.length; kodeIdx++) {
+            const kodeStr = kodeUrutan[kodeIdx];
+            const libraryItems = state.libraryKegiatan[kodeStr] || [];
+            const selectedActivities = [];
+            
+            for (let idx = 0; idx < libraryItems.length; idx++) {
+                const checkbox = document.getElementById(`cb_${kodeStr}_${idx}`);
+                if (checkbox && checkbox.checked) {
+                    let durasi = null;
+                    
+                    if (KODE_TKL[kodeStr]?.hasDuration) {
+                        const durasiInput = document.querySelector(`#durasi_${kodeStr}_${idx} input`);
+                        durasi = durasiInput ? parseInt(durasiInput.value) || null : null;
+                        
+                        if (!durasi) {
+                            showToast(`KODE ${kodeStr} - ${libraryItems[idx]} WAJIB DIISI DURASI`, 'error');
+                            hasError = true;
+                            break;
+                        }
+                    }
+                    
+                    selectedActivities.push({
+                        nama: libraryItems[idx],
+                        durasi: durasi
+                    });
+                }
+            }
+            
+            if (hasError) break;
+            
+            if (selectedActivities.length > 0) {
+                activities[kodeStr] = selectedActivities;
+            }
+        }
+        
+        if (hasError) return;
+        
+        if (Object.keys(activities).length === 0) {
+            showToast('PILIH MINIMAL 1 KEGIATAN', 'error');
+            return;
+        }
+        
+        const newMachine = {
+            id: crypto.randomUUID(),
+            name: toUpper(nama),
+            target: target,
+            activities: activities
+        };
+        
+        state.machines.push(newMachine);
+        localStorage.setItem('machines', JSON.stringify(state.machines));
+        
+        closeModal();
+        renderApp();
+        showToast('MESIN BERHASIL DITAMBAHKAN');
+    }
+
+    function editMachine(id) {
+        const machine = state.machines.find(m => m.id === id);
+        if (!machine) return;
+        showToast('FITUR EDIT SEGERA HADIR', 'warning');
+    }
+
+    function deleteMachine(id) {
+        if (confirm('YAKIN INGIN MENGHAPUS MESIN INI?')) {
+            state.machines = state.machines.filter(m => m.id !== id);
+            localStorage.setItem('machines', JSON.stringify(state.machines));
+            renderApp();
+            showToast('MESIN DIHAPUS', 'warning');
+        }
+    }
+
+    // ==================== INIT ====================
+    function init() {
+        // LOAD LIBRARY KEGIATAN
+        const savedLibrary = localStorage.getItem('library_kegiatan');
+        if (savedLibrary) {
+            state.libraryKegiatan = JSON.parse(savedLibrary);
+        } else {
+            // SAMPLE LIBRARY (1,2,3,5,6,7,8,9)
+            state.libraryKegiatan = {
+                '1': ['SETUP INJEKSI', 'SETUP BLOW', 'SETUP FILLING'],
+                '2': ['RUNNING NORMAL', 'RUNNING CEPAT'],
+                '3': ['LINE STOP MATERIAL', 'LINE STOP SETTING', 'LINE STOP QUALITY'],
+                '5': ['AM SHIFT 1', 'AM SHIFT 2', 'AM SHIFT 3'],
+                '6': ['PM MINGGUAN', 'PM BULANAN'],
+                '7': ['CLEANUP SHIFT', 'CLEANUP TOTAL'],
+                '8': ['ISTIRAHAT SHIFT 1', 'ISTIRAHAT SHIFT 2', 'BRIEFING PAGI'],
+                '9': ['STOP LISTRIK', 'STOP AIR', 'STOP GAS']
+            };
+            localStorage.setItem('library_kegiatan', JSON.stringify(state.libraryKegiatan));
+        }
+        
+        // LOAD MACHINES
+        const savedMachines = localStorage.getItem('machines');
+        if (savedMachines) {
+            state.machines = JSON.parse(savedMachines);
+        }
+        
+        // LOAD RECORDS
+        const savedRecords = localStorage.getItem('tkl_records');
+        if (savedRecords) {
+            state.tklRecords = JSON.parse(savedRecords);
+        }
+        
+        renderApp();
+    }
+
+    // EXPOSE FUNCTIONS
+    window.navigateTo = navigateTo;
+    window.updateDate = updateDate;
+    window.updateShift = updateShift;
+    window.updateMachine = updateMachine;
+    window.updateOperator = updateOperator;
+    window.showTambahKegiatanModal = showTambahKegiatanModal;
+    window.updateKegiatanFromSelect = updateKegiatanFromSelect;
+    window.tambahKegiatanFromModal = tambahKegiatanFromModal;
+    window.hapusKegiatan = hapusKegiatan;
+    window.tambahBatch = tambahBatch;
+    window.hapusBatch = hapusBatch;
+    window.updateBatch = updateBatch;
+    window.simpanData = simpanData;
+    window.showRecordDetail = showRecordDetail;
+    window.showTambahKegiatanLibraryModal = showTambahKegiatanLibraryModal;
+    window.simpanKegiatanKeLibrary = simpanKegiatanKeLibrary;
+    window.hapusDariLibrary = hapusDariLibrary;
+    window.showTambahMesinModal = showTambahMesinModal;
+    window.simpanMesinBaru = simpanMesinBaru;
+    window.editMachine = editMachine;
+    window.deleteMachine = deleteMachine;
+    window.closeModal = closeModal;
+
+    init();
+</script>
+
+</body>
+</html>
