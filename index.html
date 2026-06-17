@@ -5,28 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>OEE TKL SYSTEM • PT GOF</title>
     
-    <!-- Font & Icons -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <!-- Tailwind -->
     <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- Supabase -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    
-    <!-- Charts -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
     
     <style>
         * { font-family: 'Inter', sans-serif; margin: 0; padding: 0; box-sizing: border-box; }
-        
-        body { background: #f8fafc; transition: background 0.3s ease; }
-        
-        [data-theme="dark"] body { background: #0f172a; }
-        [data-theme="dark"] .card { background: #1e293b; border-color: #334155; }
-        [data-theme="dark"] .card-header { color: #f1f5f9; }
-        [data-theme="dark"] .input-field { background: #334155; border-color: #475569; color: #f1f5f9; }
+        body { background: #f8fafc; }
         
         .card {
             background: white;
@@ -49,36 +36,13 @@
             color: #1e293b;
         }
         
-        .card-header-left {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-        
-        .card-header-right {
-            font-size: 0.8rem;
-            color: #64748b;
-            background: #f1f5f9;
-            padding: 0.25rem 0.75rem;
-            border-radius: 20px;
-            white-space: nowrap;
-        }
-        
         .input-field {
             width: 100%;
             padding: 0.6rem 1rem;
             border: 1px solid #e2e8f0;
             border-radius: 12px;
             font-size: 0.9rem;
-            transition: all 0.2s;
             background: white;
-            text-transform: uppercase;
-        }
-        
-        .input-field:focus {
-            outline: none;
-            border-color: #667eea;
-            box-shadow: 0 0 0 3px rgba(102,126,234,0.1);
         }
         
         .btn {
@@ -91,7 +55,6 @@
             display: inline-flex;
             align-items: center;
             gap: 0.5rem;
-            text-transform: uppercase;
         }
         
         .btn-primary {
@@ -122,6 +85,7 @@
             border-radius: 100px;
             border: 1px solid #e2e8f0;
             margin-bottom: 2rem;
+            flex-wrap: wrap;
         }
         
         .nav-tab {
@@ -131,7 +95,6 @@
             color: #64748b;
             cursor: pointer;
             transition: all 0.2s;
-            text-transform: uppercase;
         }
         
         .nav-tab:hover { background: #f1f5f9; }
@@ -159,12 +122,6 @@
         .kode-8 { background: #fed7aa; color: #7b341e; }
         .kode-9 { background: #f1f5f9; color: #334155; }
         
-        .tally-mark {
-            font-family: 'Courier New', monospace;
-            font-size: 1.5rem;
-            letter-spacing: 2px;
-        }
-        
         .scorecard {
             background: linear-gradient(135deg, #ffffff, #f8fafc);
             border-radius: 16px;
@@ -177,18 +134,21 @@
             font-size: 2.2rem;
             font-weight: 800;
             margin: 0.5rem 0;
-            line-height: 1.2;
-        }
-        
-        .scorecard-label {
-            font-size: 0.8rem;
-            color: #64748b;
-            font-weight: 600;
-            text-transform: uppercase;
         }
         
         .scorecard.good .scorecard-value { color: #10b981; }
         .scorecard.bad .scorecard-value { color: #ef4444; }
+        
+        .timeline-card {
+            background: #f8fafc;
+            border-radius: 12px;
+            padding: 1rem;
+            border: 1px solid #e2e8f0;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 0.5rem;
+        }
         
         .resume-card {
             background: linear-gradient(135deg, #f8fafc, #f1f5f9);
@@ -209,57 +169,6 @@
             border: 1px solid #7dd3fc;
         }
         
-        .timeline-card {
-            background: #f8fafc;
-            border-radius: 12px;
-            padding: 1rem;
-            border: 1px solid #e2e8f0;
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            margin-bottom: 0.5rem;
-        }
-        
-        .checkbox-item {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 12px;
-            background: #f8fafc;
-            border-radius: 8px;
-            margin-bottom: 8px;
-            border: 1px solid #e2e8f0;
-        }
-        
-        .checkbox-item.active {
-            background: rgba(102,125,234,0.1);
-            border-color: #667eea;
-        }
-        
-        .checkbox-item.exceed {
-            background: rgba(245,158,11,0.1);
-            border-color: #f59e0b;
-        }
-        
-        .odt-exceed-warning {
-            background: rgba(245,158,11,0.1);
-            border: 1px solid #f59e0b;
-            border-radius: 8px;
-            padding: 8px 12px;
-            margin-top: 8px;
-            font-size: 12px;
-            color: #f59e0b;
-        }
-        
-        .exceed-badge {
-            background: #f59e0b;
-            color: white;
-            font-size: 10px;
-            padding: 2px 6px;
-            border-radius: 12px;
-            margin-left: 8px;
-        }
-        
         .table-wrapper {
             overflow-x: auto;
             border-radius: 12px;
@@ -269,7 +178,7 @@
         table {
             width: 100%;
             border-collapse: collapse;
-            min-width: 1200px;
+            min-width: 1000px;
         }
         
         th {
@@ -278,7 +187,7 @@
             padding: 0.8rem;
             font-weight: 600;
             font-size: 0.8rem;
-            white-space: nowrap;
+            text-align: left;
         }
         
         td {
@@ -311,34 +220,12 @@
             font-weight: 600;
             z-index: 9999;
             animation: slideIn 0.3s ease;
-            text-transform: uppercase;
         }
         
         @keyframes slideIn {
             from { transform: translateX(100%); opacity: 0; }
             to { transform: translateX(0); opacity: 1; }
         }
-        
-        .loading-overlay {
-            position: fixed;
-            inset: 0;
-            background: rgba(0,0,0,0.7);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 99999;
-        }
-        
-        .spinner {
-            border: 3px solid rgba(255,255,255,0.3);
-            border-top-color: white;
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            animation: spin 0.8s linear infinite;
-        }
-        
-        @keyframes spin { to { transform: rotate(360deg); } }
         
         .modal-overlay {
             position: fixed;
@@ -356,7 +243,7 @@
             background: white;
             border-radius: 24px;
             padding: 2rem;
-            max-width: 800px;
+            max-width: 700px;
             width: 100%;
             max-height: 85vh;
             overflow-y: auto;
@@ -391,54 +278,221 @@
             100% { background-position: 0% 50%; }
         }
         
-        .odt-exceed-list {
-            background: rgba(245,158,11,0.1);
-            border: 1px solid #f59e0b;
-            border-radius: 8px;
+        .detail-item {
+            background: #f8fafc;
             padding: 12px;
-            margin-top: 16px;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+            margin-bottom: 8px;
         }
         
-        .odt-exceed-item {
-            display: flex;
-            justify-content: space-between;
-            padding: 4px 0;
-            border-bottom: 1px dashed rgba(245,158,11,0.3);
-        }
-        
-        .no-data-message {
-            text-align: center;
-            padding: 3rem;
-            color: #94a3b8;
-            font-style: italic;
-        }
-        
-        .time-limit-info {
+        .detail-item-label {
             font-size: 11px;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .detail-item-value {
+            font-size: 14px;
+            font-weight: 600;
+            color: #1e293b;
+        }
+        
+        .badge-success {
+            background: rgba(16,185,129,0.1);
+            color: #10b981;
+            padding: 4px 12px;
+            border-radius: 20px;
+            display: inline-block;
+        }
+        
+        .badge-danger {
+            background: rgba(239,68,68,0.1);
             color: #ef4444;
-            margin-top: 4px;
+            padding: 4px 12px;
+            border-radius: 20px;
+            display: inline-block;
+        }
+        
+        .login-container {
+            min-height: 60vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .edit-mode-badge {
+            background: #f59e0b;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        
+        .oee-card {
+            background: white;
+            border-radius: 16px;
+            padding: 1rem;
+            text-align: center;
+            border: 1px solid #e2e8f0;
+        }
+        
+        .oee-card-large {
+            background: linear-gradient(135deg, #667eea15, #764ba215);
+            border: 2px solid #667eea;
+        }
+        
+        .oee-value {
+            font-size: 2rem;
+            font-weight: 800;
+            margin: 0.5rem 0;
+        }
+        
+        .oee-label {
+            font-size: 0.75rem;
+            color: #64748b;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        
+        .machine-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .machine-card {
+            background: white;
+            border-radius: 16px;
+            border: 1px solid #e2e8f0;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        
+        .machine-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 24px rgba(0,0,0,0.1);
+        }
+        
+        .machine-header {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            padding: 1rem 1.25rem;
+            color: white;
+        }
+        
+        .machine-name {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+        }
+        
+        .machine-stats {
+            display: flex;
+            gap: 1rem;
+            margin-top: 0.5rem;
+            font-size: 0.75rem;
+            opacity: 0.9;
+        }
+        
+        .machine-body {
+            padding: 1.25rem;
+        }
+        
+        .machine-info {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        
+        .info-item {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .info-label {
+            font-size: 0.7rem;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .info-value {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #1e293b;
+        }
+        
+        .minor-stop-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .minor-stop-tag {
+            background: #f1f5f9;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            color: #475569;
+        }
+        
+        .activity-summary {
+            background: #f8fafc;
+            border-radius: 12px;
+            padding: 0.75rem;
+            margin-bottom: 1rem;
+        }
+        
+        .activity-summary-title {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: #64748b;
+            margin-bottom: 0.5rem;
+        }
+        
+        .activity-badges {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+        
+        .machine-actions {
+            display: flex;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        
+        .machine-actions .btn {
+            flex: 1;
+            justify-content: center;
+            padding: 0.5rem;
+            font-size: 0.8rem;
         }
         
         @media (max-width: 768px) {
             .card { padding: 1rem; }
-            .nav-tabs { border-radius: 20px; flex-wrap: wrap; }
-            .nav-tab { flex: 1 1 auto; text-align: center; }
+            .nav-tabs { border-radius: 20px; }
+            .nav-tab { padding: 0.5rem 1rem; font-size: 12px; }
+            .machine-grid { grid-template-columns: 1fr; }
+            .scorecard-value { font-size: 1.5rem; }
+            .oee-value { font-size: 1.5rem; }
         }
     </style>
 </head>
 <body>
 
-<div id="app"></div>
+<div id="app-wrapper"></div>
 
 <script>
 (function() {
     'use strict';
-    
-    // ==================== SUPABASE CONFIG ====================
-    const SUPABASE_URL = 'https://heagluczlgbajbjeyium.supabase.co';
-    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhlYWdsdWN6bGdiYWpiamV5aXVtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM3MjIyODEsImV4cCI6MjA4OTI5ODI4MX0.3WrxwXqWf1NT-aCvfDjznIZuo7x81vN5QA3gs4VbMbw';
-    
-    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
     
     // ==================== KONFIGURASI ====================
     const CONFIG = {
@@ -453,12 +507,12 @@
     
     const KODE_TKL = {
         '1': { name: 'PERSIAPAN AWAL (SETUP)', icon: '🔧', hasDuration: true },
-        '2': { name: 'JALAN PROSES (MACHINE RUNNING)', icon: '⚙️', hasDuration: false },
+        '2': { name: 'JALAN PROSES (RUNNING)', icon: '⚙️', hasDuration: false },
         '3': { name: 'LINESTOP MESIN', icon: '⚠️', hasDuration: false },
-        '5': { name: 'AM ACTIVITY (5R, CLIT, CLOSE WHITE TAG)', icon: '🧹', hasDuration: true },
-        '6': { name: 'PM, CLOSE YELLOW & RED TAG', icon: '🔩', hasDuration: false },
-        '7': { name: 'CLEANING AKHIR (CLEANUP)', icon: '🧼', hasDuration: true },
-        '8': { name: 'ISTIRAHAT, BRIEFING, CM, QCC, START UP', icon: '☕', hasDuration: true },
+        '5': { name: 'AM ACTIVITY', icon: '🧹', hasDuration: true },
+        '6': { name: 'PM, CLOSE TAG', icon: '🔩', hasDuration: false },
+        '7': { name: 'CLEANING AKHIR', icon: '🧼', hasDuration: true },
+        '8': { name: 'ISTIRAHAT, BRIEFING', icon: '☕', hasDuration: true },
         '9': { name: 'LINE STOP NON MESIN', icon: '⏸️', hasDuration: false }
     };
     
@@ -470,79 +524,76 @@
         'LONGSHIFT MALAM (19:00-07:00)': { start: '19:00', end: '07:00', minutes: 720 }
     };
     
+    // ==================== LOCAL STORAGE ====================
+    const STORAGE_KEYS = {
+        MACHINES: 'oee_machines_final',
+        LIBRARY: 'oee_library_final',
+        OEE_RECORDS: 'oee_records_final'
+    };
+    
     // ==================== STATE ====================
-    const state = {
-        currentPage: 'dashboard',
-        machines: [],
-        tklRecords: [],
-        libraryKegiatan: {},
-        
-        // Input TKL state
-        kegiatanList: [],
-        batches: [],
-        minorStopCounts: {},
-        selectedDate: new Date().toISOString().split('T')[0],
-        selectedShift: '',
-        selectedMachineId: '',
-        selectedOperator: '',
-        
-        // Management
-        isManagementUnlocked: false,
-        editMode: false,
-        editingRecordId: null,
-        
-        // Dashboard filters
-        filters: {
-            startDate: getDefaultStartDate(),
-            endDate: new Date().toISOString().split('T')[0],
-            shift: 'all',
-            machine: 'all',
-            pic: 'all',
-            detailLineStopItem: 'all',
-            detailLineStopType: 'all'
-        },
-        clickedRecordFilter: null,
-        chartInstances: {},
-        
-        // Theme
-        theme: localStorage.getItem('oee-theme') || 'light'
+    let currentPage = 'dashboard';
+    let allMachines = [];
+    let allOEERecords = [];
+    let libraryKegiatan = {};
+    let chartInstances = {};
+    let isManagementUnlocked = false;
+    
+    // State untuk Input TKL
+    let kegiatanList = [];
+    let batches = [];
+    let selectedDate = new Date().toISOString().split('T')[0];
+    let selectedShift = '';
+    let selectedMachineId = '';
+    let selectedOperator = '';
+    let editMode = false;
+    let editingRecordId = null;
+    
+    let filters = {
+        startDate: getCurrentMonthStart(),
+        endDate: getCurrentMonthEnd(),
+        shift: 'all',
+        machine: 'all',
+        pic: 'all'
     };
     
     // ==================== HELPER FUNCTIONS ====================
-    function getDefaultStartDate() {
+    function getCurrentMonthStart() {
         const date = new Date();
         date.setDate(1);
         return date.toISOString().split('T')[0];
     }
     
-    function toUpper(str) {
-        return str ? str.toString().toUpperCase() : '';
+    function getCurrentMonthEnd() {
+        const date = new Date();
+        date.setMonth(date.getMonth() + 1);
+        date.setDate(0);
+        return date.toISOString().split('T')[0];
     }
+    
+    function formatDate(dateStr) {
+        if (!dateStr) return '-';
+        try {
+            return new Date(dateStr).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
+        } catch { return dateStr; }
+    }
+    
+    function formatDateShort(dateStr) {
+        if (!dateStr) return '-';
+        try {
+            return new Date(dateStr).toLocaleDateString('id-ID', { day: '2-digit', month: '2-digit' });
+        } catch { return dateStr; }
+    }
+    
+    function toUpper(str) { return str ? str.toString().toUpperCase() : ''; }
     
     function showToast(message, type = 'success') {
         const toast = document.createElement('div');
         toast.className = 'toast';
         toast.style.borderLeftColor = type === 'success' ? '#10b981' : '#ef4444';
-        toast.innerHTML = `<span style="margin-right: 8px;">${type === 'success' ? '✅' : '❌'}</span>${toUpper(message)}`;
+        toast.innerHTML = `${type === 'success' ? '✅' : '❌'} ${message}`;
         document.body.appendChild(toast);
         setTimeout(() => toast.remove(), 3000);
-    }
-    
-    function showLoading(message = 'Loading...') {
-        const overlay = document.createElement('div');
-        overlay.id = 'loading-overlay';
-        overlay.className = 'loading-overlay';
-        overlay.innerHTML = `
-            <div style="background: white; padding: 2rem; border-radius: 16px; text-align: center;">
-                <div class="spinner" style="border-top-color: #667eea; margin: 0 auto 1rem;"></div>
-                <p style="color: #1e293b; font-weight: 600;">${message}</p>
-            </div>
-        `;
-        document.body.appendChild(overlay);
-    }
-    
-    function hideLoading() {
-        document.getElementById('loading-overlay')?.remove();
     }
     
     function showModal(content) {
@@ -553,1280 +604,551 @@
         document.body.appendChild(modal);
     }
     
-    function closeModal() {
-        document.querySelector('.modal-overlay')?.remove();
-    }
+    function closeModal() { document.querySelector('.modal-overlay')?.remove(); }
     
-    function safeJSONParse(str, defaultValue = []) {
-        if (!str) return defaultValue;
-        try {
-            return typeof str === 'string' ? JSON.parse(str) : (str || defaultValue);
-        } catch {
-            return defaultValue;
-        }
-    }
+    function getShiftMinutes(shiftKey) { return SHIFTS[shiftKey]?.minutes || 480; }
+    function getShiftStart() { return selectedShift ? SHIFTS[selectedShift]?.start || '07:00' : '07:00'; }
+    function getShiftEnd() { return selectedShift ? SHIFTS[selectedShift]?.end || '15:30' : '15:30'; }
+    function getNextStart() { return kegiatanList.length === 0 ? getShiftStart() : kegiatanList[kegiatanList.length - 1].jam; }
+    function addHour(time) { if (!time) return '08:00'; const [h, m] = time.split(':').map(Number); const nh = (h + 1) % 24; return `${nh.toString().padStart(2,'0')}:${m.toString().padStart(2,'0')}`; }
+    function isTimeGreater(t1, t2) { if (!t1 || !t2) return false; const [h1,m1] = t1.split(':').map(Number); const [h2,m2] = t2.split(':').map(Number); return h1 > h2 || (h1 === h2 && m1 > m2); }
+    function hitungDurasi(dari, sampai) { if (!dari || !sampai) return 0; const [h1,m1] = dari.split(':').map(Number); const [h2,m2] = sampai.split(':').map(Number); return (h2*60+m2) - (h1*60+m1); }
     
-    function formatDate(dateStr) {
-        if (!dateStr) return '-';
-        try {
-            return new Date(dateStr).toLocaleDateString('id-ID');
-        } catch {
-            return dateStr;
-        }
-    }
-    
-    function getShiftMinutes(shiftKey) {
-        return SHIFTS[shiftKey]?.minutes || 480;
-    }
-    
-    function getShiftStart() {
-        return state.selectedShift ? SHIFTS[state.selectedShift]?.start || '07:00' : '07:00';
-    }
-    
-    function getShiftEnd() {
-        return state.selectedShift ? SHIFTS[state.selectedShift]?.end || '15:30' : '15:30';
-    }
-    
-    function getNextStart() {
-        if (state.kegiatanList.length === 0) return getShiftStart();
-        return state.kegiatanList[state.kegiatanList.length - 1].jam;
-    }
-    
-    function addHour(time) {
-        if (!time) return '08:00';
-        const [h, m] = time.split(':').map(Number);
-        const nh = (h + 1) % 24;
-        return `${nh.toString().padStart(2,'0')}:${m.toString().padStart(2,'0')}`;
-    }
-    
-    function isTimeGreater(t1, t2) {
-        if (!t1 || !t2) return false;
-        const [h1, m1] = t1.split(':').map(Number);
-        const [h2, m2] = t2.split(':').map(Number);
-        return h1 > h2 || (h1 === h2 && m1 > m2);
-    }
-    
-    function hitungDurasi(dari, sampai) {
-        if (!dari || !sampai) return 0;
-        const [h1,m1] = dari.split(':').map(Number);
-        const [h2,m2] = sampai.split(':').map(Number);
-        return (h2*60+m2) - (h1*60+m1);
-    }
-    
-    // ==================== OEE CALCULATIONS ====================
-    function hitungResume() {
-        let totalODT = 0;
-        let totalRunning = 0;
-        let totalLineStopMesin = 0;
-        let totalLineStopNonMesin = 0;
-        let odtExceeds = [];
+    // ==================== PERHITUNGAN ====================
+    function hitungResume(kegiatanList, machineId) {
+        let totalODT = 0, totalRunning = 0, totalLineStopMesin = 0, totalLineStopNonMesin = 0, odtExceeds = [];
+        const mesin = allMachines.find(m => m.id === machineId);
         
-        const mesin = state.machines.find(m => m.id === state.selectedMachineId);
-        
-        state.kegiatanList.forEach(k => {
+        kegiatanList.forEach(k => {
             const dur = hitungDurasi(k.dari, k.jam);
-            
-            // KODE 2 = RUNNING
-            if (k.kode === 2) {
-                totalRunning += dur;
-            }
-            // KODE 3 = LINE STOP MESIN
-            else if (k.kode === 3) {
-                totalLineStopMesin += dur;
-            }
-            // KODE 9 = LINE STOP NON MESIN
-            else if (k.kode === 9) {
-                totalLineStopNonMesin += dur;
-            }
-            // KODE ODT: 1,5,6,7,8
+            if (k.kode === 2) totalRunning += dur;
+            else if (k.kode === 3) totalLineStopMesin += dur;
+            else if (k.kode === 9) totalLineStopNonMesin += dur;
             else if ([1,5,6,7,8].includes(k.kode)) {
-                
-                // Untuk kode 1,5,7,8 yang punya standar
-                if ([1,5,7,8].includes(k.kode)) {
-                    let standar = 0;
-                    if (mesin?.activities && mesin.activities[k.kode]) {
-                        const kegiatan = mesin.activities[k.kode].find(a => a.nama === k.kegiatan);
-                        standar = kegiatan?.durasi || 0;
-                    }
-                    
-                    if (dur <= standar) {
-                        // Actual ≤ Standar → ambil actual
-                        totalODT += dur;
-                    } else {
-                        // Actual > Standar → ambil standar, selisih ke LSNM
-                        totalODT += standar;
-                        const exceed = dur - standar;
-                        totalLineStopNonMesin += exceed;
-                        
-                        odtExceeds.push({
-                            item: k.kegiatan,
-                            standar: standar,
-                            actual: dur,
-                            exceed: exceed,
-                            kode: k.kode
-                        });
-                    }
+                let standarDurasi = 0;
+                if (mesin?.activities && mesin.activities[k.kode]) {
+                    const kegiatan = mesin.activities[k.kode].find(a => a.nama === k.kegiatan);
+                    standarDurasi = kegiatan?.durasi || 0;
                 }
-                // Untuk kode 6 (PM, tanpa standar)
-                else if (k.kode === 6) {
+                if (standarDurasi > 0 && dur > standarDurasi) {
+                    totalODT += standarDurasi;
+                    const exceed = dur - standarDurasi;
+                    totalLineStopNonMesin += exceed;
+                    odtExceeds.push({ item: k.kegiatan, standardTime: standarDurasi, actualTime: dur, exceed: exceed });
+                } else {
                     totalODT += dur;
                 }
             }
         });
-        
-        return { 
-            totalODT, 
-            totalRunning, 
-            totalLineStopMesin, 
-            totalLineStopNonMesin,
-            odtExceeds 
-        };
+        return { totalODT, totalRunning, totalLineStopMesin, totalLineStopNonMesin, odtExceeds };
     }
     
-    function hitungPerfAndQual() {
-        const totalGood = state.batches.reduce((s, b) => s + (b.good || 0), 0);
-        const totalReject = state.batches.reduce((s, b) => s + (b.reject || 0), 0);
+    function hitungAvailAndOEE(kegiatanList, batches, selectedShift, machineId) {
+        const resume = hitungResume(kegiatanList, machineId);
+        const jamKerja = getShiftMinutes(selectedShift);
+        const totalGood = batches.reduce((s, b) => s + (b.good || 0), 0);
+        const totalReject = batches.reduce((s, b) => s + (b.reject || 0), 0);
+        const mesin = allMachines.find(m => m.id === machineId);
+        const target = mesin?.target_per_minute || 1;
         
-        let running = 0;
-        state.kegiatanList.forEach(k => {
-            if (k.kode === 2) running += hitungDurasi(k.dari, k.jam);
-        });
-        
-        const mesin = state.machines.find(m => m.id === state.selectedMachineId);
-        const target = mesin?.target || 1;
-        
-        const perf = (running * target) > 0 ? (totalGood / (running * target)) * 100 : 0;
+        const perf = (resume.totalRunning * target) > 0 ? (totalGood / (resume.totalRunning * target)) * 100 : 0;
         const quality = totalGood > 0 ? ((totalGood - totalReject) / totalGood) * 100 : 100;
-        
-        return { perf, quality };
-    }
-    
-    function hitungAvailAndOEE() {
-        const resume = hitungResume();
-        const perfQual = hitungPerfAndQual();
-        const jamKerja = getShiftMinutes(state.selectedShift);
-        
-        // AVAIL = Total Running / (Jam Kerja - Total ODT)
-        const penyebutAvail = jamKerja - resume.totalODT;
-        const avail = penyebutAvail > 0 ? (resume.totalRunning / penyebutAvail) * 100 : 0;
-        
-        // AVAIL 365 = Total Running / Jam Kerja
+        const denominatorAvail = jamKerja - resume.totalODT;
+        const avail = denominatorAvail > 0 ? (resume.totalRunning / denominatorAvail) * 100 : 0;
         const avail365 = jamKerja > 0 ? (resume.totalRunning / jamKerja) * 100 : 0;
-        
-        const oeeValue = (avail * perfQual.perf * perfQual.quality) / 10000;
-        const oee365 = (avail365 * perfQual.perf * perfQual.quality) / 10000;
+        const oeeValue = (avail * perf * quality) / 10000;
+        const oee365 = (avail365 * perf * quality) / 10000;
         const sisaJamKerja = jamKerja - resume.totalODT - resume.totalLineStopMesin - resume.totalLineStopNonMesin - resume.totalRunning;
         
-        return { 
-            avail, 
-            avail365, 
-            perf: perfQual.perf, 
-            quality: perfQual.quality, 
-            oee: oeeValue, 
-            oee365, 
-            sisaJamKerja,
-            odtExceeds: resume.odtExceeds
-        };
+        return { avail, avail365, perf, quality, oee: oeeValue, oee365, sisaJamKerja, totalGood, totalReject, odtExceeds: resume.odtExceeds };
     }
     
-    // ==================== SUPABASE FUNCTIONS ====================
-    async function loadMachines() {
-        try {
-            const { data, error } = await supabase
-                .from('machines')
-                .select('*')
-                .eq('is_deleted', false)
-                .order('name');
-            
-            if (error) throw error;
-            
-            // Load activities for each machine
-            for (let machine of data) {
-                const { data: activities, error: actError } = await supabase
-                    .from('machine_activities')
-                    .select('*')
-                    .eq('machine_id', machine.id);
-                
-                if (!actError) {
-                    const grouped = {};
-                    activities.forEach(act => {
-                        if (!grouped[act.kode]) grouped[act.kode] = [];
-                        grouped[act.kode].push({
-                            nama: act.nama,
-                            durasi: act.durasi
-                        });
-                    });
-                    machine.activities = grouped;
-                }
-            }
-            
-            state.machines = data || [];
-            return state.machines;
-        } catch (error) {
-            console.error('Error loading machines:', error);
-            showToast('Gagal load mesin', 'error');
-            return [];
+    // ==================== LOAD DATA ====================
+    function loadFromStorage() {
+        const storedMachines = localStorage.getItem(STORAGE_KEYS.MACHINES);
+        if (storedMachines) {
+            allMachines = JSON.parse(storedMachines);
+        } else {
+            allMachines = [
+                { id: '1', machine_name: 'INJEKSI 1', target_per_minute: 2.5, pic: 'BUDI', minor_stop: ['ETIKET PUTUS', 'CODING KERING'], activities: {} },
+                { id: '2', machine_name: 'INJEKSI 2', target_per_minute: 2.3, pic: 'ANDRE', minor_stop: ['ETIKET PUTUS', 'AIR PRESSURE LOW'], activities: {} },
+                { id: '3', machine_name: 'ASSY LINE A', target_per_minute: 1.8, pic: 'SUSAN', minor_stop: ['BELT SLIP'], activities: {} }
+            ];
+            saveToStorage();
         }
-    }
-    
-    async function loadLibraryKegiatan() {
-        try {
-            const { data, error } = await supabase
-                .from('library_kegiatan')
-                .select('*')
-                .order('kode');
-            
-            if (error) throw error;
-            
-            const grouped = {};
-            data.forEach(item => {
-                if (!grouped[item.kode]) grouped[item.kode] = [];
-                grouped[item.kode].push(item.nama);
-            });
-            
-            state.libraryKegiatan = grouped;
-            return grouped;
-        } catch (error) {
-            console.error('Error loading library:', error);
-            return {};
+        
+        const storedLibrary = localStorage.getItem(STORAGE_KEYS.LIBRARY);
+        if (storedLibrary) {
+            libraryKegiatan = JSON.parse(storedLibrary);
+        } else {
+            libraryKegiatan = {
+                '1': ['SETUP MESIN', 'PERSIAPAN MATERIAL', 'PENGECEKAN AWAL'],
+                '2': ['PRODUKSI NORMAL'],
+                '3': ['MOTOR OVERLOAD', 'SENSOR ERROR', 'BELT PUTUS'],
+                '5': ['5R PAGI', 'CLEANING MESIN'],
+                '6': ['PM HARIAN', 'PM MINGGUAN'],
+                '7': ['CLEANING AKHIR', 'PEMBERSIHAN AREA'],
+                '8': ['ISTIRAHAT', 'BRIEFING', 'START UP'],
+                '9': ['TUNGGU MATERIAL', 'TUNGGU INSTRUKSI', 'ADMINISTRASI']
+            };
+            saveToStorage();
         }
-    }
-    
-    async function loadOEERecords() {
-        try {
-            const { data, error } = await supabase
-                .from('oee_records')
-                .select('*')
-                .order('date', { ascending: false })
-                .order('created_at', { ascending: false });
-            
-            if (error) throw error;
-            
-            state.tklRecords = data || [];
-            return state.tklRecords;
-        } catch (error) {
-            console.error('Error loading OEE records:', error);
-            return [];
-        }
-    }
-    
-    async function saveMachine(machineData, activities) {
-        try {
-            const { data: machine, error: machineError } = await supabase
-                .from('machines')
-                .insert([{
-                    name: machineData.name,
-                    target: machineData.target,
-                    minor_stop: machineData.minorStop
-                }])
-                .select()
-                .single();
-            
-            if (machineError) throw machineError;
-            
-            const activitiesToInsert = [];
-            Object.entries(activities).forEach(([kode, items]) => {
-                items.forEach(item => {
-                    activitiesToInsert.push({
-                        machine_id: machine.id,
-                        kode: kode,
-                        nama: item.nama,
-                        durasi: item.durasi
-                    });
+        
+        const storedRecords = localStorage.getItem(STORAGE_KEYS.OEE_RECORDS);
+        if (storedRecords) {
+            allOEERecords = JSON.parse(storedRecords);
+        } else {
+            allOEERecords = [];
+            for (let i = 0; i < 15; i++) {
+                const date = new Date();
+                date.setDate(date.getDate() - i);
+                allOEERecords.push({
+                    id: Date.now() + i,
+                    date: date.toISOString().split('T')[0],
+                    shift: Object.keys(SHIFTS)[Math.floor(Math.random() * 5)],
+                    machine_name: allMachines[Math.floor(Math.random() * allMachines.length)].machine_name,
+                    pic: ['BUDI', 'ANDRE', 'SUSAN'][Math.floor(Math.random() * 3)],
+                    batch_number: `BATCH-${Math.floor(Math.random() * 1000)}`,
+                    actual_output: Math.floor(800 + Math.random() * 1200),
+                    reject: Math.floor(Math.random() * 50),
+                    availability_actual: 75 + Math.random() * 24,
+                    availability_365: 50 + Math.random() * 40,
+                    performance: 88 + Math.random() * 11,
+                    quality: 95 + Math.random() * 4.5,
+                    oee_actual: (75 + Math.random() * 24) * (88 + Math.random() * 11) * (95 + Math.random() * 4.5) / 10000,
+                    oee_365: (50 + Math.random() * 40) * (88 + Math.random() * 11) * (95 + Math.random() * 4.5) / 10000,
+                    notes: i % 7 === 0 ? 'Sample data' : ''
                 });
-            });
-            
-            if (activitiesToInsert.length > 0) {
-                const { error: actError } = await supabase
-                    .from('machine_activities')
-                    .insert(activitiesToInsert);
-                
-                if (actError) throw actError;
             }
-            
-            showToast('Mesin berhasil ditambahkan', 'success');
-            return machine;
-        } catch (error) {
-            console.error('Error saving machine:', error);
-            showToast('Gagal simpan mesin', 'error');
-            throw error;
+            saveToStorage();
         }
     }
     
-    async function deleteMachine(machineId) {
-        try {
-            const { error } = await supabase
-                .from('machines')
-                .update({ is_deleted: true })
-                .eq('id', machineId);
-            
-            if (error) throw error;
-            
-            showToast('Mesin dihapus', 'warning');
-        } catch (error) {
-            console.error('Error deleting machine:', error);
-            showToast('Gagal hapus mesin', 'error');
-            throw error;
-        }
+    function saveToStorage() {
+        localStorage.setItem(STORAGE_KEYS.MACHINES, JSON.stringify(allMachines));
+        localStorage.setItem(STORAGE_KEYS.LIBRARY, JSON.stringify(libraryKegiatan));
+        localStorage.setItem(STORAGE_KEYS.OEE_RECORDS, JSON.stringify(allOEERecords));
     }
     
-    async function saveLibraryKegiatan(kode, nama) {
-        try {
-            const { error } = await supabase
-                .from('library_kegiatan')
-                .insert([{ kode, nama }]);
-            
-            if (error) throw error;
-            
-            if (!state.libraryKegiatan[kode]) state.libraryKegiatan[kode] = [];
-            state.libraryKegiatan[kode].push(nama);
-            
+    function saveOEERecord(recordData) {
+        const newRecord = { ...recordData, id: Date.now().toString(), created_at: new Date().toISOString() };
+        allOEERecords.unshift(newRecord);
+        saveToStorage();
+        showToast('Data OEE berhasil disimpan!');
+        return newRecord;
+    }
+    
+    function updateOEERecord(recordId, recordData) {
+        const index = allOEERecords.findIndex(r => r.id === recordId);
+        if (index !== -1) {
+            allOEERecords[index] = { ...recordData, id: recordId, updated_at: new Date().toISOString() };
+            saveToStorage();
+            showToast('Data berhasil diupdate!');
             return true;
-        } catch (error) {
-            console.error('Error saving library:', error);
-            throw error;
         }
+        return false;
     }
     
-    async function deleteLibraryKegiatan(kode, nama) {
-        try {
-            const { error } = await supabase
-                .from('library_kegiatan')
-                .delete()
-                .eq('kode', kode)
-                .eq('nama', nama);
-            
-            if (error) throw error;
-            
-            if (state.libraryKegiatan[kode]) {
-                state.libraryKegiatan[kode] = state.libraryKegiatan[kode].filter(i => i !== nama);
-            }
-            
-            return true;
-        } catch (error) {
-            console.error('Error deleting library:', error);
-            throw error;
-        }
-    }
-    
-    async function saveOEERecord(recordData) {
-        try {
-            const { data, error } = await supabase
-                .from('oee_records')
-                .insert([{
-                    date: recordData.date,
-                    shift: recordData.shift,
-                    shift_minutes: recordData.shift_minutes,
-                    machine_id: recordData.machine_id,
-                    machine_name: recordData.machine_name,
-                    operator: recordData.operator,
-                    kegiatan: recordData.kegiatan,
-                    batches: recordData.batches,
-                    minor_stop: recordData.minor_stop,
-                    total_odt: recordData.total_odt,
-                    total_running: recordData.total_running,
-                    total_line_stop_mesin: recordData.total_line_stop_mesin,
-                    total_line_stop_non_mesin: recordData.total_line_stop_non_mesin,
-                    total_good: recordData.total_good,
-                    total_defect: recordData.total_defect,
-                    availability: recordData.availability,
-                    availability_365: recordData.availability_365,
-                    performance: recordData.performance,
-                    quality: recordData.quality,
-                    oee_actual: recordData.oee_actual,
-                    oee_365: recordData.oee_365,
-                    notes: recordData.notes || ''
-                }])
-                .select()
-                .single();
-            
-            if (error) throw error;
-            
-            showToast('Data OEE berhasil disimpan!', 'success');
-            return data;
-        } catch (error) {
-            console.error('Error saving OEE record:', error);
-            showToast('Gagal simpan data OEE', 'error');
-            throw error;
-        }
-    }
-    
-    // ==================== DASHBOARD FUNCTIONS ====================
     function getFilteredRecords() {
-        try {
-            return state.tklRecords.filter(r => {
-                if (!r.date) return false;
-                
-                const rDate = new Date(r.date);
-                const sDate = new Date(state.filters.startDate);
-                const eDate = new Date(state.filters.endDate);
-                eDate.setHours(23, 59, 59);
-                
-                const dateMatch = rDate >= sDate && rDate <= eDate;
-                if (!dateMatch) return false;
-                
-                if (state.filters.shift !== 'all' && r.shift !== state.filters.shift) return false;
-                if (state.filters.machine !== 'all' && r.machine_name !== state.filters.machine) return false;
-                if (state.filters.pic !== 'all' && r.operator !== state.filters.pic) return false;
-                
-                return true;
-            });
-        } catch (error) {
-            console.error('Error filtering records:', error);
-            return [];
-        }
+        return allOEERecords.filter(r => {
+            if (!r.date) return false;
+            const rDate = new Date(r.date);
+            const sDate = new Date(filters.startDate);
+            const eDate = new Date(filters.endDate);
+            eDate.setHours(23, 59, 59);
+            if (!(rDate >= sDate && rDate <= eDate)) return false;
+            if (filters.shift !== 'all' && r.shift !== filters.shift) return false;
+            if (filters.machine !== 'all' && r.machine_name !== filters.machine) return false;
+            if (filters.pic !== 'all' && r.pic !== filters.pic) return false;
+            return true;
+        });
     }
     
     function calculateMetrics(records) {
-        if (!records.length) {
-            return { avgA: 0, avgP: 0, avgQ: 0, avgOEEActual: 0, avgOEE365: 0, totalOutput: 0, totalRecords: 0 };
-        }
-        
-        const avgA = records.reduce((s, r) => s + (r.availability || 0), 0) / records.length;
-        const avgP = records.reduce((s, r) => s + (r.performance || 0), 0) / records.length;
-        const avgQ = records.reduce((s, r) => s + (r.quality || 0), 0) / records.length;
-        const avgOEEActual = (avgA * avgP * avgQ) / 10000;
+        if (!records.length) return { avgOEEActual: 0, avgOEE365: 0, totalOutput: 0 };
+        const avgOEEActual = records.reduce((s, r) => s + (r.oee_actual || 0), 0) / records.length;
         const avgOEE365 = records.reduce((s, r) => s + (r.oee_365 || 0), 0) / records.length;
-        const totalOutput = records.reduce((s, r) => s + (r.total_good || 0), 0);
-        
-        return { avgA, avgP, avgQ, avgOEEActual, avgOEE365, totalOutput, totalRecords: records.length };
-    }
-    
-    function calculateOperatorPerformance(records) {
-        const picStats = {};
-        
-        records.forEach(r => {
-            if (!r.operator) return;
-            
-            if (!picStats[r.operator]) {
-                picStats[r.operator] = { totalOEE: 0, totalOutput: 0, totalTargetOutput: 0, count: 0 };
-            }
-            
-            picStats[r.operator].totalOEE += r.oee_actual || 0;
-            picStats[r.operator].totalOutput += r.total_good || 0;
-            
-            // Calculate target output (simplified)
-            picStats[r.operator].totalTargetOutput += (r.total_good || 0) * 1.2;
-            picStats[r.operator].count += 1;
-        });
-        
-        return Object.entries(picStats).map(([pic, stats]) => ({
-            pic,
-            avgOEE: stats.totalOEE / stats.count,
-            totalOutput: stats.totalOutput,
-            totalTargetOutput: stats.totalTargetOutput,
-            count: stats.count
-        })).sort((a, b) => b.avgOEE - a.avgOEE);
-    }
-    
-    // ==================== CHART DATA AGGREGATION ====================
-    function getODTChartData(records) {
-        const odtStats = {};
-        
-        records.forEach(r => {
-            try {
-                const kegiatan = r.kegiatan || [];
-                kegiatan.forEach(k => {
-                    if ([1,5,6,7,8].includes(k.kode)) {
-                        const dur = k.jam ? hitungDurasi(k.dari, k.jam) : 0;
-                        const key = `${k.kegiatan} (K${k.kode})`;
-                        odtStats[key] = (odtStats[key] || 0) + dur;
-                    }
-                });
-            } catch (e) {
-                console.error('Error parsing kegiatan for ODT:', e);
-            }
-        });
-        
-        return Object.entries(odtStats)
-            .sort((a, b) => b[1] - a[1])
-            .slice(0, 10);
-    }
-    
-    function getLineStopMesinChartData(records) {
-        const lsmStats = {};
-        
-        records.forEach(r => {
-            try {
-                const kegiatan = r.kegiatan || [];
-                kegiatan.forEach(k => {
-                    if (k.kode === 3) {
-                        const dur = k.jam ? hitungDurasi(k.dari, k.jam) : 0;
-                        const key = `${k.kegiatan} (K3)`;
-                        lsmStats[key] = (lsmStats[key] || 0) + dur;
-                    }
-                });
-            } catch (e) {
-                console.error('Error parsing kegiatan for LSM:', e);
-            }
-        });
-        
-        return Object.entries(lsmStats)
-            .sort((a, b) => b[1] - a[1])
-            .slice(0, 10);
-    }
-    
-    function getLineStopNonMesinChartData(records) {
-        const lsnmStats = {};
-        
-        records.forEach(r => {
-            try {
-                const kegiatan = r.kegiatan || [];
-                kegiatan.forEach(k => {
-                    if (k.kode === 9) {
-                        const dur = k.jam ? hitungDurasi(k.dari, k.jam) : 0;
-                        const key = `${k.kegiatan} (K9)`;
-                        lsnmStats[key] = (lsnmStats[key] || 0) + dur;
-                    }
-                });
-            } catch (e) {
-                console.error('Error parsing kegiatan for LSNM:', e);
-            }
-        });
-        
-        return Object.entries(lsnmStats)
-            .sort((a, b) => b[1] - a[1])
-            .slice(0, 10);
-    }
-    
-    function getMinorStopChartData(records) {
-        const msStats = {};
-        
-        records.forEach(r => {
-            try {
-                const msData = r.minor_stop || {};
-                Object.entries(msData).forEach(([item, count]) => {
-                    msStats[item] = (msStats[item] || 0) + count;
-                });
-            } catch (e) {
-                console.error('Error parsing minor stop data:', e);
-            }
-        });
-        
-        return Object.entries(msStats)
-            .sort((a, b) => b[1] - a[1])
-            .slice(0, 10);
+        const totalOutput = records.reduce((s, r) => s + (r.actual_output || 0), 0);
+        return { avgOEEActual, avgOEE365, totalOutput };
     }
     
     // ==================== CHART FUNCTIONS ====================
-    function destroyAllCharts() {
-        Object.values(state.chartInstances).forEach(chart => {
-            if (chart && chart.destroy) chart.destroy();
-        });
-        state.chartInstances = {};
-    }
-    
-    function renderTrendChart(records) {
-        const ctx = document.getElementById('chart-trend');
-        if (!ctx) return;
-        
-        if (records.length === 0) {
-            ctx.getContext('2d').clearRect(0, 0, ctx.width, ctx.height);
-            return;
-        }
-        
+    function getMonthlyTrendData(records) {
+        const currentYear = new Date().getFullYear();
         const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'];
         const monthlyData = Array(12).fill().map(() => []);
-        
         records.forEach(r => {
-            if (!r.date || !r.oee_actual) return;
+            if (!r.date) return;
+            const recordYear = new Date(r.date).getFullYear();
+            if (recordYear !== currentYear) return;
             const month = new Date(r.date).getMonth();
-            monthlyData[month].push(r.oee_actual);
+            monthlyData[month].push(r.oee_actual || 0);
         });
-        
-        const monthlyAvg = monthlyData.map(arr => 
-            arr.length ? arr.reduce((s, v) => s + v, 0) / arr.length : null
-        );
-        
-        const totalRecords = records.length;
-        
-        state.chartInstances.trend = new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: monthNames,
-                datasets: [{
-                    label: 'OEE Actual',
-                    data: monthlyAvg,
-                    borderColor: '#667eea',
-                    backgroundColor: 'rgba(102,126,234,0.1)',
-                    tension: 0.4,
-                    fill: true,
-                    pointRadius: 4,
-                    spanGaps: true
-                }, {
-                    label: `Target ${CONFIG.OEE_TARGET}%`,
-                    data: Array(12).fill(CONFIG.OEE_TARGET),
-                    borderColor: '#10b981',
-                    borderDash: [5, 5],
-                    pointRadius: 0,
-                    fill: false
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    tooltip: {
-                        callbacks: {
-                            label: function(context) {
-                                let label = context.dataset.label || '';
-                                if (label) {
-                                    label += ': ';
-                                }
-                                if (context.raw !== null) {
-                                    label += context.raw.toFixed(1) + '%';
-                                } else {
-                                    label += 'Tidak ada data';
-                                }
-                                return label;
-                            }
-                        }
-                    },
-                    datalabels: {
-                        display: false
-                    }
-                },
-                scales: { y: { beginAtZero: true, max: 100 } }
-            }
-        });
+        const monthlyAvg = monthlyData.map(arr => arr.length ? arr.reduce((s, v) => s + v, 0) / arr.length : null);
+        return { months: monthNames, values: monthlyAvg };
     }
     
-    function renderPerMachineChart(records) {
-        const ctx = document.getElementById('chart-per-machine');
-        if (!ctx) return;
-        
-        if (records.length === 0) {
-            ctx.getContext('2d').clearRect(0, 0, ctx.width, ctx.height);
-            return;
-        }
-        
+    function getPerMachineData(records) {
         const machineStats = {};
         records.forEach(r => {
-            if (!r.machine_name || !r.oee_actual) return;
-            if (!machineStats[r.machine_name]) {
-                machineStats[r.machine_name] = { total: 0, count: 0 };
-            }
-            machineStats[r.machine_name].total += r.oee_actual;
+            if (!r.machine_name) return;
+            if (!machineStats[r.machine_name]) machineStats[r.machine_name] = { total: 0, count: 0 };
+            machineStats[r.machine_name].total += r.oee_actual || 0;
             machineStats[r.machine_name].count += 1;
         });
-        
-        const data = Object.entries(machineStats).map(([name, stats]) => ({
-            name, avg: stats.total / stats.count
-        })).sort((a, b) => b.avg - a.avg);
-        
-        if (!data.length) return;
-        
-        const totalMachines = data.length;
-        
-        state.chartInstances.perMachine = new Chart(ctx, {
-            type: 'bar',
-            data: {
-                labels: data.map(d => d.name),
-                datasets: [{
-                    label: 'OEE Actual',
-                    data: data.map(d => d.avg),
-                    backgroundColor: data.map(d => d.avg >= CONFIG.OEE_TARGET ? '#10b981' : '#ef4444')
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    tooltip: {
-                        callbacks: {
-                            label: function(context) {
-                                return `OEE: ${context.raw.toFixed(1)}%`;
-                            }
-                        }
-                    },
-                    datalabels: {
-                        anchor: 'end',
-                        align: 'top',
-                        offset: 4,
-                        color: '#1e293b',
-                        font: { weight: 'bold', size: 11 },
-                        formatter: (value) => value.toFixed(1) + '%'
-                    }
-                },
-                scales: { y: { beginAtZero: true, max: 100 } }
-            },
-            plugins: [ChartDataLabels]
-        });
+        return Object.entries(machineStats).map(([name, stats]) => ({ name, avg: stats.total / stats.count })).sort((a, b) => b.avg - a.avg);
     }
     
-    function renderAPQChart(records) {
-        const ctx = document.getElementById('chart-apq');
-        if (!ctx) return;
-        
-        if (records.length === 0) {
-            ctx.getContext('2d').clearRect(0, 0, ctx.width, ctx.height);
-            return;
-        }
-        
-        const avgA = records.length ? records.reduce((s, r) => s + (r.availability || 0), 0) / records.length : 0;
+    function getAPQData(records) {
+        const avgA = records.length ? records.reduce((s, r) => s + (r.availability_actual || 0), 0) / records.length : 0;
         const avgP = records.length ? records.reduce((s, r) => s + (r.performance || 0), 0) / records.length : 0;
         const avgQ = records.length ? records.reduce((s, r) => s + (r.quality || 0), 0) / records.length : 0;
         const avgA365 = records.length ? records.reduce((s, r) => s + (r.availability_365 || 0), 0) / records.length : 0;
-        
-        const data = [avgA, avgP, avgQ, avgA365];
-        const labels = ['Availability', 'Performance', 'Quality', 'Availability 365'];
-        const colors = [
-            avgA >= CONFIG.A_TARGET ? '#10b981' : '#ef4444',
-            avgP >= CONFIG.P_TARGET ? '#10b981' : '#ef4444',
-            avgQ >= CONFIG.Q_TARGET ? '#10b981' : '#ef4444',
-            avgA365 >= CONFIG.A365_TARGET ? '#10b981' : '#ef4444'
-        ];
-        
-        state.chartInstances.apq = new Chart(ctx, {
-            type: 'bar',
-            data: {
-                labels: labels,
-                datasets: [{
-                    data: data,
-                    backgroundColor: colors
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: { display: false },
-                    tooltip: {
-                        callbacks: {
-                            label: function(context) {
-                                return `${context.raw.toFixed(1)}%`;
-                            }
-                        }
-                    },
-                    datalabels: {
-                        anchor: 'end',
-                        align: 'top',
-                        offset: 4,
-                        color: '#1e293b',
-                        font: { weight: 'bold', size: 11 },
-                        formatter: (value) => value.toFixed(1) + '%'
-                    }
-                },
-                scales: { y: { beginAtZero: true, max: 100 } }
-            },
-            plugins: [ChartDataLabels]
-        });
+        return { avgA, avgP, avgQ, avgA365 };
     }
     
-    function renderODTChart(records) {
-        const ctx = document.getElementById('chart-odt');
-        if (!ctx) return;
-        
-        const odtData = getODTChartData(records);
-        
-        if (odtData.length === 0) {
-            ctx.getContext('2d').clearRect(0, 0, ctx.width, ctx.height);
-            return;
-        }
-        
-        const totalODT = odtData.reduce((sum, [_, val]) => sum + val, 0);
-        
-        state.chartInstances.odt = new Chart(ctx, {
-            type: 'bar',
-            data: {
-                labels: odtData.map(d => d[0]),
-                datasets: [{
-                    label: 'Menit',
-                    data: odtData.map(d => d[1]),
-                    backgroundColor: '#f59e0b'
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                indexAxis: 'y',
-                plugins: {
-                    legend: { display: false },
-                    tooltip: {
-                        callbacks: {
-                            label: function(context) {
-                                return `${context.raw.toFixed(1)} menit`;
-                            }
-                        }
-                    },
-                    datalabels: {
-                        anchor: 'end',
-                        align: 'right',
-                        offset: 4,
-                        color: '#1e293b',
-                        font: { weight: 'bold', size: 10 },
-                        formatter: (value) => value.toFixed(0)
-                    }
-                },
-                scales: {
-                    x: { beginAtZero: true }
-                }
-            },
-            plugins: [ChartDataLabels]
+    function getOperatorPerformance(records) {
+        const picStats = {};
+        records.forEach(r => {
+            if (!r.pic) return;
+            if (!picStats[r.pic]) picStats[r.pic] = { totalOEE: 0, totalOutput: 0, count: 0 };
+            picStats[r.pic].totalOEE += r.oee_actual || 0;
+            picStats[r.pic].totalOutput += r.actual_output || 0;
+            picStats[r.pic].count += 1;
         });
+        return Object.entries(picStats).map(([pic, stats]) => ({ pic, avgOEE: stats.totalOEE / stats.count, totalOutput: stats.totalOutput, count: stats.count })).sort((a, b) => b.avgOEE - a.avgOEE).slice(0, 10);
     }
     
-    function renderLineStopMesinChart(records) {
-        const ctx = document.getElementById('chart-ls-mesin');
-        if (!ctx) return;
-        
-        const lsmData = getLineStopMesinChartData(records);
-        
-        if (lsmData.length === 0) {
-            ctx.getContext('2d').clearRect(0, 0, ctx.width, ctx.height);
-            return;
-        }
-        
-        const totalLSM = lsmData.reduce((sum, [_, val]) => sum + val, 0);
-        
-        state.chartInstances.lsMesin = new Chart(ctx, {
-            type: 'bar',
-            data: {
-                labels: lsmData.map(d => d[0]),
-                datasets: [{
-                    label: 'Menit',
-                    data: lsmData.map(d => d[1]),
-                    backgroundColor: '#ef4444'
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                indexAxis: 'y',
-                plugins: {
-                    legend: { display: false },
-                    tooltip: {
-                        callbacks: {
-                            label: function(context) {
-                                return `${context.raw.toFixed(1)} menit`;
-                            }
-                        }
-                    },
-                    datalabels: {
-                        anchor: 'end',
-                        align: 'right',
-                        offset: 4,
-                        color: '#1e293b',
-                        font: { weight: 'bold', size: 10 },
-                        formatter: (value) => value.toFixed(0)
-                    }
-                },
-                scales: {
-                    x: { beginAtZero: true }
-                }
-            },
-            plugins: [ChartDataLabels]
-        });
-    }
-    
-    function renderLineStopNonMesinChart(records) {
-        const ctx = document.getElementById('chart-ls-non-mesin');
-        if (!ctx) return;
-        
-        const lsnmData = getLineStopNonMesinChartData(records);
-        
-        if (lsnmData.length === 0) {
-            ctx.getContext('2d').clearRect(0, 0, ctx.width, ctx.height);
-            return;
-        }
-        
-        const totalLSNM = lsnmData.reduce((sum, [_, val]) => sum + val, 0);
-        
-        state.chartInstances.lsNonMesin = new Chart(ctx, {
-            type: 'bar',
-            data: {
-                labels: lsnmData.map(d => d[0]),
-                datasets: [{
-                    label: 'Menit',
-                    data: lsnmData.map(d => d[1]),
-                    backgroundColor: '#f59e0b'
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                indexAxis: 'y',
-                plugins: {
-                    legend: { display: false },
-                    tooltip: {
-                        callbacks: {
-                            label: function(context) {
-                                return `${context.raw.toFixed(1)} menit`;
-                            }
-                        }
-                    },
-                    datalabels: {
-                        anchor: 'end',
-                        align: 'right',
-                        offset: 4,
-                        color: '#1e293b',
-                        font: { weight: 'bold', size: 10 },
-                        formatter: (value) => value.toFixed(0)
-                    }
-                },
-                scales: {
-                    x: { beginAtZero: true }
-                }
-            },
-            plugins: [ChartDataLabels]
-        });
-    }
-    
-    function renderMinorStopChart(records) {
-        const ctx = document.getElementById('chart-minor-stop');
-        if (!ctx) return;
-        
-        const msData = getMinorStopChartData(records);
-        
-        if (msData.length === 0) {
-            ctx.getContext('2d').clearRect(0, 0, ctx.width, ctx.height);
-            return;
-        }
-        
-        const totalMS = msData.reduce((sum, [_, val]) => sum + val, 0);
-        
-        state.chartInstances.minorStop = new Chart(ctx, {
-            type: 'bar',
-            data: {
-                labels: msData.map(d => d[0]),
-                datasets: [{
-                    label: 'Frekuensi',
-                    data: msData.map(d => d[1]),
-                    backgroundColor: '#764ba2'
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                indexAxis: 'y',
-                plugins: {
-                    legend: { display: false },
-                    tooltip: {
-                        callbacks: {
-                            label: function(context) {
-                                return `${context.raw} kali`;
-                            }
-                        }
-                    },
-                    datalabels: {
-                        anchor: 'end',
-                        align: 'right',
-                        offset: 4,
-                        color: '#1e293b',
-                        font: { weight: 'bold', size: 10 },
-                        formatter: (value) => value
-                    }
-                },
-                scales: {
-                    x: { beginAtZero: true }
-                }
-            },
-            plugins: [ChartDataLabels]
-        });
+    function destroyAllCharts() {
+        Object.values(chartInstances).forEach(chart => { if (chart && chart.destroy) chart.destroy(); });
+        chartInstances = {};
     }
     
     function renderCharts() {
-        destroyAllCharts();
         const records = getFilteredRecords();
+        destroyAllCharts();
         
         setTimeout(() => {
-            renderTrendChart(records);
-            renderPerMachineChart(records);
-            renderAPQChart(records);
-            renderODTChart(records);
-            renderLineStopMesinChart(records);
-            renderLineStopNonMesinChart(records);
-            renderMinorStopChart(records);
+            // Trend Chart - tanpa label target
+            const trendCtx = document.getElementById('chart-trend');
+            if (trendCtx) {
+                const { months, values } = getMonthlyTrendData(records);
+                chartInstances.trend = new Chart(trendCtx, {
+                    type: 'line',
+                    data: {
+                        labels: months,
+                        datasets: [
+                            {
+                                label: 'Rata-rata OEE',
+                                data: values,
+                                borderColor: '#667eea',
+                                backgroundColor: 'rgba(102,126,234,0.1)',
+                                tension: 0.4,
+                                fill: true,
+                                pointRadius: 5,
+                                spanGaps: true
+                            },
+                            {
+                                label: `Target ${CONFIG.OEE_TARGET}%`,
+                                data: Array(12).fill(CONFIG.OEE_TARGET),
+                                borderColor: '#10b981',
+                                borderDash: [5, 5],
+                                pointRadius: 0,
+                                fill: false
+                            }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: { y: { beginAtZero: true, max: 100 } },
+                        plugins: {
+                            datalabels: {
+                                // Tidak menampilkan label di chart trend
+                                display: false
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        if (context.raw !== null && context.datasetIndex === 0) {
+                                            return `Rata-rata OEE: ${context.raw.toFixed(1)}%`;
+                                        }
+                                        return context.dataset.label;
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    plugins: [ChartDataLabels]
+                });
+            }
+            
+            // Per Machine Chart - label di dalam bar
+            const perMachineCtx = document.getElementById('chart-per-machine');
+            if (perMachineCtx) {
+                const machineData = getPerMachineData(records);
+                chartInstances.perMachine = new Chart(perMachineCtx, {
+                    type: 'bar',
+                    data: {
+                        labels: machineData.map(d => d.name),
+                        datasets: [{
+                            label: 'Avg OEE Actual',
+                            data: machineData.map(d => d.avg),
+                            backgroundColor: machineData.map(d => d.avg >= CONFIG.OEE_TARGET ? '#10b981' : '#ef4444')
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: { y: { beginAtZero: true, max: 100 } },
+                        plugins: {
+                            datalabels: {
+                                anchor: 'center',
+                                align: 'center',
+                                color: '#fff',
+                                font: { weight: 'bold', size: 13 },
+                                formatter: function(value) {
+                                    return value.toFixed(1) + '%';
+                                },
+                                // Hanya tampilkan jika bar cukup tinggi
+                                filter: function(context) {
+                                    const value = context.dataset.data[context.dataIndex];
+                                    return value > 15; // minimal 15% agar label terlihat
+                                }
+                            }
+                        }
+                    },
+                    plugins: [ChartDataLabels]
+                });
+            }
+            
+            // APQ Chart - label di dalam bar
+            const apqCtx = document.getElementById('chart-apq');
+            if (apqCtx) {
+                const { avgA, avgP, avgQ, avgA365 } = getAPQData(records);
+                chartInstances.apq = new Chart(apqCtx, {
+                    type: 'bar',
+                    data: {
+                        labels: ['Availability', 'Performance', 'Quality', 'Availability 365'],
+                        datasets: [{
+                            data: [avgA, avgP, avgQ, avgA365],
+                            backgroundColor: [
+                                avgA >= CONFIG.A_TARGET ? '#10b981' : '#ef4444',
+                                avgP >= CONFIG.P_TARGET ? '#10b981' : '#ef4444',
+                                avgQ >= CONFIG.Q_TARGET ? '#10b981' : '#ef4444',
+                                avgA365 >= CONFIG.A365_TARGET ? '#10b981' : '#ef4444'
+                            ]
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: { y: { beginAtZero: true, max: 100 } },
+                        plugins: { 
+                            legend: { display: false },
+                            datalabels: {
+                                anchor: 'center',
+                                align: 'center',
+                                color: '#fff',
+                                font: { weight: 'bold', size: 13 },
+                                formatter: function(value) {
+                                    return value.toFixed(1) + '%';
+                                },
+                                filter: function(context) {
+                                    return context.dataset.data[context.dataIndex] > 15;
+                                }
+                            }
+                        }
+                    },
+                    plugins: [ChartDataLabels]
+                });
+            }
+            
+            // Operator Chart - label di dalam bar (horizontal)
+            const operatorCtx = document.getElementById('chart-operator');
+            if (operatorCtx) {
+                const operatorData = getOperatorPerformance(records);
+                chartInstances.operator = new Chart(operatorCtx, {
+                    type: 'bar',
+                    data: {
+                        labels: operatorData.map(d => d.pic),
+                        datasets: [{
+                            label: 'Avg OEE Actual',
+                            data: operatorData.map(d => d.avgOEE),
+                            backgroundColor: operatorData.map(d => d.avgOEE >= CONFIG.OEE_TARGET ? '#10b981' : '#ef4444')
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        indexAxis: 'y',
+                        scales: { x: { beginAtZero: true, max: 100 } },
+                        plugins: {
+                            datalabels: {
+                                anchor: 'center',
+                                align: 'center',
+                                color: '#fff',
+                                font: { weight: 'bold', size: 12 },
+                                formatter: function(value) {
+                                    return value.toFixed(1) + '%';
+                                },
+                                filter: function(context) {
+                                    return context.dataset.data[context.dataIndex] > 15;
+                                }
+                            }
+                        }
+                    },
+                    plugins: [ChartDataLabels]
+                });
+            }
         }, 100);
     }
     
-    // ==================== RENDER FUNCTIONS ====================
-    function renderApp() {
-        const app = document.getElementById('app');
-        if (!app) return;
-        
-        const scrollPosition = window.scrollY;
-        
-        if (state.currentPage === 'dashboard') {
-            app.innerHTML = renderDashboard();
-        } else if (state.currentPage === 'input') {
-            app.innerHTML = renderInputPage();
-        } else if (state.currentPage === 'management') {
-            app.innerHTML = state.isManagementUnlocked ? renderManagementPage() : renderManagementLogin();
-        } else {
-            app.innerHTML = renderPlaceholder();
+    // ==================== SHOW RECORD DETAIL ====================
+    function showRecordDetail(record) {
+        let odtItemsHTML = '';
+        let totalODT = 0;
+        if (record.odt_data && record.odt_data.length) {
+            record.odt_data.forEach(odt => {
+                if (odt.checked) {
+                    const actual = parseFloat(odt.actualTime) || 0;
+                    const standard = parseFloat(odt.standardTime) || 0;
+                    const used = Math.min(actual, standard);
+                    totalODT += used;
+                    const exceed = actual > standard ? actual - standard : 0;
+                    odtItemsHTML += `<div class="detail-item"><div class="detail-item-label">${odt.name}</div><div class="detail-item-value">${used.toFixed(1)} menit (Standar: ${standard} menit)</div>${exceed > 0 ? `<div style="color: #f59e0b; font-size: 12px; margin-top: 4px;">⚠️ Exceed: +${exceed.toFixed(1)} menit</div>` : ''}</div>`;
+                }
+            });
         }
         
-        setTimeout(() => {
-            window.scrollTo(0, scrollPosition);
-        }, 10);
-        
-        if (state.currentPage === 'dashboard') {
-            setTimeout(renderCharts, 200);
+        let totalLSM = 0;
+        let lsmItemsHTML = '';
+        if (record.line_stop_mesin_data && record.line_stop_mesin_data.length) {
+            record.line_stop_mesin_data.forEach(ls => {
+                const dur = parseFloat(ls.duration) || 0;
+                totalLSM += dur;
+                lsmItemsHTML += `<div class="detail-item"><div class="detail-item-label">${ls.item}</div><div class="detail-item-value">${dur.toFixed(1)} menit</div></div>`;
+            });
         }
-    }
-    
-    function renderHeader(title, icon) {
-        return `
-            <div class="gradient-bg text-white p-6 rounded-2xl shadow-lg mb-6">
-                <div class="flex items-center justify-between">
-                    <div>
-                        <h1 class="text-2xl font-bold flex items-center gap-2">
-                            <span>${icon}</span>
-                            ${toUpper(title)}
-                        </h1>
-                        <p class="text-white/80 text-sm mt-1">PT GOF • OVERALL EQUIPMENT EFFECTIVENESS</p>
-                    </div>
-                    <div class="text-right">
-                        <div class="text-lg font-semibold">${toUpper(new Date().toLocaleDateString('id-ID', { day:'numeric', month:'long', year:'numeric' }))}</div>
-                    </div>
-                </div>
+        
+        let totalLSNM = 0;
+        let lsnmItemsHTML = '';
+        if (record.line_stop_non_mesin_data && record.line_stop_non_mesin_data.length) {
+            record.line_stop_non_mesin_data.forEach(ls => {
+                const dur = parseFloat(ls.duration) || 0;
+                totalLSNM += dur;
+                lsnmItemsHTML += `<div class="detail-item"><div class="detail-item-label">${ls.item}</div><div class="detail-item-value">${dur.toFixed(1)} menit</div></div>`;
+            });
+        }
+        
+        let msItemsHTML = '';
+        if (record.minor_stop_data && record.minor_stop_data.length) {
+            record.minor_stop_data.forEach(ms => {
+                msItemsHTML += `<div class="detail-item"><div class="detail-item-label">${ms.item}</div><div class="detail-item-value">${ms.frequency} kali</div></div>`;
+            });
+        }
+        
+        const modalContent = `
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <h3 style="font-size: 24px; font-weight: 700; color: #667eea;">📋 Detail OEE Record</h3>
+                <button class="btn btn-secondary" onclick="closeModal()" style="padding: 8px 16px;">✕ Tutup</button>
             </div>
-        `;
-    }
-    
-    function renderNav() {
-        return `
-            <div class="nav-tabs">
-                <div class="nav-tab ${state.currentPage === 'dashboard' ? 'active' : ''}" onclick="window.navigateTo('dashboard')">
-                    <i class="fas fa-chart-pie"></i> DASHBOARD
-                </div>
-                <div class="nav-tab ${state.currentPage === 'input' ? 'active' : ''}" onclick="window.navigateTo('input')">
-                    <i class="fas fa-pen"></i> INPUT TKL
-                </div>
-                <div class="nav-tab ${state.currentPage === 'management' ? 'active' : ''}" onclick="window.navigateTo('management')">
-                    <i class="fas fa-cog"></i> MANAGEMENT
-                </div>
+            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 24px;">
+                <div class="detail-item"><div class="detail-item-label">Tanggal</div><div class="detail-item-value">${formatDate(record.date)}</div></div>
+                <div class="detail-item"><div class="detail-item-label">Shift</div><div class="detail-item-value">${record.shift || '-'}</div></div>
+                <div class="detail-item"><div class="detail-item-label">Mesin</div><div class="detail-item-value">${record.machine_name || '-'}</div></div>
+                <div class="detail-item"><div class="detail-item-label">Operator</div><div class="detail-item-value">${record.pic || '-'}</div></div>
+                <div class="detail-item"><div class="detail-item-label">Batch</div><div class="detail-item-value">${record.batch_number || '-'}</div></div>
+                <div class="detail-item"><div class="detail-item-label">Output / Reject</div><div class="detail-item-value">${record.actual_output || 0} / ${record.reject || 0}</div></div>
             </div>
+            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 24px;">
+                <div class="detail-item"><div class="detail-item-label">Availability</div><div class="detail-item-value">${(record.availability_actual || 0).toFixed(1)}%</div></div>
+                <div class="detail-item"><div class="detail-item-label">Performance</div><div class="detail-item-value">${(record.performance || 0).toFixed(1)}%</div></div>
+                <div class="detail-item"><div class="detail-item-label">Quality</div><div class="detail-item-value">${(record.quality || 0).toFixed(1)}%</div></div>
+                <div class="detail-item"><div class="detail-item-label">OEE Actual</div><div class="detail-item-value ${(record.oee_actual || 0) >= CONFIG.OEE_TARGET ? 'badge-success' : 'badge-danger'}">${(record.oee_actual || 0).toFixed(1)}%</div></div>
+                <div class="detail-item"><div class="detail-item-label">OEE 365</div><div class="detail-item-value">${(record.oee_365 || 0).toFixed(1)}%</div></div>
+                <div class="detail-item"><div class="detail-item-label">Minor Stop</div><div class="detail-item-value">${record.minor_stop_count || 0} kali</div></div>
+            </div>
+            ${odtItemsHTML ? `<div style="margin-bottom: 24px;"><div style="font-size: 16px; font-weight: 700; margin-bottom: 12px;">⏱️ ODT - Total: ${totalODT.toFixed(1)} menit</div>${odtItemsHTML}</div>` : ''}
+            ${lsmItemsHTML ? `<div style="margin-bottom: 24px;"><div style="font-size: 16px; font-weight: 700; margin-bottom: 12px;">🔧 Line Stop Mesin - Total: ${totalLSM.toFixed(1)} menit</div>${lsmItemsHTML}</div>` : ''}
+            ${lsnmItemsHTML ? `<div style="margin-bottom: 24px;"><div style="font-size: 16px; font-weight: 700; margin-bottom: 12px;">⚠️ Line Stop Non Mesin - Total: ${totalLSNM.toFixed(1)} menit</div>${lsnmItemsHTML}</div>` : ''}
+            ${msItemsHTML ? `<div style="margin-bottom: 24px;"><div style="font-size: 16px; font-weight: 700; margin-bottom: 12px;">⏸️ Minor Stop - Total: ${record.minor_stop_count || 0} kali</div>${msItemsHTML}</div>` : ''}
+            <div class="flex justify-end"><button class="btn btn-primary" onclick="closeModal()">Tutup</button></div>
         `;
+        showModal(modalContent);
     }
     
-    // ==================== DASHBOARD PAGE ====================
+    // ==================== RENDER DASHBOARD ====================
     function renderDashboard() {
         const records = getFilteredRecords();
         const metrics = calculateMetrics(records);
-        const operatorStats = calculateOperatorPerformance(records);
-        
-        const uniquePICs = [...new Set(state.tklRecords.map(r => r.operator).filter(Boolean))];
-        const uniqueMachines = [...new Set(state.tklRecords.map(r => r.machine_name).filter(Boolean))];
-        
-        const odtTotal = records.reduce((sum, r) => sum + (r.total_odt || 0), 0);
-        const lsmTotal = records.reduce((sum, r) => sum + (r.total_line_stop_mesin || 0), 0);
-        const lsnmTotal = records.reduce((sum, r) => sum + (r.total_line_stop_non_mesin || 0), 0);
-        const msTotal = records.reduce((sum, r) => {
-            try {
-                const ms = r.minor_stop || {};
-                return sum + Object.values(ms).reduce((s, v) => s + v, 0);
-            } catch {
-                return sum;
-            }
-        }, 0);
+        const uniquePICs = [...new Set(allOEERecords.map(r => r.pic).filter(Boolean))];
+        const uniqueMachines = [...new Set(allOEERecords.map(r => r.machine_name).filter(Boolean))];
         
         return `
-            ${renderHeader('DASHBOARD OEE', '📊')}
-            ${renderNav()}
-            
-            <div class="max-w-7xl mx-auto px-4 py-6 space-y-6">
+            <div class="gradient-bg text-white p-6 shadow-lg">
+                <div class="max-w-7xl mx-auto flex justify-between items-center flex-wrap gap-4">
+                    <div><h1 class="text-2xl font-bold">OEE Digital Monitoring System PT. GOF</h1><p class="text-white/80 text-sm mt-1">Created by MSTD GOF</p></div>
+                    <div class="text-right"><p class="text-sm font-semibold">${new Date().toLocaleDateString('id-ID', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</p><p class="text-xs text-white/70">${new Date().toLocaleTimeString('id-ID')}</p></div>
+                </div>
+            </div>
+            <div class="max-w-7xl mx-auto px-4 py-6">
+                <div class="nav-tabs">
+                    <div class="nav-tab ${currentPage === 'dashboard' ? 'active' : ''}" onclick="navigateTo('dashboard')">📊 DASHBOARD</div>
+                    <div class="nav-tab ${currentPage === 'input' ? 'active' : ''}" onclick="navigateTo('input')">✏️ INPUT TKL</div>
+                    <div class="nav-tab ${currentPage === 'management' ? 'active' : ''}" onclick="navigateTo('management')">⚙️ MANAGEMENT</div>
+                    <div class="nav-tab ${currentPage === 'audit' ? 'active' : ''}" onclick="navigateTo('audit')">📋 AUDIT TRAIL</div>
+                </div>
+                
                 <div class="card">
-                    <div class="card-header">
-                        <div class="card-header-left">
-                            <i class="fas fa-filter text-blue-500"></i>
-                            FILTER DATA
-                        </div>
-                    </div>
-                    
+                    <div class="card-header">🔍 Filter Data</div>
                     <div class="filter-section">
-                        <div>
-                            <label class="text-xs font-medium text-gray-500 mb-1 block">TGL MULAI</label>
-                            <input type="date" class="input-field" value="${state.filters.startDate}" onchange="window.updateFilter('startDate', this.value)">
-                        </div>
-                        <div>
-                            <label class="text-xs font-medium text-gray-500 mb-1 block">TGL AKHIR</label>
-                            <input type="date" class="input-field" value="${state.filters.endDate}" onchange="window.updateFilter('endDate', this.value)">
-                        </div>
-                        <div>
-                            <label class="text-xs font-medium text-gray-500 mb-1 block">SHIFT</label>
-                            <select class="input-field" onchange="window.updateFilter('shift', this.value)">
-                                <option value="all">SEMUA</option>
-                                ${Object.keys(SHIFTS).map(s => `
-                                    <option value="${s}" ${state.filters.shift === s ? 'selected' : ''}>${s}</option>
-                                `).join('')}
-                            </select>
-                        </div>
-                        <div>
-                            <label class="text-xs font-medium text-gray-500 mb-1 block">MESIN</label>
-                            <select class="input-field" onchange="window.updateFilter('machine', this.value)">
-                                <option value="all">SEMUA</option>
-                                ${uniqueMachines.map(m => `
-                                    <option value="${m}" ${state.filters.machine === m ? 'selected' : ''}>${m}</option>
-                                `).join('')}
-                            </select>
-                        </div>
-                        <div>
-                            <label class="text-xs font-medium text-gray-500 mb-1 block">PIC</label>
-                            <select class="input-field" onchange="window.updateFilter('pic', this.value)">
-                                <option value="all">SEMUA</option>
-                                ${uniquePICs.map(p => `
-                                    <option value="${p}" ${state.filters.pic === p ? 'selected' : ''}>${p}</option>
-                                `).join('')}
-                            </select>
-                        </div>
+                        <div><label class="block text-xs mb-1">Start Date</label><input type="date" class="input-field" value="${filters.startDate}" onchange="updateFilter('startDate', this.value)"></div>
+                        <div><label class="block text-xs mb-1">End Date</label><input type="date" class="input-field" value="${filters.endDate}" onchange="updateFilter('endDate', this.value)"></div>
+                        <div><label class="block text-xs mb-1">Shift</label><select class="input-field" onchange="updateFilter('shift', this.value)"><option value="all">Semua Shift</option>${Object.keys(SHIFTS).map(s => `<option value="${s}" ${filters.shift === s ? 'selected' : ''}>${s}</option>`).join('')}</select></div>
+                        <div><label class="block text-xs mb-1">Machine</label><select class="input-field" onchange="updateFilter('machine', this.value)"><option value="all">Semua Mesin</option>${uniqueMachines.map(m => `<option value="${m}" ${filters.machine === m ? 'selected' : ''}>${m}</option>`).join('')}</select></div>
+                        <div><label class="block text-xs mb-1">PIC</label><select class="input-field" onchange="updateFilter('pic', this.value)"><option value="all">Semua Operator</option>${uniquePICs.map(p => `<option value="${p}" ${filters.pic === p ? 'selected' : ''}>${p}</option>`).join('')}</select></div>
                     </div>
                 </div>
                 
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                    <div class="scorecard ${metrics.avgOEEActual >= CONFIG.OEE_TARGET ? 'good' : 'bad'}">
-                        <div class="scorecard-label">RATA OEE</div>
-                        <div class="scorecard-value">${metrics.avgOEEActual.toFixed(1)}%</div>
-                    </div>
-                    <div class="scorecard ${metrics.avgOEE365 >= CONFIG.OEE365_TARGET ? 'good' : 'bad'}">
-                        <div class="scorecard-label">RATA OEE 365</div>
-                        <div class="scorecard-value">${metrics.avgOEE365.toFixed(1)}%</div>
-                    </div>
-                    <div class="scorecard">
-                        <div class="scorecard-label">TOTAL OUTPUT</div>
-                        <div class="scorecard-value text-blue-600">${metrics.totalOutput.toLocaleString()}</div>
-                    </div>
-                    <div class="scorecard">
-                        <div class="scorecard-label">MESIN AKTIF</div>
-                        <div class="scorecard-value text-green-600">${state.machines.length}</div>
-                    </div>
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                    <div class="scorecard ${metrics.avgOEEActual >= CONFIG.OEE_TARGET ? 'good' : 'bad'}"><div class="scorecard-label">Rata-rata OEE</div><div class="scorecard-value">${metrics.avgOEEActual.toFixed(1)}%</div><div class="text-xs">Target: ${CONFIG.OEE_TARGET}%</div></div>
+                    <div class="scorecard ${metrics.avgOEE365 >= CONFIG.OEE365_TARGET ? 'good' : 'bad'}"><div class="scorecard-label">Rata-rata OEE 365</div><div class="scorecard-value">${metrics.avgOEE365.toFixed(1)}%</div><div class="text-xs">Target: ${CONFIG.OEE365_TARGET}%</div></div>
+                    <div class="scorecard"><div class="scorecard-label">Total Output</div><div class="scorecard-value text-blue-600">${metrics.totalOutput.toLocaleString()}</div><div class="text-xs">${records.length} Records</div></div>
+                    <div class="scorecard"><div class="scorecard-label">Mesin Aktif</div><div class="scorecard-value text-green-600">${allMachines.length}</div><div class="text-xs">Total Machines</div></div>
                 </div>
                 
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                    <div class="card">
-                        <div class="card-header">
-                            <div class="card-header-left">📈 TREND OEE PER BULAN</div>
-                            <div class="card-header-right">${records.length} Records</div>
-                        </div>
-                        <div class="chart-container"><canvas id="chart-trend"></canvas></div>
-                    </div>
-                    <div class="card">
-                        <div class="card-header">
-                            <div class="card-header-left">🎯 OEE PER MESIN</div>
-                            <div class="card-header-right">Target 88%</div>
-                        </div>
-                        <div class="chart-container"><canvas id="chart-per-machine"></canvas></div>
-                    </div>
+                    <div class="card"><div class="card-header">📈 AVG OEE per Bulan (Tren)</div><div class="chart-container"><canvas id="chart-trend"></canvas></div></div>
+                    <div class="card"><div class="card-header">🎯 OEE Actual per Machine</div><div class="chart-container"><canvas id="chart-per-machine"></canvas></div></div>
                 </div>
                 
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                    <div class="card">
-                        <div class="card-header">
-                            <div class="card-header-left">📊 A-P-Q-A365 BREAKDOWN</div>
-                            <div class="card-header-right">A:93% P:98% Q:99% A365:60%</div>
-                        </div>
-                        <div class="chart-container"><canvas id="chart-apq"></canvas></div>
-                    </div>
-                    <div class="card">
-                        <div class="card-header">
-                            <div class="card-header-left">⏱️ ODT TOP 10</div>
-                            <div class="card-header-right">Total: ${odtTotal.toFixed(0)} menit</div>
-                        </div>
-                        <div class="chart-container-horizontal"><canvas id="chart-odt"></canvas></div>
-                    </div>
-                </div>
-                
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                    <div class="card">
-                        <div class="card-header">
-                            <div class="card-header-left">🔧 LINE STOP MESIN TOP 10</div>
-                            <div class="card-header-right">Total: ${lsmTotal.toFixed(0)} menit</div>
-                        </div>
-                        <div class="chart-container-horizontal"><canvas id="chart-ls-mesin"></canvas></div>
-                    </div>
-                    <div class="card">
-                        <div class="card-header">
-                            <div class="card-header-left">⚠️ LINE STOP NON MESIN TOP 10</div>
-                            <div class="card-header-right">Total: ${lsnmTotal.toFixed(0)} menit</div>
-                        </div>
-                        <div class="chart-container-horizontal"><canvas id="chart-ls-non-mesin"></canvas></div>
-                    </div>
+                    <div class="card"><div class="card-header">📊 A-P-Q-A365 Breakdown</div><div class="chart-container"><canvas id="chart-apq"></canvas></div></div>
+                    <div class="card"><div class="card-header">👨‍🔧 Operator Performance (OEE)</div><div class="chart-container-horizontal"><canvas id="chart-operator"></canvas></div></div>
                 </div>
                 
                 <div class="card">
-                    <div class="card-header">
-                        <div class="card-header-left">⏸️ MINOR STOP TOP 10</div>
-                        <div class="card-header-right">Total: ${msTotal} kali</div>
-                    </div>
-                    <div class="chart-container-horizontal"><canvas id="chart-minor-stop"></canvas></div>
-                </div>
-                
-                <div class="card">
-                    <div class="card-header">
-                        <div class="card-header-left">👨‍🔧 OPERATOR PERFORMANCE</div>
-                    </div>
+                    <div class="card-header">📋 OEE History <span class="text-xs">(Klik baris untuk detail)</span></div>
                     <div class="table-wrapper">
                         <table>
-                            <thead>
-                                <tr>
-                                    <th>PIC</th>
-                                    <th>AVG OEE</th>
-                                    <th>TOTAL OUTPUT</th>
-                                    <th>TARGET OUTPUT</th>
-                                    <th>RECORDS</th>
-                                </tr>
-                            </thead>
+                            <thead> <tr><th>Date</th><th>Shift</th><th>Machine</th><th>PIC</th><th>Batch</th><th>Output</th><th>Reject</th><th>A%</th><th>P%</th><th>Q%</th><th>OEE%</th><th>Notes</th> </thead>
                             <tbody>
-                                ${operatorStats.length ? operatorStats.map(s => `
-                                    <tr>
-                                        <td class="font-medium">${s.pic}</td>
-                                        <td class="${s.avgOEE >= CONFIG.OEE_TARGET ? 'status-good' : 'status-bad'}">${s.avgOEE.toFixed(1)}%</td>
-                                        <td>${s.totalOutput.toLocaleString()}</td>
-                                        <td>${Math.round(s.totalTargetOutput).toLocaleString()}</td>
-                                        <td>${s.count}</td>
-                                    </tr>
-                                `).join('') : `
-                                    <tr>
-                                        <td colspan="5" class="text-center py-8 text-gray-400">BELUM ADA DATA OPERATOR</td>
-                                    </tr>
-                                `}
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-                
-                <div class="card">
-                    <div class="card-header">
-                        <div class="card-header-left">📋 OEE HISTORY</div>
-                    </div>
-                    <div class="table-wrapper">
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>DATE</th>
-                                    <th>SHIFT</th>
-                                    <th>MESIN</th>
-                                    <th>PIC</th>
-                                    <th>BATCH</th>
-                                    <th>OUTPUT</th>
-                                    <th>REJECT</th>
-                                    <th>A%</th>
-                                    <th>P%</th>
-                                    <th>Q%</th>
-                                    <th>OEE%</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                ${records.length ? records.slice(0, 10).map(r => `
-                                    <tr class="clickable-row" onclick='window.showRecordDetail(${JSON.stringify(r).replace(/'/g, "\\'")})'>
-                                        <td>${formatDate(r.date)}</td>
-                                        <td>${r.shift || '-'}</td>
-                                        <td>${r.machine_name || '-'}</td>
-                                        <td>${r.operator || '-'}</td>
-                                        <td>${r.batches?.[0]?.batch || '-'}</td>
-                                        <td>${r.total_good || 0}</td>
-                                        <td>${r.total_defect || 0}</td>
-                                        <td class="${(r.availability || 0) >= CONFIG.A_TARGET ? 'status-good' : 'status-bad'}">${(r.availability || 0).toFixed(1)}%</td>
-                                        <td class="${(r.performance || 0) >= CONFIG.P_TARGET ? 'status-good' : 'status-bad'}">${(r.performance || 0).toFixed(1)}%</td>
-                                        <td class="${(r.quality || 0) >= CONFIG.Q_TARGET ? 'status-good' : 'status-bad'}">${(r.quality || 0).toFixed(1)}%</td>
-                                        <td class="${(r.oee_actual || 0) >= CONFIG.OEE_TARGET ? 'status-good' : 'status-bad'}">${(r.oee_actual || 0).toFixed(1)}%</td>
-                                    </tr>
-                                `).join('') : `
-                                    <tr>
-                                        <td colspan="11" class="text-center py-8 text-gray-400">BELUM ADA DATA OEE</td>
-                                    </tr>
-                                `}
+                                ${records.slice(0, 20).map(r => `<tr class="clickable-row" onclick='showRecordDetail(${JSON.stringify(r).replace(/'/g, "\\'")})'>
+                                    <td>${formatDateShort(r.date)}</td>
+                                    <td>${r.shift || '-'}</td>
+                                    <td><strong>${r.machine_name || '-'}</strong></td>
+                                    <td>${r.pic || '-'}</td>
+                                    <td>${r.batch_number || '-'}</td>
+                                    <td>${(r.actual_output || 0).toLocaleString()}</td>
+                                    <td>${r.reject || 0}</td>
+                                    <td class="${(r.availability_actual || 0) >= CONFIG.A_TARGET ? 'status-good' : 'status-bad'}">${(r.availability_actual || 0).toFixed(1)}%</td>
+                                    <td class="${(r.performance || 0) >= CONFIG.P_TARGET ? 'status-good' : 'status-bad'}">${(r.performance || 0).toFixed(1)}%</td>
+                                    <td class="${(r.quality || 0) >= CONFIG.Q_TARGET ? 'status-good' : 'status-bad'}">${(r.quality || 0).toFixed(1)}%</td>
+                                    <td class="${(r.oee_actual || 0) >= CONFIG.OEE_TARGET ? 'status-good' : 'status-bad'}">${(r.oee_actual || 0).toFixed(1)}%</td>
+                                    <td class="max-w-[150px] truncate">${r.notes || '-'}</td>
+                                </tr>`).join('')}
+                                ${records.length === 0 ? '<tr><td colspan="12" class="text-center py-8">Belum ada data</td>' : ''}
                             </tbody>
                         </table>
                     </div>
@@ -1835,233 +1157,81 @@
         `;
     }
     
-    // ==================== INPUT PAGE ====================
+    // ==================== INPUT TKL PAGE ====================
     function renderInputPage() {
-        const oeeData = hitungAvailAndOEE();
-        const resume = hitungResume();
-        const mesinTerpilih = state.machines.find(m => m.id === state.selectedMachineId);
-        const jamKerja = getShiftMinutes(state.selectedShift);
-        const shiftEnd = getShiftEnd();
+        const mesinTerpilih = allMachines.find(m => m.id === selectedMachineId);
+        const oeeData = selectedShift && selectedMachineId ? hitungAvailAndOEE(kegiatanList, batches, selectedShift, selectedMachineId) : { avail: 0, avail365: 0, perf: 0, quality: 0, oee: 0, oee365: 0, sisaJamKerja: 0, totalGood: 0, totalReject: 0, odtExceeds: [] };
+        const resume = selectedMachineId ? hitungResume(kegiatanList, selectedMachineId) : { totalODT: 0, totalRunning: 0, totalLineStopMesin: 0, totalLineStopNonMesin: 0, odtExceeds: [] };
         
-        // Generate HTML untuk ODT Exceeds
         const odtExceedsHTML = resume.odtExceeds.length > 0 ? `
-            <div class="odt-exceed-list">
-                <h4 class="font-semibold text-orange-600 mb-2 flex items-center gap-2">
-                    <i class="fas fa-exclamation-triangle"></i>
-                    ODT EXCEED (Masuk ke Line Stop Non Mesin)
-                </h4>
-                ${resume.odtExceeds.map(ex => `
-                    <div class="odt-exceed-item">
-                        <span>
-                            <span class="kode-badge kode-${ex.kode} text-xs mr-2">KODE ${ex.kode}</span>
-                            ${ex.item}
-                        </span>
-                        <span class="font-semibold text-orange-600">+${ex.exceed} menit</span>
-                    </div>
-                `).join('')}
-                <div class="mt-2 text-xs text-gray-500">
-                    * Kelebihan waktu dari standar otomatis masuk ke Line Stop Non Mesin
-                </div>
+            <div class="mt-3 p-3 bg-orange-50 rounded-lg border border-orange-300">
+                <p class="text-sm text-orange-700 font-semibold"><i class="fas fa-exclamation-triangle"></i> ODT Exceed (Otomatis masuk ke Line Stop Non Mesin):</p>
+                ${resume.odtExceeds.map(ex => `<div class="text-xs text-orange-600 mt-1">• ${ex.item}: ${ex.actualTime.toFixed(1)} menit (Standar ${ex.standardTime} menit) → Kelebihan ${ex.exceed.toFixed(1)} menit masuk LSNM</div>`).join('')}
             </div>
         ` : '';
         
         return `
-            ${renderHeader('INPUT TKL REAL TIME', '✏️')}
-            ${renderNav()}
-            
-            <div class="max-w-7xl mx-auto px-4 py-6 space-y-6">
-                <div class="card">
-                    <h3 class="font-bold mb-4">📋 INFORMASI SHIFT</h3>
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                        <div>
-                            <label class="text-xs font-semibold text-gray-500 mb-1">TANGGAL</label>
-                            <input type="date" class="input-field" value="${state.selectedDate}" onchange="window.updateDate(this.value)">
-                        </div>
-                        <div>
-                            <label class="text-xs font-semibold text-gray-500 mb-1">SHIFT</label>
-                            <select class="input-field" onchange="window.updateShift(this.value)">
-                                <option value="">PILIH SHIFT</option>
-                                ${Object.keys(SHIFTS).map(s => `
-                                    <option value="${s}" ${state.selectedShift === s ? 'selected' : ''}>${s}</option>
-                                `).join('')}
-                            </select>
-                        </div>
-                        <div>
-                            <label class="text-xs font-semibold text-gray-500 mb-1">MESIN</label>
-                            <select class="input-field" onchange="window.updateMachine(this.value)">
-                                <option value="">PILIH MESIN</option>
-                                ${state.machines.map(m => `
-                                    <option value="${m.id}" ${state.selectedMachineId === m.id ? 'selected' : ''}>${m.name}</option>
-                                `).join('')}
-                            </select>
-                        </div>
-                        <div>
-                            <label class="text-xs font-semibold text-gray-500 mb-1">OPERATOR</label>
-                            <input type="text" class="input-field" value="${state.selectedOperator}" onchange="window.updateOperator(this.value)">
-                        </div>
+            <div class="gradient-bg text-white p-6 shadow-lg">
+                <div class="max-w-7xl mx-auto flex justify-between items-center flex-wrap gap-4">
+                    <div><h1 class="text-2xl font-bold">OEE Digital Monitoring System PT. GOF</h1><p class="text-white/80 text-sm mt-1">Created by MSTD GOF</p></div>
+                    <div class="text-right"><p class="text-sm font-semibold">${new Date().toLocaleDateString('id-ID', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</p></div>
+                </div>
+            </div>
+            <div class="max-w-7xl mx-auto px-4 py-6">
+                <div class="nav-tabs">
+                    <div class="nav-tab" onclick="navigateTo('dashboard')">📊 DASHBOARD</div>
+                    <div class="nav-tab active">✏️ INPUT TKL</div>
+                    <div class="nav-tab" onclick="navigateTo('management')">⚙️ MANAGEMENT</div>
+                    <div class="nav-tab" onclick="navigateTo('audit')">📋 AUDIT TRAIL</div>
+                </div>
+                
+                ${editMode ? `<div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mb-4 rounded-lg"><p><i class="fas fa-edit"></i> <span class="edit-mode-badge">EDIT MODE</span> Sedang mengedit data ID: ${editingRecordId}</p></div>` : ''}
+                
+                <div class="card"><h3 class="font-bold mb-4">📋 INFORMASI SHIFT</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                        <div><label class="text-xs">TANGGAL</label><input type="date" id="input-date" class="input-field" value="${selectedDate}" onchange="updateDateValue(this.value)"></div>
+                        <div><label class="text-xs">SHIFT</label><select id="input-shift" class="input-field" onchange="updateShiftValue(this.value)"><option value="">PILIH SHIFT</option>${Object.keys(SHIFTS).map(s => `<option value="${s}" ${selectedShift === s ? 'selected' : ''}>${s}</option>`).join('')}</select></div>
+                        <div><label class="text-xs">MESIN</label><select id="input-machine" class="input-field" onchange="updateMachineValue(this.value)"><option value="">PILIH MESIN</option>${allMachines.map(m => `<option value="${m.id}" ${selectedMachineId === m.id ? 'selected' : ''}>${m.machine_name}</option>`).join('')}</select></div>
+                        <div><label class="text-xs">OPERATOR</label><input type="text" id="input-operator" class="input-field" value="${selectedOperator}" placeholder="NAMA OPERATOR" onchange="updateOperatorValue(this.value)"></div>
                     </div>
                 </div>
                 
-                <div class="card">
-                    <div class="flex justify-between items-center mb-4">
-                        <h3 class="font-bold">⏱️ TIMELINE KEGIATAN</h3>
-                        <button class="btn btn-primary text-sm" onclick="window.showTambahKegiatanModal()" ${!mesinTerpilih ? 'disabled' : ''}>
-                            <i class="fas fa-plus"></i> TAMBAH
-                        </button>
+                <div class="card"><div class="flex justify-between items-center mb-4"><h3 class="font-bold">⏱️ KEGIATAN</h3><button class="btn btn-primary text-sm" onclick="showTambahKegiatanModal()" ${!mesinTerpilih ? 'disabled' : ''}><i class="fas fa-plus"></i> TAMBAH KEGIATAN</button></div>
+                    <div id="kegiatan-list-container">
+                        ${kegiatanList.length === 0 ? '<div class="text-center py-8 bg-gray-50 rounded-lg"><p class="text-gray-400">BELUM ADA KEGIATAN</p><p class="text-xs text-gray-400 mt-1">Klik tombol "TAMBAH KEGIATAN" untuk mulai</p></div>' : kegiatanList.map((k, i) => `<div class="timeline-card"><div class="kode-badge kode-${k.kode}">${k.kode}</div><div class="flex-1"><div><span class="font-semibold">${k.dari} - ${k.jam}</span> <span class="text-xs bg-gray-200 px-2 py-1 rounded">${KODE_TKL[k.kode]?.icon} ${KODE_TKL[k.kode]?.name}</span></div><div class="text-sm">${k.kegiatan}</div></div><button class="text-red-500" onclick="hapusKegiatan(${i})"><i class="fas fa-trash"></i></button></div>`).join('')}
                     </div>
-                    
-                    ${state.kegiatanList.length === 0 ? `
-                        <div class="text-center py-8 bg-gray-50 rounded-lg border-2 border-dashed">
-                            <p class="text-gray-400">BELUM ADA KEGIATAN</p>
-                            ${!mesinTerpilih ? '<p class="text-xs text-gray-500 mt-2">PILIH MESIN TERLEBIH DAHULU</p>' : ''}
-                        </div>
-                    ` : state.kegiatanList.map((k, i) => `
-                        <div class="timeline-card">
-                            <div class="kode-badge kode-${k.kode}">${k.kode}</div>
-                            <div class="flex-1">
-                                <div class="flex items-center gap-2">
-                                    <span class="font-semibold">${k.dari} - ${k.jam}</span>
-                                    <span class="text-xs bg-gray-200 px-2 py-1 rounded">${KODE_TKL[k.kode]?.icon} ${KODE_TKL[k.kode]?.name}</span>
-                                </div>
-                                <div class="text-sm font-medium mt-1">${k.kegiatan}</div>
-                            </div>
-                            <button class="text-red-500" onclick="window.hapusKegiatan(${i})">
-                                <i class="fas fa-trash"></i>
-                            </button>
-                        </div>
-                    `).join('')}
+                    ${odtExceedsHTML}
                 </div>
                 
-                ${mesinTerpilih?.minor_stop?.length ? `
-                <div class="card">
-                    <h3 class="font-bold mb-4">⏸️ MINOR STOP</h3>
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                        ${mesinTerpilih.minor_stop.map(item => `
-                            <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-                                <span class="font-medium">${item}</span>
-                                <div class="flex items-center gap-2">
-                                    <span class="tally-mark">${'I'.repeat(state.minorStopCounts[item] || 0)}</span>
-                                    <span class="bg-gray-200 px-2 py-1 rounded-full text-xs">${state.minorStopCounts[item] || 0}</span>
-                                    <button class="w-7 h-7 rounded-full bg-blue-500 text-white" onclick="window.tambahMinorStop('${item}')">+</button>
-                                    <button class="w-7 h-7 rounded-full bg-red-500 text-white" onclick="window.kurangMinorStop('${item}')">-</button>
-                                </div>
-                            </div>
-                        `).join('')}
-                    </div>
-                </div>
-                ` : ''}
-                
-                <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-                    <div class="resume-card">
-                        <div class="text-xs text-gray-500">TOTAL ODT</div>
-                        <div class="resume-value text-blue-600">${resume.totalODT} MENIT</div>
-                        <div class="text-2xs text-gray-400">(KODE 1,5,6,7,8)</div>
-                    </div>
-                    <div class="resume-card">
-                        <div class="text-xs text-gray-500">TOTAL RUNNING</div>
-                        <div class="resume-value text-green-600">${resume.totalRunning} MENIT</div>
-                        <div class="text-2xs text-gray-400">(KODE 2)</div>
-                    </div>
-                    <div class="resume-card">
-                        <div class="text-xs text-gray-500">LINE STOP MESIN</div>
-                        <div class="resume-value text-red-600">${resume.totalLineStopMesin} MENIT</div>
-                        <div class="text-2xs text-gray-400">(KODE 3)</div>
-                    </div>
-                    <div class="resume-card">
-                        <div class="text-xs text-gray-500">LINE STOP NON MESIN</div>
-                        <div class="resume-value text-orange-600">${resume.totalLineStopNonMesin} MENIT</div>
-                        <div class="text-2xs text-gray-400">(KODE 9 + ODT EXCEED)</div>
-                    </div>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <div class="resume-card"><div class="text-xs text-gray-500">TOTAL ODT</div><div class="resume-value text-blue-600" id="total-odt">${resume.totalODT} MIN</div></div>
+                    <div class="resume-card"><div class="text-xs text-gray-500">RUNNING</div><div class="resume-value text-green-600" id="total-running">${resume.totalRunning} MIN</div></div>
+                    <div class="resume-card"><div class="text-xs text-gray-500">LS MESIN</div><div class="resume-value text-red-600" id="total-lsm">${resume.totalLineStopMesin} MIN</div></div>
+                    <div class="resume-card"><div class="text-xs text-gray-500">LS NON MESIN</div><div class="resume-value text-orange-600" id="total-lsnm">${resume.totalLineStopNonMesin} MIN</div></div>
                 </div>
                 
-                ${odtExceedsHTML}
+                <div class="sisa-jam-card"><div class="flex justify-between"><div><div class="text-xs text-sky-700">SISA JAM KERJA</div><div class="text-2xl font-bold text-sky-800" id="sisa-jam">${Math.max(0, oeeData.sisaJamKerja)} MIN</div></div><div><div class="text-xs text-sky-600">TOTAL SHIFT</div><div class="text-lg font-bold text-sky-700" id="total-shift">${getShiftMinutes(selectedShift)} MIN</div></div></div></div>
                 
-                <div class="sisa-jam-card">
-                    <div class="flex justify-between items-center">
-                        <div>
-                            <div class="text-xs text-sky-700">SISA JAM KERJA</div>
-                            <div class="text-2xl font-bold text-sky-800">${Math.max(0, oeeData.sisaJamKerja)} MENIT</div>
-                        </div>
-                        <div class="text-right">
-                            <div class="text-xs text-sky-600">TOTAL SHIFT</div>
-                            <div class="text-lg font-semibold text-sky-700">${jamKerja} MENIT</div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="card">
-                    <h3 class="font-bold mb-4">📦 BATCH & OUTPUT</h3>
-                    
-                    <div id="batch-container" class="space-y-3 mb-4">
-                        ${state.batches.map((b, i) => `
-                            <div class="flex flex-col sm:flex-row gap-3 p-4 bg-gray-50 rounded-xl">
-                                <input type="text" class="input-field flex-1" value="${b.batch || ''}" placeholder="NO. BATCH" onchange="window.updateBatch(${i}, 'batch', this.value)">
-                                <input type="number" class="input-field w-full sm:w-32" value="${b.good || ''}" placeholder="GOOD" onchange="window.updateBatch(${i}, 'good', this.value)">
-                                <input type="number" class="input-field w-full sm:w-32" value="${b.reject || ''}" placeholder="REJECT" onchange="window.updateBatch(${i}, 'reject', this.value)">
-                                <button class="btn btn-secondary" onclick="window.hapusBatch(${i})">
-                                    <i class="fas fa-trash"></i> HAPUS
-                                </button>
-                            </div>
-                        `).join('')}
-                    </div>
-                    
-                    <button class="btn btn-secondary w-full" onclick="window.tambahBatch()">
-                        <i class="fas fa-plus"></i> TAMBAH BATCH
-                    </button>
-                    
-                    <div class="grid grid-cols-2 gap-4 mt-4">
-                        <div class="bg-blue-50 rounded-xl p-4 text-center">
-                            <div class="text-xs text-blue-600">TOTAL GOOD</div>
-                            <div class="text-2xl font-bold text-blue-700">${state.batches.reduce((s,b)=>s+(b.good||0),0)}</div>
-                        </div>
-                        <div class="bg-red-50 rounded-xl p-4 text-center">
-                            <div class="text-xs text-red-600">TOTAL REJECT</div>
-                            <div class="text-2xl font-bold text-red-700">${state.batches.reduce((s,b)=>s+(b.reject||0),0)}</div>
-                        </div>
-                    </div>
+                <div class="card"><h3 class="font-bold mb-4">📦 BATCH & OUTPUT</h3>
+                    <div id="batch-container" class="space-y-3 mb-4">${batches.map((b, i) => `<div class="flex gap-3 p-4 bg-gray-50 rounded-xl"><input type="text" class="input-field flex-1" value="${b.batch || ''}" placeholder="NO. BATCH" onchange="updateBatch(${i}, 'batch', this.value)"><input type="number" class="input-field w-32" value="${b.good || ''}" placeholder="GOOD" onchange="updateBatch(${i}, 'good', this.value)"><input type="number" class="input-field w-32" value="${b.reject || ''}" placeholder="REJECT" onchange="updateBatch(${i}, 'reject', this.value)"><button class="btn btn-secondary" onclick="hapusBatch(${i})"><i class="fas fa-trash"></i></button></div>`).join('')}</div>
+                    <button class="btn btn-secondary w-full" onclick="tambahBatch()"><i class="fas fa-plus"></i> TAMBAH BATCH</button>
+                    <div class="grid grid-cols-2 gap-4 mt-4"><div class="bg-blue-50 p-4 rounded-xl text-center"><div class="text-xs text-blue-600">TOTAL GOOD</div><div class="text-2xl font-bold text-blue-700" id="total-good">${batches.reduce((s,b)=>s+(b.good||0),0)}</div></div><div class="bg-red-50 p-4 rounded-xl text-center"><div class="text-xs text-red-600">TOTAL REJECT</div><div class="text-2xl font-bold text-red-700" id="total-reject">${batches.reduce((s,b)=>s+(b.reject||0),0)}</div></div></div>
                 </div>
                 
                 <div class="card bg-gradient-to-r from-blue-50 to-purple-50">
                     <h3 class="font-bold mb-4">📊 OEE LIVE</h3>
-                    
-                    <div class="grid grid-cols-2 md:grid-cols-5 gap-3 mb-4">
-                        <div class="bg-white p-3 rounded-lg text-center">
-                            <div class="text-xs text-gray-400">AVAIL</div>
-                            <div class="text-lg font-bold ${oeeData.avail >= 90 ? 'text-green-600' : 'text-yellow-600'}">${oeeData.avail.toFixed(1)}%</div>
-                        </div>
-                        <div class="bg-white p-3 rounded-lg text-center">
-                            <div class="text-xs text-gray-400">PERF</div>
-                            <div class="text-lg font-bold ${oeeData.perf >= 95 ? 'text-green-600' : 'text-yellow-600'}">${oeeData.perf.toFixed(1)}%</div>
-                        </div>
-                        <div class="bg-white p-3 rounded-lg text-center">
-                            <div class="text-xs text-gray-400">QUAL</div>
-                            <div class="text-lg font-bold ${oeeData.quality >= 99 ? 'text-green-600' : 'text-yellow-600'}">${oeeData.quality.toFixed(1)}%</div>
-                        </div>
-                        <div class="bg-white p-3 rounded-lg text-center col-span-2 bg-gradient-to-br from-blue-100 to-purple-100">
-                            <div class="text-xs text-gray-500">OEE</div>
-                            <div class="text-2xl font-bold ${oeeData.oee >= 88 ? 'text-green-600' : 'text-red-600'}">${oeeData.oee.toFixed(1)}%</div>
-                        </div>
+                    <div class="grid grid-cols-2 gap-4 mb-4">
+                        <div class="oee-card"><div class="oee-label">AVAILABILITY</div><div class="oee-value" id="live-avail">${oeeData.avail.toFixed(1)}%</div></div>
+                        <div class="oee-card"><div class="oee-label">AVAILABILITY 365</div><div class="oee-value" id="live-avail365">${oeeData.avail365.toFixed(1)}%</div></div>
+                        <div class="oee-card"><div class="oee-label">PERFORMANCE</div><div class="oee-value" id="live-perf">${oeeData.perf.toFixed(1)}%</div></div>
+                        <div class="oee-card"><div class="oee-label">QUALITY</div><div class="oee-value" id="live-qual">${oeeData.quality.toFixed(1)}%</div></div>
+                        <div class="oee-card oee-card-large"><div class="oee-label">OEE</div><div class="oee-value" id="live-oee">${oeeData.oee.toFixed(1)}%</div></div>
+                        <div class="oee-card"><div class="oee-label">OEE 365</div><div class="oee-value" id="live-oee365">${oeeData.oee365.toFixed(1)}%</div></div>
                     </div>
-                    
-                    <div class="grid grid-cols-2 gap-4">
-                        <div class="bg-white p-4 rounded-lg text-center border border-blue-200">
-                            <div class="text-xs text-gray-400">AVAIL 365</div>
-                            <div class="text-2xl font-bold text-blue-600">${oeeData.avail365.toFixed(1)}%</div>
-                            <div class="text-xs text-gray-500 mt-1">RUNNING / JAM KERJA</div>
-                        </div>
-                        <div class="bg-white p-4 rounded-lg text-center border border-purple-200">
-                            <div class="text-xs text-gray-400">OEE 365</div>
-                            <div class="text-2xl font-bold ${oeeData.oee365 >= 60 ? 'text-green-600' : 'text-red-600'}">${oeeData.oee365.toFixed(1)}%</div>
-                            <div class="text-xs text-gray-500 mt-1">AVAIL365 × PERF × QUAL</div>
-                        </div>
-                    </div>
+                    <div class="oee-card"><div class="oee-label">TOTAL OUTPUT</div><div class="oee-value text-blue-600" id="live-output">${oeeData.totalGood || 0}</div><div class="text-xs">Reject: ${oeeData.totalReject || 0}</div></div>
                 </div>
                 
-                <div class="flex justify-end">
-                    <button class="btn btn-primary px-8 py-3" onclick="window.simpanData()">
-                        <i class="fas fa-save"></i> SIMPAN DATA SHIFT
-                    </button>
-                </div>
+                <div class="flex justify-end gap-3"><button class="btn btn-secondary" onclick="resetForm()" ${editMode ? '' : 'style="display:none"'}>BATAL EDIT</button><button class="btn btn-primary px-8 py-3" onclick="simpanData()"><i class="fas fa-save"></i> ${editMode ? 'UPDATE DATA' : 'SIMPAN DATA'}</button></div>
             </div>
         `;
     }
@@ -2069,199 +1239,314 @@
     // ==================== MANAGEMENT PAGE ====================
     function renderManagementLogin() {
         return `
-            <div class="max-w-md mx-auto mt-20">
-                <div class="card text-center">
-                    <div class="text-5xl mb-4">🔒</div>
-                    <h3 class="text-2xl font-bold mb-2">MANAGEMENT ACCESS</h3>
-                    <p class="text-gray-500 mb-6">Masukkan password untuk mengakses management mesin</p>
-                    <input type="password" id="mgmt-password" class="input-field mb-4" placeholder="PASSWORD">
-                    <button class="btn btn-primary w-full" onclick="window.unlockManagement()">UNLOCK</button>
-                </div>
-            </div>
+            <div class="gradient-bg text-white p-6 shadow-lg"><div class="max-w-7xl mx-auto"><h1 class="text-2xl font-bold">MANAGEMENT SYSTEM</h1></div></div>
+            <div class="login-container"><div class="card max-w-md mx-auto text-center"><div class="text-5xl mb-4">🔒</div><h3 class="text-2xl font-bold mb-2">MANAGEMENT ACCESS</h3><p class="text-gray-500 mb-6">Password: admin123</p><input type="password" id="mgmt-password" class="input-field mb-4" placeholder="PASSWORD"><button class="btn btn-primary w-full" onclick="unlockManagement()">UNLOCK</button></div></div>
         `;
     }
     
     function renderManagementPage() {
+        const getActivityCount = (machine) => {
+            return Object.values(machine.activities || {}).reduce((sum, arr) => sum + arr.length, 0);
+        };
+        
         return `
-            ${renderHeader('MANAGEMENT SYSTEM', '⚙️')}
-            ${renderNav()}
-            
-            <div class="max-w-7xl mx-auto px-4 py-6 space-y-8">
-                <div class="card">
+            <div class="gradient-bg text-white p-6 shadow-lg">
+                <div class="max-w-7xl mx-auto flex justify-between items-center flex-wrap gap-4">
+                    <div><h1 class="text-2xl font-bold">MANAGEMENT SYSTEM</h1><p class="text-white/80 text-sm mt-1">PT GOF</p></div>
+                    <div class="text-right"><p class="text-sm font-semibold">${new Date().toLocaleDateString('id-ID', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</p></div>
+                </div>
+            </div>
+            <div class="max-w-7xl mx-auto px-4 py-6">
+                <div class="nav-tabs">
+                    <div class="nav-tab" onclick="navigateTo('dashboard')">📊 DASHBOARD</div>
+                    <div class="nav-tab" onclick="navigateTo('input')">✏️ INPUT TKL</div>
+                    <div class="nav-tab active">⚙️ MANAGEMENT</div>
+                    <div class="nav-tab" onclick="navigateTo('audit')">📋 AUDIT TRAIL</div>
+                </div>
+                
+                <div class="flex justify-end mb-4">
+                    <button class="btn btn-primary" onclick="showTambahMesinModal()"><i class="fas fa-plus"></i> TAMBAH MESIN BARU</button>
+                </div>
+                
+                <div class="machine-grid">
+                    ${allMachines.map(machine => {
+                        const activityCount = getActivityCount(machine);
+                        const activityCodes = Object.keys(machine.activities || {}).filter(k => machine.activities[k].length > 0);
+                        const minorStops = machine.minor_stop || [];
+                        
+                        return `
+                            <div class="machine-card">
+                                <div class="machine-header">
+                                    <div class="machine-name">${machine.machine_name}</div>
+                                    <div class="machine-stats">
+                                        <span><i class="fas fa-chart-line"></i> Target: ${machine.target_per_minute}/min</span>
+                                        <span><i class="fas fa-user"></i> PIC: ${machine.pic || '-'}</span>
+                                    </div>
+                                </div>
+                                <div class="machine-body">
+                                    <div class="machine-info">
+                                        <div class="info-item">
+                                            <span class="info-label"><i class="fas fa-tasks"></i> Total Kegiatan</span>
+                                            <span class="info-value">${activityCount} kegiatan</span>
+                                        </div>
+                                        <div class="info-item">
+                                            <span class="info-label"><i class="fas fa-code-branch"></i> Kode Tersedia</span>
+                                            <div class="info-value" style="display: flex; gap: 4px; flex-wrap: wrap;">
+                                                ${activityCodes.length > 0 ? activityCodes.map(k => `<span class="kode-badge kode-${k}" style="font-size: 10px; padding: 2px 6px;">${k}</span>`).join('') : '<span class="text-gray-400 text-xs">Belum ada</span>'}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    ${minorStops.length > 0 ? `
+                                        <div class="activity-summary">
+                                            <div class="activity-summary-title"><i class="fas fa-stopwatch"></i> Minor Stop Items</div>
+                                            <div class="minor-stop-list">
+                                                ${minorStops.map(ms => `<span class="minor-stop-tag">${ms}</span>`).join('')}
+                                            </div>
+                                        </div>
+                                    ` : ''}
+                                    
+                                    <div class="machine-actions">
+                                        <button class="btn btn-secondary" onclick="editMachineActivities('${machine.id}')" title="Atur Kegiatan">
+                                            <i class="fas fa-tasks"></i> Kegiatan
+                                        </button>
+                                        <button class="btn btn-secondary" onclick="editMachine('${machine.id}')" title="Edit Mesin">
+                                            <i class="fas fa-edit"></i> Edit
+                                        </button>
+                                        <button class="btn btn-danger" onclick="deleteMachine('${machine.id}')" title="Hapus Mesin">
+                                            <i class="fas fa-trash"></i> Hapus
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                    }).join('')}
+                </div>
+                
+                <div class="card mt-6">
                     <div class="card-header">
-                        <div class="card-header-left">📚 LIBRARY KEGIATAN</div>
+                        <div class="card-header-left">📚 LIBRARY KEGIATAN (GLOBAL)</div>
                     </div>
-                    
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                        ${Object.entries(KODE_TKL).map(([kode, value]) => `
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        ${Object.entries(KODE_TKL).map(([kode, val]) => `
                             <div class="bg-gray-50 rounded-xl p-4">
-                                <div class="flex items-center justify-between mb-3">
+                                <div class="flex justify-between items-center mb-3">
                                     <div class="flex items-center gap-2">
                                         <span class="kode-badge kode-${kode}">KODE ${kode}</span>
-                                        <span class="font-semibold">${value.icon} ${value.name}</span>
+                                        <span class="font-semibold text-sm">${val.icon} ${val.name}</span>
                                     </div>
-                                    <button class="w-8 h-8 rounded-full bg-blue-100 text-blue-600 hover:bg-blue-200" 
-                                            onclick="window.showTambahKegiatanLibraryModal('${kode}')">
+                                    <button class="w-8 h-8 rounded-full bg-blue-100 text-blue-600 hover:bg-blue-200" onclick="addLibraryItem('${kode}')">
                                         <i class="fas fa-plus text-sm"></i>
                                     </button>
                                 </div>
-                                
-                                <div class="space-y-2 max-h-[200px] overflow-y-auto">
-                                    ${renderLibraryItems(kode)}
+                                <div class="space-y-2 max-h-48 overflow-y-auto">
+                                    ${(libraryKegiatan[kode] || []).map(item => `
+                                        <div class="flex justify-between items-center bg-white p-2 rounded-lg">
+                                            <span class="text-sm">${item}</span>
+                                            <button class="text-red-500 hover:text-red-700" onclick="removeLibraryItem('${kode}', '${item}')">
+                                                <i class="fas fa-times text-xs"></i>
+                                            </button>
+                                        </div>
+                                    `).join('') || '<p class="text-gray-400 text-sm text-center py-2">Belum ada kegiatan</p>'}
                                 </div>
                             </div>
                         `).join('')}
                     </div>
                 </div>
                 
-                <div class="card">
-                    <div class="flex items-center justify-between mb-6">
-                        <h2 class="text-xl font-bold">🏭 DAFTAR MESIN</h2>
-                        <button class="btn btn-primary" onclick="window.showTambahMesinModal()">
-                            <i class="fas fa-plus"></i> TAMBAH MESIN
-                        </button>
+                <div class="card mt-6">
+                    <div class="card-header">
+                        <div class="card-header-left">✏️ EDIT DATA OEE</div>
                     </div>
-                    
-                    ${state.machines.length === 0 ? `
-                        <div class="text-center py-12 bg-gray-50 rounded-xl">
-                            <p class="text-gray-400">BELUM ADA MESIN</p>
-                            <p class="text-sm text-gray-500 mt-2">Klik "TAMBAH MESIN" untuk memulai</p>
-                        </div>
-                    ` : `
-                        <div class="grid grid-cols-1 gap-4">
-                            ${state.machines.map(m => `
-                                <div class="bg-gray-50 rounded-xl p-4 flex items-center justify-between">
-                                    <div class="flex-1">
-                                        <div class="flex items-center gap-3">
-                                            <h4 class="font-bold">${m.name}</h4>
-                                            <span class="text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded-full">
-                                                TARGET: ${m.target}/MENIT
-                                            </span>
-                                        </div>
-                                        
-                                        <div class="flex flex-wrap gap-2 mt-3">
-                                            ${Object.entries(m.activities || {}).map(([kode, acts]) => `
-                                                <div class="relative group">
-                                                    <span class="kode-badge kode-${kode} cursor-help">
-                                                        ${kode} (${acts.length})
-                                                    </span>
-                                                    <div class="absolute bottom-full left-0 mb-2 w-48 p-2 bg-white rounded-lg shadow-lg hidden group-hover:block z-10">
-                                                        <p class="text-xs font-semibold mb-1">KODE ${kode}</p>
-                                                        ${acts.map(a => `
-                                                            <div class="text-xs py-1 border-b last:border-0">
-                                                                ${a.nama}
-                                                                ${a.durasi ? `<span class="text-blue-600">(${a.durasi} MIN)</span>` : ''}
-                                                            </div>
-                                                        `).join('')}
-                                                    </div>
-                                                </div>
-                                            `).join('')}
-                                        </div>
-                                        
-                                        ${m.minor_stop?.length ? `
-                                        <div class="mt-2">
-                                            <span class="text-xs text-gray-500">MINOR STOP:</span>
-                                            ${m.minor_stop.map(ms => `
-                                                <span class="text-xs bg-gray-200 px-2 py-0.5 rounded-full ml-1">${ms}</span>
-                                            `).join('')}
-                                        </div>
-                                        ` : ''}
-                                    </div>
-                                    
-                                    <div class="flex gap-2 ml-4">
-                                        <button class="w-8 h-8 rounded-full bg-blue-100 text-blue-600 hover:bg-blue-200" 
-                                                onclick="window.editMachine('${m.id}')">
-                                            <i class="fas fa-edit text-sm"></i>
-                                        </button>
-                                        <button class="w-8 h-8 rounded-full bg-red-100 text-red-600 hover:bg-red-200" 
-                                                onclick="window.deleteMachine('${m.id}')">
-                                            <i class="fas fa-trash text-sm"></i>
-                                        </button>
-                                    </div>
-                                </div>
-                            `).join('')}
-                        </div>
-                    `}
+                    <div class="filter-section">
+                        <div><label class="text-xs">Tanggal</label><input type="date" id="edit-search-date" class="input-field"></div>
+                        <div><label class="text-xs">Shift</label><select id="edit-search-shift" class="input-field"><option value="">Semua</option>${Object.keys(SHIFTS).map(s => `<option value="${s}">${s}</option>`).join('')}</select></div>
+                        <div><label class="text-xs">Mesin</label><select id="edit-search-machine" class="input-field"><option value="">Semua</option>${allMachines.map(m => `<option value="${m.machine_name}">${m.machine_name}</option>`).join('')}</select></div>
+                        <div><button class="btn btn-primary" onclick="searchOEERecords()"><i class="fas fa-search"></i> Cari</button></div>
+                    </div>
+                    <div id="edit-search-results" class="mt-4"></div>
                 </div>
             </div>
         `;
     }
     
-    function renderLibraryItems(kode) {
-        const items = state.libraryKegiatan[kode] || [];
-        if (!items.length) {
-            return '<p class="text-xs text-gray-400 italic">BELUM ADA KEGIATAN</p>';
-        }
-        return items.map(item => `
-            <div class="flex items-center justify-between bg-white p-2 rounded-lg">
-                <span class="text-sm">${item}</span>
-                <button class="text-red-500 hover:text-red-700" onclick="window.hapusDariLibrary('${kode}', '${item}')">
-                    <i class="fas fa-times text-xs"></i>
-                </button>
-            </div>
-        `).join('');
-    }
-    
-    function renderPlaceholder() {
+    // ==================== AUDIT TRAIL PAGE ====================
+    function renderAuditPage() {
+        const records = getFilteredRecords();
         return `
-            ${renderHeader('OEE SYSTEM', '⚙️')}
-            ${renderNav()}
-            <div class="max-w-7xl mx-auto px-4 py-12 text-center">
-                <i class="fas fa-construction text-5xl text-gray-300 mb-4"></i>
-                <h3 class="text-xl text-gray-500">HALAMAN DALAM PENGEMBANGAN</h3>
+            <div class="gradient-bg text-white p-6 shadow-lg">
+                <div class="max-w-7xl mx-auto flex justify-between items-center flex-wrap gap-4">
+                    <div><h1 class="text-2xl font-bold">AUDIT TRAIL</h1><p class="text-white/80 text-sm mt-1">Riwayat Semua Data OEE</p></div>
+                    <div class="text-right"><p class="text-sm font-semibold">${new Date().toLocaleDateString('id-ID', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</p></div>
+                </div>
+            </div>
+            <div class="max-w-7xl mx-auto px-4 py-6">
+                <div class="nav-tabs">
+                    <div class="nav-tab" onclick="navigateTo('dashboard')">📊 DASHBOARD</div>
+                    <div class="nav-tab" onclick="navigateTo('input')">✏️ INPUT TKL</div>
+                    <div class="nav-tab" onclick="navigateTo('management')">⚙️ MANAGEMENT</div>
+                    <div class="nav-tab active">📋 AUDIT TRAIL</div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">🔍 Filter Data</div>
+                    <div class="filter-section">
+                        <div><label class="block text-xs mb-1">Start Date</label><input type="date" class="input-field" value="${filters.startDate}" onchange="updateFilter('startDate', this.value)"></div>
+                        <div><label class="block text-xs mb-1">End Date</label><input type="date" class="input-field" value="${filters.endDate}" onchange="updateFilter('endDate', this.value)"></div>
+                        <div><label class="block text-xs mb-1">Shift</label><select class="input-field" onchange="updateFilter('shift', this.value)"><option value="all">Semua Shift</option>${Object.keys(SHIFTS).map(s => `<option value="${s}" ${filters.shift === s ? 'selected' : ''}>${s}</option>`).join('')}</select></div>
+                        <div><label class="block text-xs mb-1">Machine</label><select class="input-field" onchange="updateFilter('machine', this.value)"><option value="all">Semua Mesin</option>${[...new Set(allOEERecords.map(r => r.machine_name))].map(m => `<option value="${m}" ${filters.machine === m ? 'selected' : ''}>${m}</option>`).join('')}</select></div>
+                        <div><label class="block text-xs mb-1">PIC</label><select class="input-field" onchange="updateFilter('pic', this.value)"><option value="all">Semua Operator</option>${[...new Set(allOEERecords.map(r => r.pic))].map(p => `<option value="${p}" ${filters.pic === p ? 'selected' : ''}>${p}</option>`).join('')}</select></div>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">📋 SEMUA DATA OEE <span class="text-xs">(Klik baris untuk detail lengkap)</span></div>
+                    <div class="table-wrapper">
+                        <table>
+                            <thead> <tr><th>Date</th><th>Shift</th><th>Machine</th><th>PIC</th><th>Batch</th><th>Output</th><th>Reject</th><th>A%</th><th>P%</th><th>Q%</th><th>OEE%</th><th>Notes</th><th>Aksi</th> </thead>
+                            <tbody>
+                                ${records.map(r => `<tr class="clickable-row" onclick='showRecordDetail(${JSON.stringify(r).replace(/'/g, "\\'")})'>
+                                    <td>${formatDateShort(r.date)}</td>
+                                    <td>${r.shift || '-'}</td>
+                                    <td><strong>${r.machine_name || '-'}</strong></td>
+                                    <td>${r.pic || '-'}</td>
+                                    <td>${r.batch_number || '-'}</td>
+                                    <td>${(r.actual_output || 0).toLocaleString()}</td>
+                                    <td>${r.reject || 0}</td>
+                                    <td class="${(r.availability_actual || 0) >= CONFIG.A_TARGET ? 'status-good' : 'status-bad'}">${(r.availability_actual || 0).toFixed(1)}%</td>
+                                    <td class="${(r.performance || 0) >= CONFIG.P_TARGET ? 'status-good' : 'status-bad'}">${(r.performance || 0).toFixed(1)}%</td>
+                                    <td class="${(r.quality || 0) >= CONFIG.Q_TARGET ? 'status-good' : 'status-bad'}">${(r.quality || 0).toFixed(1)}%</td>
+                                    <td class="${(r.oee_actual || 0) >= CONFIG.OEE_TARGET ? 'status-good' : 'status-bad'}">${(r.oee_actual || 0).toFixed(1)}%</td>
+                                    <td class="max-w-[150px] truncate">${r.notes || '-'}</td>
+                                    <td><button class="btn btn-primary text-xs py-1 px-2" onclick="event.stopPropagation(); editOEERecord('${r.id}')">Edit</button></td>
+                                </tr>`).join('')}
+                                ${records.length === 0 ? '<tr><td colspan="13" class="text-center py-8">Belum ada data</td>' : ''}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
         `;
     }
     
-    // ==================== ACTIONS ====================
-    window.updateDate = function(val) { state.selectedDate = val; };
-    window.updateShift = function(val) { state.selectedShift = val; renderApp(); };
-    window.updateMachine = function(val) { state.selectedMachineId = val; renderApp(); };
-    window.updateOperator = function(val) { state.selectedOperator = toUpper(val); };
+    // ==================== EDIT MESIN ACTIVITIES ====================
+    function editMachineActivities(machineId) {
+        const machine = allMachines.find(m => m.id === machineId);
+        if (!machine) return;
+        
+        let html = `<h3 class="text-xl font-bold mb-4">📋 ATUR KEGIATAN MESIN: ${machine.machine_name}</h3>`;
+        html += `<p class="text-sm text-gray-500 mb-4">Pilih kegiatan dari library untuk mesin ini. Centang yang tersedia. Untuk kegiatan ODT (Kode 1,5,7,8), isi durasi standar.</p>`;
+        
+        const kodeUrutan = ['1','2','3','5','6','7','8','9'];
+        
+        kodeUrutan.forEach(kode => {
+            const libraryItems = libraryKegiatan[kode] || [];
+            const currentActivities = machine.activities?.[kode] || [];
+            const currentNames = currentActivities.map(a => a.nama);
+            
+            html += `<div class="border rounded-lg p-3 mb-3 bg-gray-50">
+                        <div class="flex items-center gap-2 mb-2">
+                            <span class="kode-badge kode-${kode}">KODE ${kode}</span>
+                            <span class="font-semibold">${KODE_TKL[kode]?.icon} ${KODE_TKL[kode]?.name}</span>
+                            ${KODE_TKL[kode]?.hasDuration ? '<span class="text-xs text-blue-500 ml-2">(Bisa diisi durasi standar)</span>' : ''}
+                        </div>
+                        <div class="space-y-2">`;
+            
+            if (libraryItems.length === 0) {
+                html += `<div class="text-center text-gray-400 text-sm py-2">Belum ada kegiatan di library untuk kode ${kode}</div>`;
+            } else {
+                libraryItems.forEach(item => {
+                    const currentActivity = currentActivities.find(a => a.nama === item);
+                    const currentDurasi = currentActivity?.durasi || '';
+                    html += `<div class="flex items-center gap-3 p-2 bg-white rounded-lg">
+                                <input type="checkbox" class="act-checkbox" data-kode="${kode}" data-nama="${item}" ${currentNames.includes(item) ? 'checked' : ''}>
+                                <span class="text-sm flex-1">${item}</span>
+                                ${KODE_TKL[kode]?.hasDuration ? `
+                                    <div class="flex items-center gap-1">
+                                        <span class="text-xs text-gray-500">Durasi standar:</span>
+                                        <input type="number" class="duration-input" data-nama="${item}" data-kode="${kode}" value="${currentDurasi}" placeholder="menit" style="width: 80px; padding: 4px 8px; border: 1px solid #e2e8f0; border-radius: 8px;">
+                                        <span class="text-xs text-gray-500">menit</span>
+                                    </div>
+                                ` : ''}
+                            </div>`;
+                });
+            }
+            
+            html += `</div></div>`;
+        });
+        
+        html += `<div class="flex gap-3 mt-4"><button class="btn btn-primary flex-1" onclick="saveMachineActivities('${machineId}')">💾 SIMPAN KEGIATAN</button><button class="btn btn-secondary flex-1" onclick="closeModal()">BATAL</button></div>`;
+        
+        showModal(html);
+    }
     
-    window.tambahMinorStop = function(item) {
-        state.minorStopCounts[item] = (state.minorStopCounts[item] || 0) + 1;
-        renderApp();
-    };
-    
-    window.kurangMinorStop = function(item) {
-        if (state.minorStopCounts[item] > 0) state.minorStopCounts[item]--;
-        renderApp();
-    };
-    
-    window.tambahBatch = function() {
-        state.batches.push({ batch: '', good: 0, reject: 0 });
-        renderApp();
-    };
-    
-    window.hapusBatch = function(i) {
-        state.batches.splice(i, 1);
-        renderApp();
-    };
-    
-    window.updateBatch = function(i, field, val) {
-        if (field === 'batch') {
-            state.batches[i][field] = toUpper(val);
-        } else {
-            state.batches[i][field] = val === '' ? 0 : parseInt(val);
+    function saveMachineActivities(machineId) {
+        const checkboxes = document.querySelectorAll('.act-checkbox');
+        const newActivities = {};
+        
+        checkboxes.forEach(cb => {
+            const kode = cb.getAttribute('data-kode');
+            const nama = cb.getAttribute('data-nama');
+            if (cb.checked) {
+                if (!newActivities[kode]) newActivities[kode] = [];
+                let durasi = null;
+                const durationInput = document.querySelector(`.duration-input[data-nama="${nama}"][data-kode="${kode}"]`);
+                if (durationInput && durationInput.value) {
+                    durasi = parseInt(durationInput.value);
+                }
+                newActivities[kode].push({
+                    nama: nama,
+                    durasi: durasi && !isNaN(durasi) ? durasi : null
+                });
+            }
+        });
+        
+        const index = allMachines.findIndex(m => m.id === machineId);
+        if (index !== -1) {
+            allMachines[index].activities = newActivities;
+            saveToStorage();
+            closeModal();
+            renderApp();
+            showToast('Kegiatan mesin berhasil diupdate');
         }
-        renderApp();
-    };
+    }
     
-    window.hapusKegiatan = function(i) {
-        state.kegiatanList.splice(i, 1);
-        renderApp();
-    };
+    // ==================== INPUT TKL ACTIONS ====================
+    function updateDateValue(val) { selectedDate = val; renderApp(); }
+    function updateShiftValue(val) { selectedShift = val; renderApp(); }
+    function updateMachineValue(val) { selectedMachineId = val; renderApp(); }
+    function updateOperatorValue(val) { selectedOperator = toUpper(val); renderApp(); }
     
-    window.showTambahKegiatanModal = function() {
-        if (!state.selectedMachineId) {
-            showToast('PILIH MESIN TERLEBIH DAHULU', 'error');
-            return;
+    function tambahBatch() { batches.push({ batch: '', good: 0, reject: 0 }); renderApp(); }
+    function hapusBatch(i) { batches.splice(i, 1); renderApp(); }
+    function updateBatch(i, field, val) { 
+        if (field === 'batch') batches[i][field] = toUpper(val); 
+        else batches[i][field] = val === '' ? 0 : parseInt(val); 
+        renderApp(); 
+    }
+    function hapusKegiatan(i) { kegiatanList.splice(i, 1); renderApp(); }
+    
+    function resetForm() { 
+        editMode = false; 
+        editingRecordId = null; 
+        kegiatanList = []; 
+        batches = []; 
+        selectedShift = ''; 
+        selectedMachineId = ''; 
+        selectedOperator = ''; 
+        renderApp(); 
+        showToast('Form direset');
+    }
+    
+    function showTambahKegiatanModal() {
+        if (!selectedMachineId) { 
+            showToast('PILIH MESIN DULU', 'error'); 
+            return; 
         }
         
-        const mesin = state.machines.find(m => m.id === state.selectedMachineId);
-        if (!mesin) {
-            showToast('MESIN TIDAK DITEMUKAN', 'error');
+        const mesin = allMachines.find(m => m.id === selectedMachineId);
+        if (!mesin || !mesin.activities || Object.keys(mesin.activities).length === 0) {
+            showToast('MESIN BELUM MEMILIKI KEGIATAN! Atur kegiatan di MANAGEMENT', 'error');
             return;
         }
         
@@ -2269,474 +1554,394 @@
         const end = addHour(start);
         const shiftEnd = getShiftEnd();
         
-        // Validasi jam mulai tidak melebihi shift end
-        if (isTimeGreater(start, shiftEnd)) {
-            showToast('SHIFT SUDAH BERAKHIR', 'error');
-            return;
+        if (isTimeGreater(start, shiftEnd)) { 
+            showToast('SHIFT SUDAH BERAKHIR', 'error'); 
+            return; 
         }
         
         let options = '<option value="">PILIH KEGIATAN</option>';
         const kodeUrutan = ['1','2','3','5','6','7','8','9'];
         
-        kodeUrutan.forEach(kodeStr => {
-            const acts = mesin.activities?.[kodeStr];
-            if (acts?.length) {
-                options += `<optgroup label="KODE ${kodeStr} ${KODE_TKL[kodeStr]?.icon}">`;
+        kodeUrutan.forEach(kode => {
+            const acts = mesin.activities?.[kode] || [];
+            if (acts.length) {
+                options += `<optgroup label="KODE ${kode} ${KODE_TKL[kode]?.icon}">`;
                 acts.forEach((a, idx) => {
-                    const durasiText = a.durasi ? ` (${a.durasi} MIN)` : '';
-                    options += `<option value="${kodeStr}_${idx}">${a.nama}${durasiText}</option>`;
+                    const durasiText = a.durasi ? ` (Standar: ${a.durasi} min)` : '';
+                    options += `<option value="${kode}_${idx}">${a.nama}${durasiText}</option>`;
                 });
                 options += '</optgroup>';
             }
         });
         
         showModal(`
-            <h3 class="text-xl font-bold mb-6">➕ TAMBAH KEGIATAN</h3>
-            <div class="space-y-4">
-                <div class="grid grid-cols-2 gap-3">
-                    <div>
-                        <label class="text-xs font-semibold text-gray-500 mb-1">DARI</label>
-                        <input type="time" id="modal-dari" class="input-field" value="${start}" ${!state.kegiatanList.length ? 'readonly' : ''}>
-                        ${!state.kegiatanList.length ? '<div class="time-limit-info">Jam mulai shift</div>' : ''}
-                    </div>
-                    <div>
-                        <label class="text-xs font-semibold text-gray-500 mb-1">SAMPAI</label>
-                        <input type="time" id="modal-sampai" class="input-field" value="${end}" max="${shiftEnd}">
-                        <div class="time-limit-info">Maksimal: ${shiftEnd}</div>
-                    </div>
-                </div>
-                <div>
-                    <label class="text-xs font-semibold text-gray-500 mb-1">PILIH KEGIATAN</label>
-                    <select id="modal-kegiatan-select" class="input-field" onchange="window.updateKegiatanFromSelect()">
-                        ${options}
-                    </select>
-                </div>
-                <div>
-                    <label class="text-xs font-semibold text-gray-500 mb-1">NAMA KEGIATAN</label>
-                    <input type="text" id="modal-kegiatan" class="input-field" readonly>
-                </div>
-                <div>
-                    <label class="text-xs font-semibold text-gray-500 mb-1">CATATAN</label>
-                    <input type="text" id="modal-notes" class="input-field" placeholder="OPSIONAL">
-                </div>
-                <div class="flex gap-3 pt-4">
-                    <button class="btn btn-primary flex-1" onclick="window.tambahKegiatanFromModal()">TAMBAH</button>
-                    <button class="btn btn-secondary flex-1" onclick="window.closeModal()">BATAL</button>
-                </div>
+            <h3 class="text-xl font-bold mb-4">➕ TAMBAH KEGIATAN</h3>
+            <div class="grid grid-cols-2 gap-3 mb-3">
+                <div><label>DARI</label><input type="time" id="modal-dari" class="input-field" value="${start}" ${!kegiatanList.length ? 'readonly' : ''}></div>
+                <div><label>SAMPAI</label><input type="time" id="modal-sampai" class="input-field" value="${end}"></div>
             </div>
+            <div class="mb-3"><label>KEGIATAN</label><select id="modal-kegiatan-select" class="input-field" onchange="updateKegiatanFromSelect()">${options}</select></div>
+            <div class="mb-3"><label>NAMA KEGIATAN</label><input type="text" id="modal-kegiatan" class="input-field" readonly></div>
+            <div class="flex gap-3"><button class="btn btn-primary flex-1" onclick="tambahKegiatanFromModal()">TAMBAH</button><button class="btn btn-secondary flex-1" onclick="closeModal()">BATAL</button></div>
         `);
-    };
+    }
     
-    window.updateKegiatanFromSelect = function() {
+    function updateKegiatanFromSelect() {
         const sel = document.getElementById('modal-kegiatan-select');
-        if (!sel?.value) return;
-        
-        const [kode, idx] = sel.value.split('_');
-        const mesin = state.machines.find(m => m.id === state.selectedMachineId);
-        const kegiatan = mesin?.activities?.[kode]?.[parseInt(idx)];
-        
-        if (kegiatan) {
-            document.getElementById('modal-kegiatan').value = kegiatan.nama;
+        if (sel?.value) {
+            const [kode, idx] = sel.value.split('_');
+            const mesin = allMachines.find(m => m.id === selectedMachineId);
+            const kegiatan = mesin?.activities?.[kode]?.[parseInt(idx)];
+            if (kegiatan) {
+                document.getElementById('modal-kegiatan').value = kegiatan.nama;
+            }
         }
-    };
+    }
     
-    window.tambahKegiatanFromModal = function() {
+    function tambahKegiatanFromModal() {
         const dari = document.getElementById('modal-dari')?.value;
         const sampai = document.getElementById('modal-sampai')?.value;
         const kegiatan = document.getElementById('modal-kegiatan')?.value;
-        const notes = document.getElementById('modal-notes')?.value || '';
         const sel = document.getElementById('modal-kegiatan-select');
         
-        if (!sel?.value || !kegiatan) {
-            showToast('PILIH KEGIATAN', 'error');
-            return;
+        if (!sel?.value || !kegiatan) { 
+            showToast('PILIH KEGIATAN', 'error'); 
+            return; 
         }
         
         const [kode] = sel.value.split('_');
         
-        // Validasi jam sampai tidak melebihi shift end
-        if (isTimeGreater(sampai, getShiftEnd())) {
-            showToast('JAM SAMPAI MELEBIHI AKHIR SHIFT', 'error');
-            return;
+        if (isTimeGreater(sampai, getShiftEnd())) { 
+            showToast('MELEBIHI AKHIR SHIFT', 'error'); 
+            return; 
         }
         
-        if (state.kegiatanList.length === 0) {
-            const shiftStart = getShiftStart();
-            if (dari !== shiftStart) {
-                showToast(`KEGIATAN PERTAMA HARUS MULAI JAM ${shiftStart}`, 'error');
-                return;
-            }
-        } else {
-            const last = state.kegiatanList[state.kegiatanList.length - 1];
-            if (dari !== last.jam) {
-                showToast(`HARUS LANJUT DARI JAM ${last.jam}`, 'error');
-                return;
-            }
+        if (kegiatanList.length === 0) { 
+            if (dari !== getShiftStart()) { 
+                showToast(`KEGIATAN PERTAMA HARUS MULAI JAM ${getShiftStart()}`, 'error'); 
+                return; 
+            } 
+        } else { 
+            const last = kegiatanList[kegiatanList.length - 1]; 
+            if (dari !== last.jam) { 
+                showToast(`HARUS LANJUT DARI JAM ${last.jam}`, 'error'); 
+                return; 
+            } 
         }
         
-        state.kegiatanList.push({
-            dari, jam: sampai, kode: parseInt(kode), kegiatan: toUpper(kegiatan), notes: toUpper(notes), wr: ''
+        kegiatanList.push({ 
+            dari, 
+            jam: sampai, 
+            kode: parseInt(kode), 
+            kegiatan: toUpper(kegiatan) 
         });
         
-        closeModal();
-        renderApp();
+        closeModal(); 
+        renderApp(); 
         showToast('KEGIATAN DITAMBAHKAN');
-    };
+    }
     
-    window.simpanData = async function() {
-        if (!state.selectedShift || !state.selectedMachineId || !state.selectedOperator) {
-            showToast('LENGKAPI SEMUA FIELD HEADER', 'error');
-            return;
+    function simpanData() {
+        if (!selectedShift || !selectedMachineId || !selectedOperator) { 
+            showToast('LENGKAPI DATA HEADER', 'error'); 
+            return; 
         }
-        if (!state.kegiatanList.length) {
-            showToast('MINIMAL 1 KEGIATAN', 'error');
-            return;
+        if (!kegiatanList.length) { 
+            showToast('MINIMAL 1 KEGIATAN', 'error'); 
+            return; 
         }
-        if (!state.batches.length) {
-            showToast('MINIMAL 1 BATCH', 'error');
-            return;
+        if (!batches.length) { 
+            showToast('MINIMAL 1 BATCH', 'error'); 
+            return; 
         }
         
-        const oeeData = hitungAvailAndOEE();
-        const resume = hitungResume();
-        const mesin = state.machines.find(m => m.id === state.selectedMachineId);
-        const jamKerja = getShiftMinutes(state.selectedShift);
+        const oeeData = hitungAvailAndOEE(kegiatanList, batches, selectedShift, selectedMachineId);
+        const resume = hitungResume(kegiatanList, selectedMachineId);
+        const mesin = allMachines.find(m => m.id === selectedMachineId);
         
         const recordData = {
-            date: state.selectedDate,
-            shift: state.selectedShift,
-            shift_minutes: jamKerja,
-            machine_id: state.selectedMachineId,
-            machine_name: mesin?.name,
-            operator: toUpper(state.selectedOperator),
-            kegiatan: state.kegiatanList,
-            batches: state.batches,
-            minor_stop: state.minorStopCounts,
-            total_odt: resume.totalODT,
-            total_running: resume.totalRunning,
-            total_line_stop_mesin: resume.totalLineStopMesin,
-            total_line_stop_non_mesin: resume.totalLineStopNonMesin,
-            total_good: state.batches.reduce((s,b)=>s+(b.good||0),0),
-            total_defect: state.batches.reduce((s,b)=>s+(b.reject||0),0),
-            availability: oeeData.avail,
+            date: selectedDate,
+            shift: selectedShift,
+            machine_id: selectedMachineId,
+            machine_name: mesin?.machine_name,
+            pic: toUpper(selectedOperator),
+            batch_number: batches[0]?.batch || '',
+            actual_output: batches.reduce((s,b)=>s+(b.good||0),0),
+            reject: batches.reduce((s,b)=>s+(b.reject||0),0),
+            availability_actual: oeeData.avail,
             availability_365: oeeData.avail365,
             performance: oeeData.perf,
             quality: oeeData.quality,
             oee_actual: oeeData.oee,
             oee_365: oeeData.oee365,
-            notes: ''
-        };
-        
-        try {
-            showLoading('Menyimpan data...');
-            const saved = await saveOEERecord(recordData);
-            state.tklRecords.unshift(saved);
-            
-            // Reset form
-            state.kegiatanList = [];
-            state.batches = [];
-            state.minorStopCounts = {};
-            state.selectedShift = '';
-            state.selectedMachineId = '';
-            state.selectedOperator = '';
-            
-            hideLoading();
-            state.currentPage = 'dashboard';
-            renderApp();
-        } catch (error) {
-            hideLoading();
-            console.error('Error saving:', error);
-        }
-    };
-    
-    window.unlockManagement = function() {
-        const pwd = document.getElementById('mgmt-password')?.value;
-        if (pwd === CONFIG.MANAGEMENT_PASSWORD) {
-            state.isManagementUnlocked = true;
-            renderApp();
-        } else {
-            showToast('PASSWORD SALAH', 'error');
-        }
-    };
-    
-    window.showTambahKegiatanLibraryModal = function(kode) {
-        showModal(`
-            <h3 class="text-xl font-bold mb-6">➕ TAMBAH KE LIBRARY KODE ${kode}</h3>
-            <div class="space-y-4">
-                <div>
-                    <label class="text-xs font-semibold text-gray-500 mb-1">NAMA KEGIATAN</label>
-                    <input type="text" id="modal-nama-kegiatan" class="input-field" placeholder="CONTOH: SETUP INJEKSI">
-                </div>
-                <div class="flex gap-3 pt-4">
-                    <button class="btn btn-primary flex-1" onclick="window.simpanKegiatanKeLibrary('${kode}')">SIMPAN</button>
-                    <button class="btn btn-secondary flex-1" onclick="window.closeModal()">BATAL</button>
-                </div>
-            </div>
-        `);
-    };
-    
-    window.simpanKegiatanKeLibrary = async function(kode) {
-        const nama = document.getElementById('modal-nama-kegiatan')?.value;
-        if (!nama) {
-            showToast('NAMA KEGIATAN HARUS DIISI', 'error');
-            return;
-        }
-        
-        const namaUpper = toUpper(nama);
-        
-        try {
-            await saveLibraryKegiatan(kode, namaUpper);
-            closeModal();
-            renderApp();
-            showToast('KEGIATAN DITAMBAHKAN');
-        } catch (error) {
-            showToast('GAGAL SIMPAN', 'error');
-        }
-    };
-    
-    window.hapusDariLibrary = async function(kode, item) {
-        if (confirm(`HAPUS "${item}" DARI LIBRARY?`)) {
-            try {
-                await deleteLibraryKegiatan(kode, item);
-                renderApp();
-                showToast('KEGIATAN DIHAPUS', 'warning');
-            } catch (error) {
-                showToast('GAGAL HAPUS', 'error');
-            }
-        }
-    };
-    
-    window.showTambahMesinModal = function() {
-        let html = `
-            <h3 class="text-xl font-bold mb-6">➕ TAMBAH MESIN BARU</h3>
-            <div class="space-y-6">
-                <div class="grid grid-cols-2 gap-4">
-                    <div>
-                        <label class="text-xs font-semibold text-gray-500 mb-1">NAMA MESIN</label>
-                        <input type="text" id="modal-nama-mesin" class="input-field" placeholder="CONTOH: INJEKSI 1">
-                    </div>
-                    <div>
-                        <label class="text-xs font-semibold text-gray-500 mb-1">TARGET (PCS/MENIT)</label>
-                        <input type="number" id="modal-target" class="input-field" placeholder="0" step="0.1">
-                    </div>
-                </div>
-                <div>
-                    <label class="text-xs font-semibold text-gray-500 mb-1">MINOR STOP ITEMS</label>
-                    <input type="text" id="modal-minor-stop" class="input-field" placeholder="ETIKET PUTUS, CODING KERING">
-                </div>
-                <div class="border-t pt-4">
-                    <h4 class="font-semibold mb-4">PILIH KEGIATAN PER KODE</h4>
-                    <div class="space-y-6 max-h-[400px] overflow-y-auto pr-2" id="machine-activities-container">
-        `;
-        
-        const kodeUrutan = ['1','2','3','5','6','7','8','9'];
-        
-        kodeUrutan.forEach(kodeStr => {
-            const libraryItems = state.libraryKegiatan[kodeStr] || [];
-            html += `
-                <div class="bg-gray-50 p-4 rounded-xl">
-                    <div class="flex items-center gap-2 mb-3">
-                        <span class="kode-badge kode-${kodeStr}">KODE ${kodeStr}</span>
-                        <span class="font-medium">${KODE_TKL[kodeStr].icon} ${KODE_TKL[kodeStr].name}</span>
-                        ${KODE_TKL[kodeStr].hasDuration ? '<span class="text-xs text-blue-600">(WAJIB ISI DURASI)</span>' : ''}
-                    </div>
-                    <div class="space-y-3">
-                        ${libraryItems.map((item, idx) => `
-                            <div class="flex items-center gap-3 bg-white p-3 rounded-lg">
-                                <input type="checkbox" id="cb_${kodeStr}_${idx}" class="w-4 h-4 text-blue-600 rounded" onchange="window.toggleDurationField('${kodeStr}', ${idx})">
-                                <label for="cb_${kodeStr}_${idx}" class="flex-1 text-sm">${item}</label>
-                                ${KODE_TKL[kodeStr].hasDuration ? `
-                                    <div id="durasi_${kodeStr}_${idx}" class="hidden">
-                                        <input type="number" class="input-field w-24 text-sm" placeholder="DURASI">
-                                    </div>
-                                ` : ''}
-                            </div>
-                        `).join('')}
-                        ${!libraryItems.length ? '<p class="text-sm text-gray-400 italic">BELUM ADA KEGIATAN</p>' : ''}
-                    </div>
-                </div>
-            `;
-        });
-        
-        html += `
-                    </div>
-                </div>
-                <div class="flex gap-3 pt-4">
-                    <button class="btn btn-primary flex-1" onclick="window.simpanMesinBaru()">SIMPAN</button>
-                    <button class="btn btn-secondary flex-1" onclick="window.closeModal()">BATAL</button>
-                </div>
-            </div>
-        `;
-        
-        showModal(html);
-    };
-    
-    window.toggleDurationField = function(kode, idx) {
-        const checkbox = document.getElementById(`cb_${kode}_${idx}`);
-        const durasiDiv = document.getElementById(`durasi_${kode}_${idx}`);
-        if (durasiDiv) {
-            durasiDiv.classList.toggle('hidden', !checkbox.checked);
-        }
-    };
-    
-    window.simpanMesinBaru = async function() {
-        const nama = document.getElementById('modal-nama-mesin')?.value;
-        const target = parseFloat(document.getElementById('modal-target')?.value) || 0;
-        const minorStopStr = document.getElementById('modal-minor-stop')?.value || '';
-        
-        if (!nama) {
-            showToast('NAMA MESIN HARUS DIISI', 'error');
-            return;
-        }
-        
-        const minorStop = minorStopStr.split(',').map(s => s.trim().toUpperCase()).filter(Boolean);
-        const activities = {};
-        const kodeUrutan = ['1','2','3','5','6','7','8','9'];
-        
-        for (let kodeIdx = 0; kodeIdx < kodeUrutan.length; kodeIdx++) {
-            const kodeStr = kodeUrutan[kodeIdx];
-            const libraryItems = state.libraryKegiatan[kodeStr] || [];
-            const selected = [];
-            
-            for (let idx = 0; idx < libraryItems.length; idx++) {
-                const checkbox = document.getElementById(`cb_${kodeStr}_${idx}`);
-                if (checkbox?.checked) {
-                    let durasi = null;
-                    if (KODE_TKL[kodeStr]?.hasDuration) {
-                        const durasiInput = document.querySelector(`#durasi_${kodeStr}_${idx} input`);
-                        durasi = durasiInput ? parseInt(durasiInput.value) || null : null;
-                        if (!durasi) {
-                            showToast(`KODE ${kodeStr} WAJIB DIISI DURASI`, 'error');
-                            return;
-                        }
-                    }
-                    selected.push({ nama: libraryItems[idx], durasi });
+            minor_stop_count: 0,
+            odt_data: kegiatanList.filter(k => [1,5,6,7,8].includes(k.kode)).map(k => {
+                const mesinData = allMachines.find(m => m.id === selectedMachineId);
+                let standar = 0;
+                if (mesinData?.activities && mesinData.activities[k.kode]) {
+                    const kegiatanData = mesinData.activities[k.kode].find(a => a.nama === k.kegiatan);
+                    standar = kegiatanData?.durasi || 0;
                 }
-            }
-            
-            if (selected.length) activities[kodeStr] = selected;
-        }
-        
-        if (!Object.keys(activities).length) {
-            showToast('PILIH MINIMAL 1 KEGIATAN', 'error');
-            return;
-        }
-        
-        const machineData = {
-            name: toUpper(nama),
-            target: target,
-            minorStop: minorStop
+                const actual = hitungDurasi(k.dari, k.jam);
+                return {
+                    name: k.kegiatan,
+                    standardTime: standar,
+                    actualTime: actual,
+                    checked: true
+                };
+            }),
+            line_stop_mesin_data: kegiatanList.filter(k => k.kode === 3).map(k => ({
+                item: k.kegiatan,
+                duration: hitungDurasi(k.dari, k.jam),
+                action: k.notes || '',
+                wr: ''
+            })),
+            line_stop_non_mesin_data: [
+                ...kegiatanList.filter(k => k.kode === 9).map(k => ({
+                    item: k.kegiatan,
+                    duration: hitungDurasi(k.dari, k.jam),
+                    action: k.notes || ''
+                })),
+                ...resume.odtExceeds.map(ex => ({
+                    item: `ODT Exceed - ${ex.item}`,
+                    duration: ex.exceed,
+                    action: 'Auto generated from ODT exceed'
+                }))
+            ],
+            minor_stop_data: [],
+            notes: '',
+            kegiatan_data: kegiatanList,
+            batch_data: batches
         };
         
-        try {
-            showLoading('Menyimpan mesin...');
-            await saveMachine(machineData, activities);
-            await loadMachines();
-            hideLoading();
-            closeModal();
-            renderApp();
-        } catch (error) {
-            hideLoading();
-            console.error('Error saving machine:', error);
-        }
-    };
-    
-    window.editMachine = function(id) {
-        showToast('FITUR EDIT SEGERA HADIR', 'warning');
-    };
-    
-    window.deleteMachine = async function(id) {
-        if (confirm('YAKIN HAPUS MESIN INI?')) {
-            try {
-                showLoading('Menghapus mesin...');
-                await deleteMachine(id);
-                await loadMachines();
-                hideLoading();
-                renderApp();
-            } catch (error) {
-                hideLoading();
-                console.error('Error deleting machine:', error);
-            }
-        }
-    };
-    
-    window.updateFilter = function(key, value) {
-        state.filters[key] = value;
-        state.clickedRecordFilter = null;
-        renderApp();
-    };
-    
-    window.showRecordDetail = function(record) {
-        showModal(`
-            <h3 class="text-xl font-bold mb-4">📋 DETAIL RECORD</h3>
-            <div class="space-y-4">
-                <div class="grid grid-cols-2 gap-3 p-4 bg-gray-50 rounded-xl">
-                    <div><span class="text-xs text-gray-500">TANGGAL</span><div>${formatDate(record.date)}</div></div>
-                    <div><span class="text-xs text-gray-500">SHIFT</span><div>${record.shift}</div></div>
-                    <div><span class="text-xs text-gray-500">MESIN</span><div>${record.machine_name}</div></div>
-                    <div><span class="text-xs text-gray-500">OPERATOR</span><div>${record.operator}</div></div>
-                </div>
-                <div class="grid grid-cols-3 gap-3">
-                    <div class="p-3 bg-blue-50 rounded-lg text-center">
-                        <div class="text-xs text-blue-600">AVAIL</div>
-                        <div class="font-bold">${(record.availability || 0).toFixed(1)}%</div>
-                    </div>
-                    <div class="p-3 bg-purple-50 rounded-lg text-center">
-                        <div class="text-xs text-purple-600">PERF</div>
-                        <div class="font-bold">${(record.performance || 0).toFixed(1)}%</div>
-                    </div>
-                    <div class="p-3 bg-green-50 rounded-lg text-center">
-                        <div class="text-xs text-green-600">QUAL</div>
-                        <div class="font-bold">${(record.quality || 0).toFixed(1)}%</div>
-                    </div>
-                </div>
-                <div class="p-4 bg-gradient-to-r from-blue-50 to-purple-50 rounded-xl text-center">
-                    <div class="text-sm text-gray-600">OEE</div>
-                    <div class="text-3xl font-bold ${(record.oee_actual || 0) >= 88 ? 'text-green-600' : 'text-red-600'}">
-                        ${(record.oee_actual || 0).toFixed(1)}%
-                    </div>
-                </div>
-                <button class="btn btn-secondary w-full" onclick="window.closeModal()">TUTUP</button>
-            </div>
-        `);
-    };
-    
-    window.navigateTo = function(page) {
-        state.currentPage = page;
-        if (page !== 'management') state.isManagementUnlocked = false;
-        renderApp();
-    };
-    
-    window.closeModal = closeModal;
-    
-    // ==================== INIT ====================
-    async function init() {
-        console.log('Initializing OEE System with Supabase...');
-        document.documentElement.setAttribute('data-theme', state.theme);
+        if (editMode && editingRecordId) updateOEERecord(editingRecordId, recordData);
+        else saveOEERecord(recordData);
         
-        try {
-            showLoading('Loading data from Supabase...');
-            await Promise.all([
-                loadMachines(),
-                loadLibraryKegiatan(),
-                loadOEERecords()
-            ]);
-            hideLoading();
-            renderApp();
-            showToast('Connected to Supabase', 'success');
-        } catch (error) {
-            hideLoading();
-            console.error('Init error:', error);
-            showToast('Gagal load data dari database', 'error');
+        kegiatanList = []; 
+        batches = []; 
+        selectedShift = ''; 
+        selectedMachineId = ''; 
+        selectedOperator = ''; 
+        editMode = false; 
+        editingRecordId = null;
+        
+        navigateTo('dashboard');
+        showToast('Data berhasil disimpan!');
+    }
+    
+    function editOEERecord(id) {
+        const record = allOEERecords.find(r => r.id === id);
+        if (!record) return;
+        editMode = true;
+        editingRecordId = id;
+        selectedDate = record.date;
+        selectedShift = record.shift;
+        selectedMachineId = record.machine_id;
+        selectedOperator = record.pic;
+        kegiatanList = record.kegiatan_data || [];
+        batches = record.batch_data || [];
+        navigateTo('input');
+        showToast('Data loaded for editing');
+    }
+    
+    // ==================== MANAGEMENT ACTIONS ====================
+    function unlockManagement() { 
+        if (document.getElementById('mgmt-password')?.value === CONFIG.MANAGEMENT_PASSWORD) { 
+            isManagementUnlocked = true; 
+            renderApp(); 
+            showToast('Management unlocked'); 
+        } else showToast('Password salah', 'error'); 
+    }
+    
+    function showTambahMesinModal() { 
+        showModal(`<h3 class="text-xl font-bold mb-4">➕ TAMBAH MESIN BARU</h3>
+            <div class="space-y-3">
+                <div><label class="text-xs font-semibold">NAMA MESIN</label><input type="text" id="new-machine-name" class="input-field mt-1" placeholder="CONTOH: INJEKSI 1"></div>
+                <div><label class="text-xs font-semibold">TARGET (PCS/MENIT)</label><input type="number" id="new-machine-target" class="input-field mt-1" placeholder="0" step="0.1"></div>
+                <div><label class="text-xs font-semibold">PIC</label><input type="text" id="new-machine-pic" class="input-field mt-1" placeholder="NAMA PIC"></div>
+                <div><label class="text-xs font-semibold">MINOR STOP ITEMS (pisah dengan koma)</label><input type="text" id="new-machine-ms" class="input-field mt-1" placeholder="ETIKET PUTUS, CODING KERING"></div>
+                <div class="mt-4 p-3 bg-blue-50 rounded-lg"><p class="text-sm text-blue-700"><i class="fas fa-info-circle"></i> Setelah mesin dibuat, Anda dapat mengatur kegiatannya dengan klik tombol "Kegiatan".</p></div>
+                <div class="flex gap-3 mt-4"><button class="btn btn-primary flex-1" onclick="saveNewMachine()">SIMPAN</button><button class="btn btn-secondary flex-1" onclick="closeModal()">BATAL</button></div>
+            </div>
+        `); 
+    }
+    
+    function saveNewMachine() { 
+        const name = document.getElementById('new-machine-name')?.value.toUpperCase(); 
+        const target = parseFloat(document.getElementById('new-machine-target')?.value) || 0; 
+        const pic = document.getElementById('new-machine-pic')?.value.toUpperCase() || ''; 
+        const msStr = document.getElementById('new-machine-ms')?.value || ''; 
+        const minorStop = msStr.split(',').map(s => s.trim().toUpperCase()).filter(Boolean);
+        
+        if (!name) { showToast('Nama mesin harus diisi', 'error'); return; } 
+        allMachines.push({ 
+            id: Date.now().toString(), 
+            machine_name: name, 
+            target_per_minute: target, 
+            pic: pic, 
+            minor_stop: minorStop,
+            activities: {} 
+        }); 
+        saveToStorage(); 
+        closeModal(); 
+        renderApp(); 
+        showToast('Mesin ditambahkan! Sekarang atur kegiatannya dengan klik tombol Kegiatan'); 
+    }
+    
+    function editMachine(id) { 
+        const m = allMachines.find(m => m.id === id); 
+        if (!m) return; 
+        showModal(`<h3 class="text-xl font-bold mb-4">✏️ EDIT MESIN</h3>
+            <div class="space-y-3">
+                <div><label class="text-xs font-semibold">NAMA MESIN</label><input type="text" id="edit-name" class="input-field mt-1" value="${m.machine_name}"></div>
+                <div><label class="text-xs font-semibold">TARGET (PCS/MENIT)</label><input type="number" id="edit-target" class="input-field mt-1" step="0.1" value="${m.target_per_minute}"></div>
+                <div><label class="text-xs font-semibold">PIC</label><input type="text" id="edit-pic" class="input-field mt-1" value="${m.pic || ''}"></div>
+                <div><label class="text-xs font-semibold">MINOR STOP ITEMS (pisah dengan koma)</label><input type="text" id="edit-ms" class="input-field mt-1" value="${(m.minor_stop || []).join(', ')}"></div>
+                <div class="flex gap-3 mt-4"><button class="btn btn-primary flex-1" onclick="updateMachine('${id}')">UPDATE</button><button class="btn btn-secondary flex-1" onclick="closeModal()">BATAL</button></div>
+            </div>
+        `); 
+    }
+    
+    function updateMachine(id) { 
+        const name = document.getElementById('edit-name')?.value.toUpperCase(); 
+        const target = parseFloat(document.getElementById('edit-target')?.value) || 0; 
+        const pic = document.getElementById('edit-pic')?.value.toUpperCase() || ''; 
+        const msStr = document.getElementById('edit-ms')?.value || '';
+        const minorStop = msStr.split(',').map(s => s.trim().toUpperCase()).filter(Boolean);
+        
+        const idx = allMachines.findIndex(m => m.id === id); 
+        if (idx !== -1) { 
+            allMachines[idx] = { ...allMachines[idx], machine_name: name, target_per_minute: target, pic: pic, minor_stop: minorStop }; 
+            saveToStorage(); 
+            closeModal(); 
+            renderApp(); 
+            showToast('Mesin diupdate'); 
+        } 
+    }
+    
+    function deleteMachine(id) { 
+        if (confirm('Hapus mesin ini?')) { 
+            allMachines = allMachines.filter(m => m.id !== id); 
+            saveToStorage(); 
+            renderApp(); 
+            showToast('Mesin dihapus'); 
+        } 
+    }
+    
+    function addLibraryItem(kode) { 
+        showModal(`<h3 class="text-xl font-bold mb-4">➕ TAMBAH KE LIBRARY KODE ${kode}</h3>
+            <div><label class="text-xs font-semibold">NAMA KEGIATAN</label><input type="text" id="new-item" class="input-field mt-1" placeholder="CONTOH: SETUP INJEKSI"></div>
+            <div class="flex gap-3 mt-4"><button class="btn btn-primary flex-1" onclick="saveLibraryItem('${kode}')">SIMPAN</button><button class="btn btn-secondary flex-1" onclick="closeModal()">BATAL</button></div>
+        `); 
+    }
+    
+    function saveLibraryItem(kode) { 
+        const nama = document.getElementById('new-item')?.value.toUpperCase(); 
+        if (!nama) { showToast('Nama kegiatan harus diisi', 'error'); return; } 
+        if (!libraryKegiatan[kode]) libraryKegiatan[kode] = []; 
+        libraryKegiatan[kode].push(nama); 
+        saveToStorage(); 
+        closeModal(); 
+        renderApp(); 
+        showToast('Kegiatan ditambahkan ke library'); 
+    }
+    
+    function removeLibraryItem(kode, item) { 
+        if (confirm(`Hapus "${item}" dari library?`)) { 
+            libraryKegiatan[kode] = libraryKegiatan[kode].filter(i => i !== item); 
+            saveToStorage(); 
+            renderApp(); 
+            showToast('Kegiatan dihapus dari library'); 
+        } 
+    }
+    
+    function searchOEERecords() {
+        const date = document.getElementById('edit-search-date')?.value;
+        const shift = document.getElementById('edit-search-shift')?.value;
+        const machine = document.getElementById('edit-search-machine')?.value;
+        let results = allOEERecords;
+        if (date) results = results.filter(r => r.date === date);
+        if (shift && shift !== '') results = results.filter(r => r.shift === shift);
+        if (machine && machine !== '') results = results.filter(r => r.machine_name === machine);
+        const container = document.getElementById('edit-search-results');
+        if (!container) return;
+        if (results.length === 0) { container.innerHTML = '<div class="text-center py-8 text-gray-400">Tidak ada data ditemukan</div>'; return; }
+        container.innerHTML = `<div class="table-wrapper mt-4"> <table> <thead> <tr><th>Tanggal</th><th>Shift</th><th>Mesin</th><th>PIC</th><th>Output</th><th>OEE%</th><th>Aksi</th> </thead> <tbody>${results.map(r => `<tr>
+                <td>${formatDateShort(r.date)}</td>
+                <td>${r.shift}</td>
+                <td>${r.machine_name}</td>
+                <td>${r.pic}</td>
+                <td>${r.actual_output}</td>
+                <td class="${(r.oee_actual || 0) >= 88 ? 'status-good' : 'status-bad'}">${(r.oee_actual || 0).toFixed(1)}%</td>
+                <td><button class="btn btn-primary text-xs py-1 px-3" onclick="editOEERecord('${r.id}')">Edit</button></td>
+            </tr>`).join('')} </tbody> </div>`;
+    }
+    
+    // ==================== NAVIGATION ====================
+    function navigateTo(page) {
+        currentPage = page;
+        if (page !== 'management') isManagementUnlocked = false;
+        renderApp();
+    }
+    
+    function updateFilter(key, value) {
+        filters[key] = value;
+        renderApp();
+    }
+    
+    // ==================== RENDER APP ====================
+    function renderApp() {
+        const app = document.getElementById('app-wrapper');
+        if (!app) return;
+        
+        if (currentPage === 'dashboard') {
+            app.innerHTML = renderDashboard();
+            setTimeout(renderCharts, 100);
+        } else if (currentPage === 'input') {
+            app.innerHTML = renderInputPage();
+        } else if (currentPage === 'management') {
+            app.innerHTML = isManagementUnlocked ? renderManagementPage() : renderManagementLogin();
+        } else if (currentPage === 'audit') {
+            app.innerHTML = renderAuditPage();
         }
     }
     
-    init();
+    // ==================== EXPORT GLOBAL ====================
+    window.navigateTo = navigateTo;
+    window.updateFilter = updateFilter;
+    window.closeModal = closeModal;
+    window.showRecordDetail = showRecordDetail;
+    window.updateDateValue = updateDateValue;
+    window.updateShiftValue = updateShiftValue;
+    window.updateMachineValue = updateMachineValue;
+    window.updateOperatorValue = updateOperatorValue;
+    window.tambahBatch = tambahBatch;
+    window.hapusBatch = hapusBatch;
+    window.updateBatch = updateBatch;
+    window.hapusKegiatan = hapusKegiatan;
+    window.resetForm = resetForm;
+    window.showTambahKegiatanModal = showTambahKegiatanModal;
+    window.updateKegiatanFromSelect = updateKegiatanFromSelect;
+    window.tambahKegiatanFromModal = tambahKegiatanFromModal;
+    window.simpanData = simpanData;
+    window.editOEERecord = editOEERecord;
+    window.unlockManagement = unlockManagement;
+    window.showTambahMesinModal = showTambahMesinModal;
+    window.saveNewMachine = saveNewMachine;
+    window.editMachine = editMachine;
+    window.updateMachine = updateMachine;
+    window.deleteMachine = deleteMachine;
+    window.addLibraryItem = addLibraryItem;
+    window.saveLibraryItem = saveLibraryItem;
+    window.removeLibraryItem = removeLibraryItem;
+    window.searchOEERecords = searchOEERecords;
+    window.editMachineActivities = editMachineActivities;
+    window.saveMachineActivities = saveMachineActivities;
+    
+    // ==================== INIT ====================
+    loadFromStorage();
+    renderApp();
 })();
 </script>
-
-<!-- Chart DataLabels Plugin -->
-<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
-
 </body>
 </html>
